@@ -28,7 +28,8 @@
     "start": "concurrently --names REACT,LOCALTUNNEL --prefix-colors blue,white \"cross-env BROWSER=none react-scripts start\" \"lt --port 3000 --local-host localhost --subdomain studenthelper -o\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "serve": "concurrently --names REACT,LOCALTUNNEL --prefix-colors blue,white \"serve -s build\" \"lt --port 3000 --local-host localhost --subdomain studenthelper -o\""
   },
   "proxy": "http://localhost:3080",
   "eslintConfig": {

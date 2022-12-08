@@ -1,4 +1,5 @@
-const backendURL = 'https://student-helper-backend.vercel.app';
+// const backendURL = 'https://student-helper-backend.vercel.app';
+const backendURL = 'https://studenthelperbackend.loca.lt';
 
 export async function getPastpapers (subID, unitNum, userID) {
     try {
