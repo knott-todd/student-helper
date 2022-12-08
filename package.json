@@ -25,7 +25,7 @@
     "sync-sql": "^1.0.2"
   },
   "scripts": {
-    "start": "concurrently --names REACT,LOCALTUNNEL,BACKEND --prefix-colors blue,white,orange \"cross-env BROWSER=none react-scripts start\" \"lt --port 3000 --local-host localhost --subdomain studenthelper -o\" \"nodemon sql\"",
+    "start": "concurrently --names REACT,LOCALTUNNEL --prefix-colors blue,white \"cross-env BROWSER=none react-scripts start\" \"lt --port 3000 --local-host localhost --subdomain studenthelper -o\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
