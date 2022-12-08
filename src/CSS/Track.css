@@ -1,0 +1,32 @@
+.track-card {
+    border-radius: 23px;
+    border: transparent solid 1px;
+    transition: 0.2s;
+    background-color: rgb(250, 250, 250);
+    padding: 30px;
+    text-align: left;
+}
+
+.track-card h2 {
+    font-size: 35px;
+}
+
+.card-link label{
+    padding-right: 10px;
+    font-size: 14px;
+}
+
+.track-card:hover {
+    border: var(--accent) solid 1px;
+}
+
+.card-link:hover .track-card-heading {
+    transition: 0.2s;
+    color: var(--accent);
+}
+
+.track-card-heading {
+    display: inline-block;
+    margin: 0;
+    padding: 10;
+}

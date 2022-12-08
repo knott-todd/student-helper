@@ -1,0 +1,45 @@
+.paper-topic-preview {
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    text-align: left;
+}
+
+.topic-preview-wrapper {
+    height: 50px;
+    mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+    overflow: scroll;
+    transition: 0.2s;
+}
+
+.topic-preview-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.whats-inside{
+    height: 0px;
+    overflow: hidden;
+    text-align: left;
+    transition: 0.2s;
+}
+
+.test-paper {
+    padding: 0px 20px 10px 20px;
+    border-radius: 17px;
+    border: transparent solid 1px;
+    width: 120px;
+}
+
+.test-paper:hover .whats-inside {
+    height: 72px;
+    transition: 0.2s;
+}
+
+.test-paper:hover {
+    background-color: white;
+    border-color: var(--accent);
+}
+
+.test-paper:hover .paper-year-head {
+    color: var(--accent);
+}
