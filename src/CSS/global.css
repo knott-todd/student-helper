@@ -72,3 +72,31 @@ a{
     letter-spacing: 1px;
     cursor: default;
 }
+
+.subject-list-item {
+    transition: 0.2s;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.subject-list-item:hover {
+    transition: 0.2s;
+    cursor: pointer;
+    background-color: lightgray;
+}
+
+.subject-list-item:hover label {
+    cursor: pointer;
+}
+
+.subject-label {
+    transition: 0.2s;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.subject-label:hover {
+    transition: 0.2s;
+    cursor: pointer;
+    color: var(--accent);
+}

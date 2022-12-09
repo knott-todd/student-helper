@@ -64,7 +64,7 @@ const SignIn = () => {
     
 
     return (
-        <div>
+        <div className="body-div">
             <h1 className="page-title">Sign In</h1>
 
             <form>
@@ -76,13 +76,16 @@ const SignIn = () => {
             </form>
 
             <form style={{display: "block", paddingTop: "40px"}}>
-                {subs.map(sub => (
-                    <label>
-                        {sub.name}
-                        <input type="checkbox" checked={sub.isUserSub} onChange={e => onUserSubChange(e, sub)} />
-                        <br />
-                    </label>
-                ))}
+                <h3 style={{display: (subs.length !== 0 ? "block" : "none")}}>Your Subjects</h3>
+                <div style={{textAlign: "left", maxWidth: "230px", margin: "auto"}}>
+                    {subs.sort((a, b) => b.isUserSub - a.isUserSub).map(sub => (
+                        <label className="subject-label" style={{paddingBottom: "2px"}}>
+                            {sub.name}
+                            <input type="checkbox" style={{float: "right"}} checked={sub.isUserSub} onChange={e => onUserSubChange(e, sub)} />
+                            <br />
+                        </label>
+                    ))}
+                </div>
             </form>
             
         </div>

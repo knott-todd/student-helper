@@ -55,7 +55,7 @@ export default ({children}) => {
     }, [userID])
 
     useEffect(() => {
-        if(currSub && currUnit && userID){
+        if(currSub && currUnit && userID && currSub.id && currUnit.id){
             getPastpapers(currSub.id, currUnit, userID)
             .then(async result => {        
                 for(const paper of result){
