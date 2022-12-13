@@ -4,6 +4,7 @@ import { getModules } from "./services/SQLService";
 import './CSS/global.css'
 import './CSS/Track.css'
 import {AppContext} from "./AppContext";
+import { faFutbolBall } from "@fortawesome/free-solid-svg-icons";
 
 const Track = () => {
     const [modules, setModules] = useState([]);
@@ -12,7 +13,7 @@ const Track = () => {
 
     useEffect(() => {
         
-        if(global.currSub) {
+        if(global.currSub && global.currSub.id) {
 
             getModules(global.currSub.id, global.currUnit, global.userID).then(result => {
                 setModules(result)

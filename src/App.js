@@ -17,6 +17,7 @@ import ObjectiveSetter from './ObjectiveSetter';
 import StructureParser from './StructureParser';
 import TopicQuestions from './TopicQuestions';
 import SignIn from './SignIn';
+import Refresh from './Refresh';
 import { useContext, useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser } from '@fortawesome/free-solid-svg-icons'
@@ -24,6 +25,20 @@ library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser)
 
 function App() {
   const global = useContext(AppContext);
+
+  const emptyCache = () => {
+    if('caches' in window){
+    caches.keys().then((names) => {
+        // Delete all the cache files
+        names.forEach(name => {
+            caches.delete(name);
+        })
+      });
+
+      // Makes sure the page reloads. Changes are only visible after you refresh.
+      window.location.reload(true);
+    }
+  }
 
   return (
     <div className="App">
@@ -35,7 +50,6 @@ function App() {
         </Header>
         <Routes>
           <Route exact path = "/" >
-            
             <Route path='/' element={ global.userID ? <Navigate to="/test" /> : <Navigate to="/sign_in" /> } />
 
             <Route path = "test">
@@ -58,6 +72,8 @@ function App() {
             <Route path='/parse_structure' element={<StructureParser />} />
 
             <Route path="/sign_in" element={<SignIn />} />
+
+            <Route path="*" element={<Refresh />} />
             
           </Route>
         </Routes>

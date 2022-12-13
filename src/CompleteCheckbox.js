@@ -7,7 +7,7 @@ const CompleteCheckbox = props => {
     }
     return (
         <label>
-            Completed
+            {/* Completed */}
             <input type="checkbox" checked={(props.question.is_complete)} onChange={onChange} />
         </label>
     )

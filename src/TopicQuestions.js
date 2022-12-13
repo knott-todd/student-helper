@@ -50,7 +50,8 @@ const TopicQuestions = () => {
     
     useEffect(() => {
         getTopicQuestions(id, global.userID).then(result => {
-            console.log(result)
+            console.log("He")
+            console.log(id, global.userID, result)
             setQuests(result);
         });
 

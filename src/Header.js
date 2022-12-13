@@ -23,14 +23,19 @@ const Header = () => {
                     global.setCurrSub(result[0]);
                     global.setCurrUnit(units[0]);
                     
-                    if(result.length !== 0)
-                        navigate('/track')
+                    // if(result.length !== 0)
+                    //     navigate('/track')
                 })
         }
     }, [global.userID]);
 
     useEffect(() => {
+        console.log("changed subs")
         setSubs(global.userSubs)
+
+        global.setCurrSub(global.userSubs[0]);
+
+        console.log(global.currSub)
     }, [global.userSubs])
 
     return (
