@@ -15,7 +15,6 @@ export default ({children}) => {
         "067BC2",
         "ECC30B",
         "4B7F52",
-        "3F4739",
         "080357",
         "FF9F1C",
         "B95F89",

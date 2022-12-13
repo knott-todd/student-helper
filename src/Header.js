@@ -23,8 +23,8 @@ const Header = () => {
                     global.setCurrSub(result[0]);
                     global.setCurrUnit(units[0]);
                     
-                    if(result.length !== 0)
-                        navigate('/track')
+                    // if(result.length !== 0)
+                    //     navigate('/track')
                 })
         }
     }, [global.userID]);

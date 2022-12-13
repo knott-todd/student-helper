@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {AppContext} from "./AppContext";
 import { setUser, getUserID, getSubjects, getUserSubjects, setUserSub } from "./services/SQLService";
 
@@ -10,6 +11,7 @@ const SignIn = () => {
     const [subs, setSubs] = useState([]);
     
     const global = useContext(AppContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if(global.userID){
@@ -48,6 +50,8 @@ const SignIn = () => {
         setFnameVal("");
         setLnameVal("");
 
+        navigate("/track");
+
     }
 
     const onUserSubChange = (e, subject) => {
@@ -69,7 +73,7 @@ const SignIn = () => {
         <div className="body-div">
             <h1 className="page-title">Sign In</h1>
 
-            <form>
+            <form className="default-form">
                 <label htmlFor="fname">First Name</label><br />
                 <input type="text" id="fname" name="fname" value={fnameVal} onChange={e => setFnameVal(e.target.value)} /><br />
                 <label htmlFor="fname">Last Name</label><br />
@@ -81,11 +85,11 @@ const SignIn = () => {
                 <h3 style={{display: (subs.length !== 0 ? "block" : "none")}}>Your Subjects</h3>
                 <div style={{textAlign: "left", maxWidth: "230px", margin: "auto"}}>
                     {subs.sort((a, b) => b.isUserSub - a.isUserSub).map(sub => (
-                        <label className="subject-label" style={{paddingBottom: "2px"}}>
+                        <p className="subject-label" >
                             {sub.name}
-                            <input type="checkbox" style={{float: "right"}} checked={sub.isUserSub} onChange={e => onUserSubChange(e, sub)} />
+                            <input type="checkbox" style={{float: "right", height: "100%"}} checked={sub.isUserSub} onChange={e => onUserSubChange(e, sub)} />
                             <br />
-                        </label>
+                        </p>
                     ))}
                 </div>
             </form>

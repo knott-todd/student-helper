@@ -18,8 +18,6 @@ const Track = () => {
             getModules(global.currSub.id, global.currUnit, global.userID).then(result => {
                 setModules(result)
             })
-        } else {
-            console.log("RAAA")
         }
 
     }, [global.currSub, global.currUnit]);

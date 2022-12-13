@@ -68,6 +68,21 @@ const Questions = () => {
 
             })
 
+            for (const q of restructured) {
+
+                for (const letter of q.letters){
+                    
+                    for (const roman of letter.romans) {
+                        roman.is_complete = roman.subLetters.every(subLetter => subLetter.is_complete);
+                    }
+
+                    letter.is_complete = letter.romans.every(roman => roman.is_complete);
+                }
+
+                q.is_complete = q.letters.every(letter => letter.is_complete);
+
+            }
+
             setOrdered(restructured);
             console.log(quests, restructured);
     }, [quests]);
@@ -95,6 +110,55 @@ const Questions = () => {
         updateUserQuestion(tempQuests.find(quest => quest.id === id), global.userID);
     }
 
+    const onParentCheckboxChange = (e, id) => {
+        const newValue = e.target.checked;
+
+        let tempQuests = [...quests];
+        let tempOrdered = [...ordered];
+        
+        if(id.subLetter) {
+
+            tempQuests.filter(quest => quest.num === id.num && quest.sub_letter === id.letter && quest.sub_sub_roman === id.roman && quest.sub_sub_sub_letter === id.subLetter).forEach(quest => {
+                quest.is_complete = newValue;
+
+                updateUserQuestion(quest, global.userID)
+            })
+
+            setQuests(tempQuests);
+
+        } else if(id.roman) {
+
+            tempQuests.filter(quest => quest.num === id.num && quest.sub_letter === id.letter && quest.sub_sub_roman === id.roman).forEach(quest => {
+                quest.is_complete = newValue;
+
+                updateUserQuestion(quest, global.userID)
+            })
+
+            setQuests(tempQuests);
+            
+        } else if(id.letter) {
+
+            tempQuests.filter(quest => quest.num === id.num && quest.sub_letter === id.letter).forEach(quest => {
+                quest.is_complete = newValue;
+
+                updateUserQuestion(quest, global.userID)
+            })
+
+            setQuests(tempQuests);
+
+        } else if(id.num) {
+
+            tempQuests.filter(quest => quest.num === id.num).forEach(quest => {
+                quest.is_complete = newValue;
+
+                updateUserQuestion(quest, global.userID)
+            })
+
+            setQuests(tempQuests);
+        }
+
+    }
+
     return (
         <div className="questions body-div">
             {ordered.map((q, qi) => (
@@ -103,18 +167,38 @@ const Questions = () => {
                         r.subLetters.map((s, si) => (
                             <div key={s.id} className="list-item question">
                                 
-                                {(li === 0 && ri === 0 && si === 0) ? <p style={{display: "inline", padding: 2}}>{q.num}.</p> : null}
-                                {(l.letter && ri === 0 && si === 0) ? (<p style={{display: "inline", padding: 2}}>{l.letter})</p>) : null}
-                                {(r.roman && si === 0) ? (<p style={{display: "inline", padding: 2}}>{r.roman})</p>) : null}
-                                {s.subLetter ? (<p style={{display: "inline", padding: 2}}>{s.subLetter})</p>) : null}
+                                {(li === 0 && ri === 0 && si === 0) ? (
+                                    <p style={{display: "inline", padding: 2, fontWeight: "bold"}}>
+                                        <CompleteCheckbox question={q} id={{num: q.num}} onChange={onParentCheckboxChange} />
+                                        {q.num}.
+                                    </p>
+                                ) : null}
+                                {(l.letter && ri === 0 && si === 0) ? (
+                                    <p style={{display: "inline", padding: 2, fontWeight: "bold"}}>
+                                        <CompleteCheckbox question={l} id={{num: q.num, letter: l.letter}} onChange={onParentCheckboxChange} />
+                                        {l.letter})
+                                    </p>
+                                ) : null}
+                                {(r.roman && si === 0) ? (
+                                    <p style={{display: "inline", padding: 2, fontWeight: "bold"}}>
+                                        <CompleteCheckbox question={r} id={{num: q.num, letter: l.letter, roman: r.roman}} onChange={onParentCheckboxChange} />
+                                        {r.roman})
+                                    </p>
+                                ) : null}
+                                {s.subLetter ? (
+                                    <p style={{display: "inline", padding: 2, fontWeight: "bold"}}>
+                                        <CompleteCheckbox question={s} id={{num: q.num, letter: l.letter, roman: r.roman, subLetter: s.subLetter}} onChange={onParentCheckboxChange} />
+                                        {s.subLetter})
+                                    </p>
+                                ) : null}
 
-                                <Link to={`/objective_questions/${s.objectiveID}`} style={{display: "inline-block"}}>
+                                {/* <Link to={`/objective_questions/${s.objectiveID}`} style={{display: "inline-block"}}>
                                     {s.info}
-                                </Link>
+                                </Link> */}
 
-                                <br />
+                                {/* <br /> */}
 
-                                <CompleteCheckbox question={s} id={s.id} onChange={onCheckboxChange} />
+                                {/* <CompleteCheckbox question={s} id={s.id} onChange={onCheckboxChange} /> */}
 
                                 <FamiliarityDropdown question={s} id={s.id} onChange = {onDropdownChange} />
                             </div>
