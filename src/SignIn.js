@@ -15,8 +15,10 @@ const SignIn = () => {
         if(global.userID){
             getSubjects()
                 .then(result => {
+                    console.log("Woi")
                     getUserSubjects(global.userID)
                         .then(res2 => {
+                            console.log("UID: ")
                             for (const sub of result) {
                                 console.log((typeof res2.find(sub2 => sub2.id === sub.id) !== 'undefined'))
                                 sub.isUserSub = (typeof res2.find(sub2 => sub2.id === sub.id) !== 'undefined');

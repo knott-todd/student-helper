@@ -30,7 +30,12 @@ const Header = () => {
     }, [global.userID]);
 
     useEffect(() => {
+        console.log("changed subs")
         setSubs(global.userSubs)
+
+        global.setCurrSub(global.userSubs[0]);
+
+        console.log(global.currSub)
     }, [global.userSubs])
 
     return (

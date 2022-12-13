@@ -18,9 +18,9 @@ const Markscheme = (props) => {
     }, []);
 
     return (
-        <div className="markscheme body-div">
+        <div className="markscheme body-div" style={{height: "75vh"}}>
 
-            <iframe src={markscheme.markscheme_link} width="99%" height="650"></iframe>
+            <iframe src={markscheme.markscheme_link} width="99%" height="100%"></iframe>
             <Link to={`/questions/${markscheme.id}`}>
                 Continue
             </Link>
