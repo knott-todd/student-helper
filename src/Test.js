@@ -66,8 +66,8 @@ const Test = () => {
                 {papers.sort((a, b) => a.year.substring(0, 4) - b.year.substring(0, 4)).reverse().sort((a, b) => Number(a.is_complete) - Number(b.is_complete)).map(paper => (
                     <Link to={`pastpaper/${paper.id}`} className={`list-link test-paper ${paper.is_complete ? "complete" : ""}`} key={paper.id} >
                         
-                        <div style={{display: "block"}}>
-                            <h2 className="paper-year-head" style={{display: "inline-block", paddingTop: 10, margin: 0}}>{paper.year}</h2>
+                        <div className="head-badge-wrapper" style={{display: "block"}}>
+                            <h2 className="paper-year-head" style={{display: "inline-block", verticalAlign: "top", margin: 0}}>{paper.year}</h2>
                             <div className="badges-wrapper">
                                 <p className={`badge topic-badge ${paper.areTopicsLinked ? "badge-enabled" : (paper.areAnyTopicsLinked ? "badge-semi" : "badge-disabled")}`}>T</p>
                             </div>
