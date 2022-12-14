@@ -40,7 +40,7 @@ const Header = () => {
 
     return (
         <div className="header" style={{visibility: (global.userID ? "visible" : "hidden")}}>
-            <label style={{padding: 10}}>
+            <form style={{padding: 10}}>
                 <select className="sub-select header-dropdown" value={global.currSub ? global.currSub.id : ""} style={{margin: "10px 10px 10px 5px"}} onChange={e => global.setCurrSub(subs.find(sub => sub.id === parseInt(e.target.value)))}>
                     {subs.map(sub => (
                         <option key={parseInt(sub.id)} value={sub.id}>{sub.name}</option>
@@ -51,7 +51,7 @@ const Header = () => {
                         <option key={parseInt(unit)} value={unit}>Unit {unit}</option>
                     ))} 
                 </select>
-            </label>
+            </form>
         </div>
     )
 }

@@ -36,7 +36,7 @@
 }
 
 .test-paper:hover {
-    background-color: white;
+    background-color: var(--content-background-color);
     border-color: var(--accent);
 }
 
@@ -79,7 +79,7 @@
 .badge-enabled {
     transition: 0.2s;
     opacity: 1;
-    color: black;
+    color: var(--primary-text-color);
 }
 
 .paper-year-head {

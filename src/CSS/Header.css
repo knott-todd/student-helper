@@ -2,14 +2,16 @@
     padding: 14px;
     margin: 0;
     border-radius: 10px;
-    color: rgb(196, 196, 196);
-    border: solid rgb(196, 196, 196) 3px;
+    border: solid 2px transparent;
     font-size: 18px;
     font-weight: 500;
+    background-color: var(--background-color);
+    box-sizing: border-box;
 }
 
-.header-dropdown:focus {
-    border-color: rgb(196, 196, 196);
+.header-dropdown:focus-visible{
+    border-color: var(--accent);
+    outline: none;
 }
 
 .header {

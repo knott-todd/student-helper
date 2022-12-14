@@ -27,11 +27,11 @@ const Navbar = () => {
         <div className="navbar">
             <nav>
                 <div style={{display: (global.userID ? "inline-block" : "none")}}>
-                    <a onClick={() => nav(-1)}><FontAwesomeIcon icon="arrow-left" /></a>
+                    <a className="nav-back" onClick={() => nav(-1)}><FontAwesomeIcon icon="arrow-left" /></a>
                     
                     <NavLink to="/test" currSection={currSection} onChange={setCurrSection} icon="file-pen" />
                     <NavLink to="/track" currSection={currSection} onChange={setCurrSection} icon="bars-progress" />
-                    {global.userID === 1 ? <NavLink to="/insert_objective" currSection={currSection} onChange={setCurrSection} text="Insert" icon="folder-plus" /> : ""}
+                    {global.userID === 150 ? <NavLink to="/insert_objective" currSection={currSection} onChange={setCurrSection} text="Insert" icon="folder-plus" /> : ""}
                 </div>
                 <div style={{display: "inline-block"}}>
                     <NavLink to="/sign_in" currSection={currSection} onChange={setCurrSection} text={global.userID ? "Profile" : "Sign In"} icon="user" />

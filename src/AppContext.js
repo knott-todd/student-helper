@@ -9,8 +9,9 @@ export default ({children}) => {
     const [currUnit, setCurrUnit] = useState();
     const [userID, setUserID] = useState(JSON.parse(sessionStorage.getItem("user")));
     const [userSubs, setUserSubs] = useState([]);
+    const [isLightMode, setIsLightMode] = useState();
 
-    const colors = [
+    const lightmodeAccentColors = [
         "A4031F",
         "067BC2",
         "ECC30B",
@@ -21,14 +22,36 @@ export default ({children}) => {
         "2EC0F9",
         "67AAF9",
         "F0386B",
-        "6B2D5C"
+        "6B2D5C",
+        "99D5C9"
+    ]
+    const darkmodeAccentColors = [
+        "067BC2",
+        "ECC30B",
+        "FF9F1C",
+        "B95F89",
+        "2EC0F9",
+        "67AAF9",
+        "F0386B",
+        "C9F0FF",
+        "F75C03",
+        "5F4BB6",
+        "A6D49F",
+        "99D5C9"
     ]
 
     const setRandomAccent = () => {
-        document.documentElement.style.setProperty(
-            '--accent',
-            `#${colors[Math.floor(Math.random() * colors.length)]}`
-        );
+        if(isLightMode){
+            document.documentElement.style.setProperty(
+                '--accent',
+                `#${lightmodeAccentColors[Math.floor(Math.random() * lightmodeAccentColors.length)]}`
+            );
+        } else{
+            document.documentElement.style.setProperty(
+                '--accent',
+                `#${darkmodeAccentColors[Math.floor(Math.random() * darkmodeAccentColors.length)]}`
+            );
+        }
     }
 
     const global = {
@@ -40,7 +63,9 @@ export default ({children}) => {
         setUserID,
         setRandomAccent,
         userSubs,
-        setUserSubs
+        setUserSubs,
+        isLightMode,
+        setIsLightMode
     }
 
     useEffect(() => {
