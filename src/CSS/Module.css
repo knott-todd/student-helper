@@ -1,27 +1,36 @@
 .progress-bg {
-    background-color:whitesmoke;
-    height: 10px;
-    width: calc(50% - 4px);
+    height: 100%;
+    width: calc(50% - 2px);
     display: inline-block;
-    border: solid 1px lightgrey;
-    
+    vertical-align: top;
+}
+
+.progress {
+    height: 9px;
+    border-radius: 5px;
+    /* border: solid 1px var(--content-background-color); */
+    background-color:var(--primary-text-color);
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .negative-progress-bg{
     /* border-right-width: 0; */
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+    /* border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px; */
+    /* border-right: solid 1px var(--content-background-color); */
 }
 
 .positive-progress-bg{
     /* border-left-width: 0; */
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+    /* border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px; */
+    /* border-left: solid 1px var(--content-background-color); */
 }
 
 .negative-progress {
     background-color: red;
-    height: 100%;
+    height: inherit;
     margin-left: auto;
     margin-right: 0;
     border-top-left-radius: 5px;
@@ -30,7 +39,7 @@
 
 .positive-progress {
     background-color:deepskyblue;
-    height: 10px;
+    height: inherit;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }

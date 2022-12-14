@@ -51,12 +51,12 @@ const Track = () => {
 
                     </Link>
 
-                    <Link className="module-link card-link accent-link" to={`objective_questions/${module.objective.id}`} style={{display: "block", padding: 3, paddingLeft: 0, margin:0, fontSize:14}}>
+                    <Link className="module-link card-link accent-link" to={`topic_questions/${module.topic.id}`} style={{display: "block", padding: 3, paddingLeft: 0, margin:0, fontSize:14}}>
                         <p style={{display: "inline-block", padding: 0, margin:0}}>
-                            <p className="module-card-heading" style={{fontWeight: 500, padding: 0, margin: 0, display: "inline"}}>Next Objective:</p> {module.objective.info ? module.objective.info : "None"}
+                            <p className="module-card-heading" style={{fontWeight: 500, padding: 0, margin: 0, display: "inline"}}>Next Topic:</p> {module.topic.name ? module.topic.name : "None"}
                         </p>
                         <p style={{display: "inline-block", padding: 3, margin:0}}>
-                        <p style={{fontWeight: 500, padding: 0, margin: 0, display: "inline"}}>Familiarity:</p> {module.lowestFamiliarity ? ((module.lowestFamiliarity  * 100).toFixed(2) + "%") : "None"}
+                            <p style={{fontWeight: 500, padding: 0, margin: 0, display: "inline"}}>Familiarity:</p> {module.lowestFamiliarity ? ((module.lowestFamiliarity  * 100).toFixed(2) + "%") : "None"}
                         </p>
                     </Link>
                 </div>

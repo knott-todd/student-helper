@@ -2,7 +2,7 @@
     border-radius: 23px;
     border: transparent solid 1px;
     transition: 0.2s;
-    background-color: var(--content-background-color);
+    background-color: transparent;
     padding: 30px;
     text-align: left;
 }
@@ -18,6 +18,7 @@
 
 .track-card:hover {
     border: var(--accent) solid 1px;
+    background-color: var(--content-background-color);
 }
 
 .card-link:hover .track-card-heading {

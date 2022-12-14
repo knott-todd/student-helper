@@ -53,45 +53,45 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    const today = new Date();
-    const time = today.getHours();
+  // useEffect(() => {
+  //   const today = new Date();
+  //   const time = today.getHours();
 
-    if(time > 6 && time < 18) {
+  //   if(time > 6 && time < 18) {
 
-      global.setIsLightMode(true);
+  //     global.setIsLightMode(true);
       
-      document.documentElement.style.setProperty(
-        '--background-color',
-        `${colors.lightmode.backgroundColor}`
-      );
-      document.documentElement.style.setProperty(
-        '--content-background-color',
-        `${colors.lightmode.contentBackgroundColor}`
-      );
-      document.documentElement.style.setProperty(
-        '--primary-text-color',
-        `${colors.lightmode.primaryTextColor}`
-      );
-    } else {
+  //     document.documentElement.style.setProperty(
+  //       '--background-color',
+  //       `${colors.lightmode.backgroundColor}`
+  //     );
+  //     document.documentElement.style.setProperty(
+  //       '--content-background-color',
+  //       `${colors.lightmode.contentBackgroundColor}`
+  //     );
+  //     document.documentElement.style.setProperty(
+  //       '--primary-text-color',
+  //       `${colors.lightmode.primaryTextColor}`
+  //     );
+  //   } else {
 
-      global.setIsLightMode(false);
+  //     global.setIsLightMode(false);
 
-      document.documentElement.style.setProperty(
-        '--background-color',
-        `${colors.darkmode.backgroundColor}`
-      );
-      document.documentElement.style.setProperty(
-        '--content-background-color',
-        `${colors.darkmode.contentBackgroundColor}`
-      );
-      document.documentElement.style.setProperty(
-        '--primary-text-color',
-        `${colors.darkmode.primaryTextColor}`
-      );
-    }
+  //     document.documentElement.style.setProperty(
+  //       '--background-color',
+  //       `${colors.darkmode.backgroundColor}`
+  //     );
+  //     document.documentElement.style.setProperty(
+  //       '--content-background-color',
+  //       `${colors.darkmode.contentBackgroundColor}`
+  //     );
+  //     document.documentElement.style.setProperty(
+  //       '--primary-text-color',
+  //       `${colors.darkmode.primaryTextColor}`
+  //     );
+  //   }
 
-  }, [])
+  // }, [])
 
   return (
     <div className="App">
