@@ -22,37 +22,8 @@ const Test = () => {
 
             getPastpapers(global.currSub.id, global.currUnit, global.userID)
             .then(result => {
-                for (const [i, paper] of result.entries()) {
-                    getPaperQuestions(paper.id, global.userID)
-                    .then(res2 => {
-                        paper.areTopicsLinked = res2.length > 0 && res2.every(quest => quest.topic !== null)
-                    })
-                }
 
                 setPapers(result)
-            })
-        }
-
-    }, [global.currSub, global.currUnit]);
-
-    
-    useEffect(() => {
-        
-        if(global.currSub && global.currSub.id) {
-
-            getPastpapers(global.currSub.id, global.currUnit, global.userID)
-            .then(result => {
-                for (const [i, paper] of result.entries()) {
-                    getPaperQuestions(paper.id, global.userID)
-                    .then(res2 => {
-                        paper.areTopicsLinked = res2.length > 0 && res2.every(quest => quest.topic !== null)
-                        paper.areAnyTopicsLinked = res2.length > 0 && res2.find(quest => quest.topic !== null)
-
-                        if(i === result.length-1){
-                            setPapers(result)
-                        }
-                    })
-                }
             })
         }
 

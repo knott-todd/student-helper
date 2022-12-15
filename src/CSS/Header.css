@@ -17,3 +17,9 @@
 .header {
     text-align: left;
 }
+
+.sub-select {
+    max-width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

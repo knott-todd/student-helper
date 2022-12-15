@@ -5,6 +5,7 @@ import './CSS/global.css'
 import './CSS/Track.css'
 import {AppContext} from "./AppContext";
 import { faFutbolBall } from "@fortawesome/free-solid-svg-icons";
+import Progress from "./Progress";
 
 const Track = () => {
     const [modules, setModules] = useState([]);
@@ -16,6 +17,7 @@ const Track = () => {
         if(global.currSub && global.currSub.id) {
 
             getModules(global.currSub.id, global.currUnit, global.userID).then(result => {
+                result.avgFam = result.reduce((sum, next) => sum + next.avgFam, 0) / result.length;
                 setModules(result)
             })
         }
@@ -25,6 +27,7 @@ const Track = () => {
     return (
         <div className="track body-div">
             <h1 className="page-title">Track</h1>
+            <Progress value={modules.avgFam} height="6px" width="90%" />
 
             {modules.sort((a, b) => (a.avgFam || a.avgFam === 0) ? a.avgFam - b.avgFam : b.avgFam - a.avgFam).map(module => (
                 <div className="module-card track-card" key={module.module.id} style={{ margin: 3}}>
@@ -34,20 +37,8 @@ const Track = () => {
                         <h2 className="track-card-heading" >
                             M{module.module.number}: {module.module.name}
                         </h2>
-                        <div>
-                            <label for="avg">
-                                Familiarity ({module.avgFam ? ((module.avgFam  * 100).toFixed(2) + "%") : "None"})
-                            </label>
 
-                            <div className="progress" style={{overflow: "hidden", width: "100px", display:"inline-block"}}>
-                                <div className="progress-bg negative-progress-bg">
-                                    <div className="negative-progress" style={{maxWidth: "100%", width: module.avgFam < 0 ? `${-module.avgFam * 100}%` : 0}}/>
-                                </div>
-                                <div className="progress-bg positive-progress-bg">
-                                    <div className="positive-progress" style={{maxWidth: "100%", width: module.avgFam > 0 ? `${module.avgFam * 100}%` : 0}}/>
-                                </div>
-                            </div>
-                        </div>
+                        <Progress label="Familiarity" value={module.avgFam} />
 
                     </Link>
 

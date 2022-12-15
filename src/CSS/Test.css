@@ -40,12 +40,21 @@
     border-color: var(--accent);
 }
 
-.test-paper:hover .paper-year-head {
+.complete:hover {
+    border-color: var(--green);
+}
+
+.test-paper:hover:not(.complete) .paper-year-head {
     color: var(--accent);
 }
 
-.test-paper:hover .badges-wrapper * {
+.test-paper:hover:not(.complete) .badges-wrapper * {
     color: var(--accent);
+}
+
+.complete:hover p, .complete:hover h2 {
+    color: var(--green);
+    opacity: 1;
 }
 
 .badges-wrapper {
@@ -71,9 +80,8 @@
 
 .badge-semi {
     transition: 0.2s;
-    opacity: 1;
+    opacity: 0.5;
     height: auto;
-    color: lightgrey;
 }
 
 .badge-enabled {

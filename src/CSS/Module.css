@@ -1,15 +1,14 @@
 .progress-bg {
     height: 100%;
-    width: calc(50% - 2px);
+    width: 50%;
     display: inline-block;
     vertical-align: top;
 }
 
 .progress {
-    height: 9px;
     border-radius: 5px;
-    /* border: solid 1px var(--content-background-color); */
-    background-color:var(--primary-text-color);
+    /* border: solid 1px var(--background-color); */
+    background-color:var(--content-background-color);
     overflow: hidden;
     box-sizing: border-box;
 }
@@ -29,7 +28,7 @@
 }
 
 .negative-progress {
-    background-color: red;
+    background-color: var(--red);
     height: inherit;
     margin-left: auto;
     margin-right: 0;
@@ -38,8 +37,33 @@
 }
 
 .positive-progress {
-    background-color:deepskyblue;
+    background-color:var(--blue);
     height: inherit;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+}
+
+.familiarity-complete .progress {
+    background: hsla(45, 100%, 56%, 1);
+
+    background: linear-gradient(134deg, hsla(45, 100%, 56%, 1) 9%, hsla(57, 100%, 50%, 1) 18%, hsla(45, 100%, 56%, 1) 27%, hsla(45, 100%, 56%, 1) 58%, hsla(57, 100%, 50%, 1) 78%, hsla(45, 100%, 56%, 1) 98%);
+
+    background: -moz-linear-gradient(134deg, hsla(45, 100%, 56%, 1) 9%, hsla(57, 100%, 50%, 1) 18%, hsla(45, 100%, 56%, 1) 27%, hsla(45, 100%, 56%, 1) 58%, hsla(57, 100%, 50%, 1) 78%, hsla(45, 100%, 56%, 1) 98%);
+
+    background: -webkit-linear-gradient(134deg, hsla(45, 100%, 56%, 1) 9%, hsla(57, 100%, 50%, 1) 18%, hsla(45, 100%, 56%, 1) 27%, hsla(45, 100%, 56%, 1) 58%, hsla(57, 100%, 50%, 1) 78%, hsla(45, 100%, 56%, 1) 98%);
+
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#FFC81E", endColorstr="#FFF200", GradientType=1 );
+
+}
+
+.familiarity-complete .card-link:hover .track-card-heading {
+    color: #ffc71f;
+}
+
+.familiarity-complete:hover {
+    border-color:#ffc71f;
+}
+
+.familiarity-complete .progress *{
+    background-color: transparent;
 }

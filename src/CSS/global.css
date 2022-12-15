@@ -4,6 +4,9 @@
     --background-color: #f2f2f2;
     --content-background-color: white;
     --primary-text-color: black;
+    --green: #60b888;
+    --red: #F2545B;
+    --blue: #28afb0;
 }
 
 @media (prefers-color-scheme: light) {
@@ -61,7 +64,8 @@ select:hover {
 }
 
 .complete p, .complete h2{
-    color: rgb(169, 213, 189);
+    color: var(--green);
+    opacity: 0.5;
 }
 
 .list-link:hover {

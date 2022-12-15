@@ -126,7 +126,6 @@ function App() {
 
             <Route path="/sign_in" element={<SignIn />} />
 
-            <Route path="*" element={<Refresh />} />
             
           </Route>
         </Routes>
