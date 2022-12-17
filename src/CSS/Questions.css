@@ -3,6 +3,8 @@
 }
 
 .questions {
-    display: inline-grid;
+    display: grid;
+    width: fit-content;
+    margin: auto;
     justify-items: end;
 }

@@ -46,11 +46,11 @@ const Header = () => {
                         <option key={parseInt(sub.id)} value={sub.id}>{sub.name}</option>
                     ))} 
                 </select> 
-                <select className="unit-select header-dropdown" value={global.currUnit} style={{margin: "10px 10px 10px 5px"}} onChange={e => global.setCurrUnit(units.find(unit => unit === parseInt(e.target.value)))}>
+                {/* <select className="unit-select header-dropdown" value={global.currUnit} style={{margin: "10px 10px 10px 5px"}} onChange={e => global.setCurrUnit(units.find(unit => unit === parseInt(e.target.value)))}>
                     {units.map(unit => (
                         <option key={parseInt(unit)} value={unit}>Unit {unit}</option>
                     ))} 
-                </select>
+                </select> */}
             </form>
         </div>
     )

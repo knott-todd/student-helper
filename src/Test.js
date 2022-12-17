@@ -20,14 +20,14 @@ const Test = () => {
         
         if(global.currSub && global.currSub.id) {
 
-            getPastpapers(global.currSub.id, global.currUnit, global.userID)
+            getPastpapers(global.currSub.id, global.currExam, global.userID)
             .then(result => {
 
                 setPapers(result)
             })
         }
 
-    }, [global.currSub, global.currUnit]);
+    }, [global.currSub, global.currExam]);
 
     return (
         <div className="Test">

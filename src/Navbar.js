@@ -26,7 +26,7 @@ const Navbar = () => {
     return (
         <div className="navbar">
             <nav>
-                <div style={{display: (global.userID ? "inline-block" : "none")}}>
+                <div style={{display: (global.userID && global.currExam ? "inline-block" : "none")}}>
                     <a className="nav-back" onClick={() => nav(-1)}><FontAwesomeIcon icon="arrow-left" /></a>
                     
                     <NavLink to="/test" currSection={currSection} onChange={setCurrSection} icon="file-pen" />

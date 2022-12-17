@@ -14,15 +14,15 @@ const Track = () => {
 
     useEffect(() => {
         
-        if(global.currSub && global.currSub.id) {
+        if(global.currSub && global.currSub.id && global.currExam) {
 
-            getModules(global.currSub.id, global.currUnit, global.userID).then(result => {
+            getModules(global.currSub.id, global.currExam, global.userID).then(result => {
                 result.avgFam = result.reduce((sum, next) => sum + next.avgFam, 0) / result.length;
                 setModules(result)
             })
         }
 
-    }, [global.currSub, global.currUnit]);
+    }, [global.currSub, global.currExam]);
 
     return (
         <div className="track body-div">

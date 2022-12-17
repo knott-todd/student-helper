@@ -1,9 +1,9 @@
 // const backendURL = 'https://student-helper-backend.vercel.app';
 const backendURL = 'https://studenthelperbackend.loca.lt';
 
-export async function getPastpapers (subID, unitNum, userID) {
+export async function getPastpapers (subID, examID, userID) {
     try {
-        const response = await fetch(`${backendURL}/userpapers/${subID}/${unitNum}/${userID}`, {
+        const response = await fetch(`${backendURL}/userpapers/${subID}/${examID}/${userID}`, {
             headers: {
                 "Bypass-Tunnel-Reminder": "true"
             }
@@ -64,6 +64,31 @@ export async function getFamiliarities () {
     } catch(error) {
         return [];
     }
+}
+
+export async function getUserExam (userID) {
+    try {
+        const response = await fetch(`${backendURL}/user_exam/${userID}`, {
+            headers: {
+                "Bypass-Tunnel-Reminder": "true"
+            }
+        });
+        return await response.json();
+    } catch(error) {
+        return [];
+    }
+}
+
+export async function setUserExam(examID, userID) {
+    const response = await fetch(`${backendURL}/set_user_exam`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            "Bypass-Tunnel-Reminder": "true"
+        },
+        body: JSON.stringify({examID, userID})
+    })
+    return await response.json();
 }
 
 export async function updateUserQuestion(data, userID) {
@@ -129,9 +154,9 @@ export async function getQuestTopic (questID) {
     }
 }
 
-export async function getModules (subID, unitID, userID) {
+export async function getModules (subID, examID, userID) {
     try {
-        const response = await fetch(`${backendURL}/familiarity/${subID}/${unitID}/${userID}`, {
+        const response = await fetch(`${backendURL}/familiarity/${subID}/${examID}/${userID}`, {
             headers: {
                 "Bypass-Tunnel-Reminder": "true"
             }

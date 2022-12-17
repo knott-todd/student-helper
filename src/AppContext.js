@@ -7,6 +7,7 @@ export const AppContext = createContext(null);
 export default ({children}) => {
     const [currSub, setCurrSub] = useState({});
     const [currUnit, setCurrUnit] = useState();
+    const [currExam, setCurrExam] = useState();
     const [userID, setUserID] = useState(JSON.parse(sessionStorage.getItem("user")));
     const [userSubs, setUserSubs] = useState([]);
     const [isLightMode, setIsLightMode] = useState();
@@ -65,7 +66,9 @@ export default ({children}) => {
         userSubs,
         setUserSubs,
         isLightMode,
-        setIsLightMode
+        setIsLightMode,
+        currExam,
+        setCurrExam
     }
 
     useEffect(() => {
