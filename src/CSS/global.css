@@ -201,3 +201,21 @@ input[type="checkbox"] {
 input[type="checkbox"]:hover {
     cursor: pointer;
 }
+
+button {
+    background-color: var(--primary-text-color);
+    color: var(--content-background-color);
+    cursor: pointer;
+    border-radius: 3px;
+    border: none;
+    padding: 3px 7px;
+}
+
+button:not(:disabled):hover {
+    background-color: var(--accent);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
