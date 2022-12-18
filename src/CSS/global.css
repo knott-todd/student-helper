@@ -158,7 +158,12 @@ a{
     background-color: var(--primary-text-color);
 }
 
-.default-form button:hover {
+.default-form button:disabled {
+    opacity: 0.5;
+    cursor:default;
+}
+
+.default-form button:not(:disabled):hover {
     transition: 0.2s;
     background-color: var(--accent);
 }

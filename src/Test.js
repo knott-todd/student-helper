@@ -18,7 +18,7 @@ const Test = () => {
     useEffect(() => {
         console.log(typeof global.currSub)
         
-        if(global.currSub && global.currSub.id) {
+        if(global.currSub && global.currSub.id && global.currExam) {
 
             getPastpapers(global.currSub.id, global.currExam, global.userID)
             .then(result => {
@@ -29,18 +29,47 @@ const Test = () => {
 
     }, [global.currSub, global.currExam]);
 
+    const badges = [
+        {
+            icon: "T",
+            enabledCondition: "areTopicsLinked",
+            description: "All topics linked"
+        },
+        {
+            icon: "T",
+            semiCondition: "areAnyTopicsLinked",
+            description: "Some topics linked"
+        },
+        {
+            icon: "Q",
+            enabledCondition: "areQuestionsOutlined",
+            description: "Questions outlined"
+        }
+    ]
+
     return (
         <div className="Test">
 
             <h1 className="page-title">Test</h1>
+            {badges.map(badge => (
+                <span style={{paddingRight: "10px", cursor: "default"}}>
+                    <p style={{display: "inline"}} className={`badge topic-badge ${badge.enabledCondition ? "badge-enabled" : (badge.semiCondition ? "badge-semi" : "badge-disabled")}`}>
+                        {badge.icon} <span style={{fontWeight: 300, opacity: 1}}>{badge.description}</span>
+                    </p>
+                </span>
+            ))}
             <div className="pastpapers list-container body-div">
-                {papers.sort((a, b) => a.year.substring(0, 4) - b.year.substring(0, 4)).reverse().sort((a, b) => Number(a.is_complete) - Number(b.is_complete)).map(paper => (
+                {papers.sort((a, b) => b.year.substring(0, 4) - a.year.substring(0, 4)).sort((a,b) => Number(b.areTopicsLinked) - Number(a.areTopicsLinked)).sort((a,b) => Number(b.areAnyTopicsLinked) - Number(a.areAnyTopicsLinked)).sort((a, b) => Number(a.is_complete) - Number(b.is_complete)).map(paper => (
                     <Link to={`pastpaper/${paper.id}`} className={`list-link test-paper ${paper.is_complete ? "complete" : ""}`} key={paper.id} >
                         
                         <div className="head-badge-wrapper" style={{display: "block"}}>
                             <h2 className="paper-year-head" style={{display: "inline-block", verticalAlign: "top", margin: 0}}>{paper.year}</h2>
                             <div className="badges-wrapper">
-                                <p className={`badge topic-badge ${paper.areTopicsLinked ? "badge-enabled" : (paper.areAnyTopicsLinked ? "badge-semi" : "badge-disabled")}`}>T</p>
+                                {Array(badges.find(badge => (paper[badge.semiCondition] || paper[badge.enabledCondition]) ) || {}).map(badge => (
+                                    <p className={`badge topic-badge ${paper[badge.enabledCondition] ? "badge-enabled" : (paper[badge.semiCondition] ? "badge-semi" : "badge-disabled")}`}>{badge.icon}</p>
+                                ))}
+                                {/* <p className={`badge topic-badge ${paper.areTopicsLinked ? "badge-enabled" : (paper.areAnyTopicsLinked ? "badge-semi" : "badge-disabled")}`}>T</p>
+                                <p className={`badge topic-badge ${paper.areQuestionsOutlined && !paper.areAnyTopicsLinked ? "badge-enabled" : "badge-disabled"}`}>Q</p>                                 */}
                             </div>
                         </div>
                         

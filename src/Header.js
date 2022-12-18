@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import {AppContext} from "./AppContext";
-import { getSubjects, getUserSubjects } from "./services/SQLService";
+import { getSubjects, getUserExam, getUserSubjects } from "./services/SQLService";
 import './CSS/Header.css'
 import { useNavigate } from "react-router-dom";
 
@@ -25,6 +25,13 @@ const Header = () => {
                     
                     // if(result.length !== 0)
                     //     navigate('/track')
+                })
+                
+            getUserExam(global.userID)
+                .then(result => {
+                    
+                    global.setCurrExam(result[0].default_exam);
+
                 })
         }
     }, [global.userID]);

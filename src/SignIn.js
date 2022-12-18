@@ -22,20 +22,6 @@ const SignIn = () => {
     }, [])
 
     useEffect(() => {
-        if(global.userID){
-            getUserExam(global.userID)
-                .then(result => {
-
-                    const currExam = result[0].default_exam;
-                    
-                    global.setCurrExam(currExam);
-
-                })
-        }
-        
-    }, [global.userID]);
-
-    useEffect(() => {
         if(global.currExam) {
             getExamSubjects(global.currExam)
                 .then(result => {
@@ -106,10 +92,10 @@ const SignIn = () => {
 
             <form className="default-form">
                 <label htmlFor="fname">First Name</label><br />
-                <input type="text" id="fname" name="fname" value={fnameVal} onChange={e => setFnameVal(e.target.value)} /><br />
+                <input type="text" id="fname" name="fname" value={fnameVal} onChange={e => setFnameVal(e.target.value)} required /><br />
                 <label htmlFor="fname">Last Name</label><br />
-                <input type="text" id="lname" name="lname" value={lnameVal} onChange={e => setLnameVal(e.target.value)} /><br />
-                <button onClick={e => handleSetUser(e)}>Submit</button>
+                <input type="text" id="lname" name="lname" value={lnameVal} onChange={e => setLnameVal(e.target.value)} required /><br />
+                <button disabled={!fnameVal || !lnameVal} onClick={e => handleSetUser(e)}>Submit</button>
             </form>
             
             {global.userID ? (
@@ -129,7 +115,7 @@ const SignIn = () => {
             <form style={{display: "block"}}>
                 <h3 style={{display: (subs.length !== 0 ? "block" : "none")}}>Your Subjects</h3>
                 <div style={{textAlign: "left", maxWidth: "230px", margin: "auto"}}>
-                    {subs.sort((a, b) => b.isUserSub - a.isUserSub).map(sub => (
+                    {subs.sort((a, b) => a.name.localeCompare(b.name)).sort((a, b) => b.isUserSub - a.isUserSub).map(sub => (
                         <p className="subject-label" >
                             {sub.name}
                             <input type="checkbox" style={{float: "right", height: "100%"}} checked={sub.isUserSub} onChange={e => onUserSubChange(e, sub)} />
