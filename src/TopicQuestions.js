@@ -98,7 +98,7 @@ const TopicQuestions = () => {
 
     return (
         <div className="objective-questions">
-            <h1>{topic.name}</h1>
+            <h1 className="page-title">{topic.name}</h1>
             <h4>Familiarity: {(topic.familiarity * 100).toFixed(2)}%</h4>
 
             <h2>

@@ -1,6 +1,48 @@
 :root {
     --accent: brown;
     --max-nav-height: 60px;
+    --background-color: #f2f2f2;
+    --content-background-color: white;
+    --primary-text-color: black;
+    --green: #60b888;
+    --red: #F2545B;
+    --blue: #28afb0;
+}
+
+@media (prefers-color-scheme: light) {
+    :root{
+        --background-color: #f2f2f2;
+        --content-background-color: white;
+        --primary-text-color: black;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root{
+        --background-color: #191919;
+        --content-background-color: #131313;
+        --primary-text-color: white;
+    }
+}
+
+body {
+    background-color: var(--background-color);
+}
+
+* {
+    transition: 0.2s;
+    color: var(--primary-text-color);
+}
+
+select {
+    background-color: var(--content-background-color);
+    border-radius: 2px;
+    border: solid 1px var(--background-color);
+}
+
+select:hover {
+    background-color: var(--content-background-color);
+    cursor: pointer;
 }
 
 .list-container {
@@ -22,11 +64,12 @@
 }
 
 .complete p, .complete h2{
-    color: rgb(169, 213, 189);
+    color: var(--green);
+    opacity: 0.5;
 }
 
 .list-link:hover {
-    background-color: rgb(238, 238, 238);
+    /* background-color: rgb(238, 238, 238); */
     color: black;
 }
 
@@ -37,7 +80,6 @@
 
 a{
     text-decoration: none;
-    color: rgb(20, 20, 20);
     cursor: pointer;
 }
 
@@ -106,17 +148,22 @@ a{
     transition: 0.2s;
     width: 100%;
     padding: 8px;
-    margin-top: 3px;
+    margin-top: 10px;
     border-radius: 4px;
     border: none;
-    color: white;
+    color: var(--content-background-color);
     font-weight: bold;
     letter-spacing: 1px;
     cursor: pointer;
-    background-color: black;
+    background-color: var(--primary-text-color);
 }
 
-.default-form button:hover {
+.default-form button:disabled {
+    opacity: 0.5;
+    cursor:default;
+}
+
+.default-form button:not(:disabled):hover {
     transition: 0.2s;
     background-color: var(--accent);
 }
@@ -130,12 +177,45 @@ a{
     box-sizing: border-box;
     padding: 0;
     border-radius: 3px;
-    border: solid 1px black;
+    border: solid 2px transparent;
     width: 100%;
+    background-color: var(--content-background-color);
+}
+
+.default-form input:-internal-autofill-selected{
+    -webkit-box-shadow: 0 0 0 30px var(--content-background-color) inset;
+    box-shadow: 0 0 0 30px var(--content-background-color) inset;
+    -webkit-text-fill-color: var(--primary-text-color);
 }
 
 .default-form input:focus {
     outline: none;
     transition: 0.2s;
-    border: solid 2px var(--accent);
+    border-color: var(--accent);
+}
+
+input[type="checkbox"] {
+    accent-color: var(--accent);
+}
+
+input[type="checkbox"]:hover {
+    cursor: pointer;
+}
+
+button {
+    background-color: var(--primary-text-color);
+    color: var(--content-background-color);
+    cursor: pointer;
+    border-radius: 3px;
+    border: none;
+    padding: 3px 7px;
+}
+
+button:not(:disabled):hover {
+    background-color: var(--accent);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: default;
 }

@@ -30,27 +30,19 @@ const ObjectiveSetter = (props) => {
     const global = useContext(AppContext);
 
     useEffect(() => {
+        console.log(quests[questIndex])
 
         if(quests[questIndex].id) {
 
-            if(quests[questIndex]) {
-
-                setPrevTopic(topic);
-                setPrevModule(module);
-
-                setTopic({id: quests[questIndex].topic});
-                setModule({id: quests[questIndex].module});
-
-                // console.log("PP:", prevTopic, topic, questIndex);
-
-            } else {
+            if(quests[questIndex - 1]) {
                 
-                setPrevTopic(topic);
-                setPrevModule(module);
+                setPrevTopic({id: quests[questIndex - 1].topic});
+                setPrevModule({id: quests[questIndex - 1].module});
 
-                setTopic({});
-                setModule({});
             }
+
+            setTopic({id: (quests[questIndex].topic || -1)});
+            setModule({id: (quests[questIndex].module || -1)});
 
             // getQuestTopic(quests[questIndex].id)
             //     .then(result => {
@@ -78,15 +70,6 @@ const ObjectiveSetter = (props) => {
     }, [quests[questIndex], questIndex]);
 
     useEffect(() => {
-        console.log(prevTopic);
-    }, [prevTopic])
-
-    // useEffect(() => {
-    //     console.log("o", objective.id)
-    //     console.log(quests[questIndex].id)
-    // }, [objective])
-
-    useEffect(() => {
 
         getPaperQuestions(props.paperID, global.userID).then(result => {
             if(typeof result[0] !== 'undefined'){
@@ -103,7 +86,7 @@ const ObjectiveSetter = (props) => {
     }, []);
 
     useEffect(() => {
-        console.log(quests[questIndex]);
+        
         if(props.unit) {
             getUnitModules(props.unit)
                 .then(result => {
@@ -120,15 +103,6 @@ const ObjectiveSetter = (props) => {
                 })
         }
     }, [module]);
-
-    // useEffect(() => {
-    //     if(topic.id) {
-    //         getTopicObjectives(topic.id)
-    //             .then(result => {
-    //                 setObjectives(result);
-    //             })
-    //     }
-    // }, [topic]);
 
     function romanToNum(roman) {
         if (roman === "")           return 0;
@@ -215,7 +189,7 @@ const ObjectiveSetter = (props) => {
                         <div style={{display: "inline-block", verticalAlign: "middle", paddingBottom: "30px"}}>
                             
                             <button style={{display: "block", margin: "auto", width: "100px"}} disabled={!prevTopic.id} onClick={copyPrevTopic} >Copy Prev All</button>
-                            <button style={{width: "100px", margin: "0px 10px"}} disabled={!topic.id} onClick={handleSubmit} >Submit</button>
+                            <button style={{width: "100px", margin: "0px 10px"}} disabled={!topic.id || topic.id === -1} onClick={handleSubmit} >Submit</button>
 
                         </div>
 

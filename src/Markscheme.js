@@ -21,7 +21,7 @@ const Markscheme = (props) => {
         <div className="markscheme body-div" style={{height: "75vh"}}>
 
             <iframe src={markscheme.markscheme_link} width="99%" height="100%"></iframe>
-            <Link to={`/questions/${markscheme.id}`}>
+            <Link to={`/test/questions/${markscheme.id}`}>
                 Continue
             </Link>
 

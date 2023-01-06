@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import {AppContext} from "./AppContext";
-import { getSubjects, getUserSubjects } from "./services/SQLService";
+import { getSubjects, getUserExam, getUserSubjects } from "./services/SQLService";
 import './CSS/Header.css'
 import { useNavigate } from "react-router-dom";
 
@@ -26,6 +26,13 @@ const Header = () => {
                     // if(result.length !== 0)
                     //     navigate('/track')
                 })
+                
+            getUserExam(global.userID)
+                .then(result => {
+                    
+                    global.setCurrExam(result[0].default_exam);
+
+                })
         }
     }, [global.userID]);
 
@@ -40,18 +47,18 @@ const Header = () => {
 
     return (
         <div className="header" style={{visibility: (global.userID ? "visible" : "hidden")}}>
-            <label style={{padding: 10}}>
+            <form style={{padding: 10}}>
                 <select className="sub-select header-dropdown" value={global.currSub ? global.currSub.id : ""} style={{margin: "10px 10px 10px 5px"}} onChange={e => global.setCurrSub(subs.find(sub => sub.id === parseInt(e.target.value)))}>
                     {subs.map(sub => (
                         <option key={parseInt(sub.id)} value={sub.id}>{sub.name}</option>
                     ))} 
                 </select> 
-                <select className="unit-select header-dropdown" value={global.currUnit} style={{margin: "10px 10px 10px 5px"}} onChange={e => global.setCurrUnit(units.find(unit => unit === parseInt(e.target.value)))}>
+                {/* <select className="unit-select header-dropdown" value={global.currUnit} style={{margin: "10px 10px 10px 5px"}} onChange={e => global.setCurrUnit(units.find(unit => unit === parseInt(e.target.value)))}>
                     {units.map(unit => (
                         <option key={parseInt(unit)} value={unit}>Unit {unit}</option>
                     ))} 
-                </select>
-            </label>
+                </select> */}
+            </form>
         </div>
     )
 }

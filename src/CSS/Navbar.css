@@ -4,7 +4,7 @@
     bottom: 0;
     width: 100%;
     max-height: var(--max-nav-height);
-    background-color: white;
+    background-color: var(--content-background-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,6 +13,10 @@
 nav .current {
     transition: 0.5s;
     border-bottom: var(--accent) solid 3px;
+    color: var(--accent);
+}
+
+nav .current * {
     color: var(--accent);
 }
 
@@ -41,6 +45,6 @@ nav a p {
     font-weight: 500;
 }
 
-nav a:hover {
-    background-color: whitesmoke;
+nav a:not(.nav-back):hover {
+    background-color: var(--background-color);
 }

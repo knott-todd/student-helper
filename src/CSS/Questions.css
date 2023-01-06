@@ -1,3 +1,10 @@
 .question {
     padding: 20px;
 }
+
+.questions {
+    display: grid;
+    width: fit-content;
+    margin: auto;
+    justify-items: end;
+}

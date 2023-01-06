@@ -16,6 +16,7 @@ const DependentDropdown = (props) => {
         <div>
             <label htmlFor={props.label.toLowerCase()}>{props.label}</label>
             <select value={props.currVal.id} className="dependent-select" id={props.label.toLowerCase()} disabled={props.required.includes(undefined)} onChange={handleChange}>
+                <option key={-1} value={-1}></option>
                 {[{}].concat(props.vals).map(obj => (
                     <option key={parseInt(obj.id)} value={obj.id}>{eval(props.prepend)}{obj[labelColumn]}</option>
                 ))}

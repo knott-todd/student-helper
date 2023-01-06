@@ -1,27 +1,35 @@
 .progress-bg {
-    background-color:whitesmoke;
-    height: 10px;
-    width: calc(50% - 4px);
+    height: 100%;
+    width: 50%;
     display: inline-block;
-    border: solid 1px lightgrey;
-    
+    vertical-align: top;
+}
+
+.progress {
+    border-radius: 5px;
+    /* border: solid 1px var(--background-color); */
+    background-color:var(--content-background-color);
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .negative-progress-bg{
     /* border-right-width: 0; */
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+    /* border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px; */
+    /* border-right: solid 1px var(--content-background-color); */
 }
 
 .positive-progress-bg{
     /* border-left-width: 0; */
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+    /* border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px; */
+    /* border-left: solid 1px var(--content-background-color); */
 }
 
 .negative-progress {
-    background-color: red;
-    height: 100%;
+    background-color: var(--red);
+    height: inherit;
     margin-left: auto;
     margin-right: 0;
     border-top-left-radius: 5px;
@@ -29,8 +37,33 @@
 }
 
 .positive-progress {
-    background-color:deepskyblue;
-    height: 10px;
+    background-color:var(--blue);
+    height: inherit;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+}
+
+.familiarity-complete .progress {
+    background: hsla(45, 100%, 56%, 1);
+
+    background: linear-gradient(134deg, hsla(45, 100%, 56%, 1) 9%, hsla(57, 100%, 50%, 1) 18%, hsla(45, 100%, 56%, 1) 27%, hsla(45, 100%, 56%, 1) 58%, hsla(57, 100%, 50%, 1) 78%, hsla(45, 100%, 56%, 1) 98%);
+
+    background: -moz-linear-gradient(134deg, hsla(45, 100%, 56%, 1) 9%, hsla(57, 100%, 50%, 1) 18%, hsla(45, 100%, 56%, 1) 27%, hsla(45, 100%, 56%, 1) 58%, hsla(57, 100%, 50%, 1) 78%, hsla(45, 100%, 56%, 1) 98%);
+
+    background: -webkit-linear-gradient(134deg, hsla(45, 100%, 56%, 1) 9%, hsla(57, 100%, 50%, 1) 18%, hsla(45, 100%, 56%, 1) 27%, hsla(45, 100%, 56%, 1) 58%, hsla(57, 100%, 50%, 1) 78%, hsla(45, 100%, 56%, 1) 98%);
+
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#FFC81E", endColorstr="#FFF200", GradientType=1 );
+
+}
+
+.familiarity-complete .card-link:hover .track-card-heading {
+    color: #ffc71f;
+}
+
+.familiarity-complete:hover {
+    border-color:#ffc71f;
+}
+
+.familiarity-complete .progress *{
+    background-color: transparent;
 }

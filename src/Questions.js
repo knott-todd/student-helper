@@ -160,54 +160,58 @@ const Questions = () => {
     }
 
     return (
-        <div className="questions body-div">
-            {ordered.map((q, qi) => (
-                q.letters.map((l, li) => (
-                    l.romans.map((r, ri) => (
-                        r.subLetters.map((s, si) => (
-                            <div key={s.id} className="list-item question">
+        <div className="body-div">
+            <div className="questions">
+                {ordered.map((q, qi) => (
+                    q.letters.map((l, li) => (
+                        l.romans.map((r, ri) => (
+                            r.subLetters.map((s, si) => (
+                                <div key={s.id} className="list-item question">
+                                    
+                                    {(li === 0 && ri === 0 && si === 0) ? (
+                                        <p style={{display: "inline", padding: 2, fontWeight: "bold"}}>
+                                            <CompleteCheckbox question={q} id={{num: q.num}} onChange={onParentCheckboxChange} />
+                                            {q.num}.
+                                        </p>
+                                    ) : null}
+                                    {(l.letter && ri === 0 && si === 0) ? (
+                                        <p style={{display: "inline", padding: 2, fontWeight: "bold"}}>
+                                            <CompleteCheckbox question={l} id={{num: q.num, letter: l.letter}} onChange={onParentCheckboxChange} />
+                                            {l.letter})
+                                        </p>
+                                    ) : null}
+                                    {(r.roman && si === 0) ? (
+                                        <p style={{display: "inline", padding: 2, fontWeight: "bold"}}>
+                                            <CompleteCheckbox question={r} id={{num: q.num, letter: l.letter, roman: r.roman}} onChange={onParentCheckboxChange} />
+                                            {r.roman})
+                                        </p>
+                                    ) : null}
+                                    {s.subLetter ? (
+                                        <p style={{display: "inline", padding: 2, fontWeight: "bold"}}>
+                                            <CompleteCheckbox question={s} id={{num: q.num, letter: l.letter, roman: r.roman, subLetter: s.subLetter}} onChange={onParentCheckboxChange} />
+                                            {s.subLetter})
+                                        </p>
+                                    ) : null}
+
+                                    {/* <Link to={`/objective_questions/${s.objectiveID}`} style={{display: "inline-block"}}>
+                                        {s.info}
+                                    </Link> */}
+
+                                    {/* <br /> */}
+
+                                    {/* <CompleteCheckbox question={s} id={s.id} onChange={onCheckboxChange} /> */}
+
+                                    <FamiliarityDropdown question={s} id={s.id} onChange = {onDropdownChange} />
+                                </div>
+                            ))
                                 
-                                {(li === 0 && ri === 0 && si === 0) ? (
-                                    <p style={{display: "inline", padding: 2, fontWeight: "bold"}}>
-                                        <CompleteCheckbox question={q} id={{num: q.num}} onChange={onParentCheckboxChange} />
-                                        {q.num}.
-                                    </p>
-                                ) : null}
-                                {(l.letter && ri === 0 && si === 0) ? (
-                                    <p style={{display: "inline", padding: 2, fontWeight: "bold"}}>
-                                        <CompleteCheckbox question={l} id={{num: q.num, letter: l.letter}} onChange={onParentCheckboxChange} />
-                                        {l.letter})
-                                    </p>
-                                ) : null}
-                                {(r.roman && si === 0) ? (
-                                    <p style={{display: "inline", padding: 2, fontWeight: "bold"}}>
-                                        <CompleteCheckbox question={r} id={{num: q.num, letter: l.letter, roman: r.roman}} onChange={onParentCheckboxChange} />
-                                        {r.roman})
-                                    </p>
-                                ) : null}
-                                {s.subLetter ? (
-                                    <p style={{display: "inline", padding: 2, fontWeight: "bold"}}>
-                                        <CompleteCheckbox question={s} id={{num: q.num, letter: l.letter, roman: r.roman, subLetter: s.subLetter}} onChange={onParentCheckboxChange} />
-                                        {s.subLetter})
-                                    </p>
-                                ) : null}
-
-                                {/* <Link to={`/objective_questions/${s.objectiveID}`} style={{display: "inline-block"}}>
-                                    {s.info}
-                                </Link> */}
-
-                                {/* <br /> */}
-
-                                {/* <CompleteCheckbox question={s} id={s.id} onChange={onCheckboxChange} /> */}
-
-                                <FamiliarityDropdown question={s} id={s.id} onChange = {onDropdownChange} />
-                            </div>
                         ))
                             
                     ))
-                        
-                ))
-            ))}
+                ))}
+
+            </div>
+            
 
 
             {/* {quests.map((question, i) => (

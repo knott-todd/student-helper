@@ -32,10 +32,10 @@ const Pastpaper = () => {
     return (
         <div className="pastpaper body-div" style={{height: "75vh"}}>
 
-            <iframe src={paper.pdf_link} width="99%" height={(global.userID === 1 ? "350" : "100%")}></iframe>
+            <iframe src={paper.pdf_link} width="99%" height={(global.userID === 150 ? "350" : "100%")}></iframe>
 
             
-            {global.userID === 1 ? (
+            {global.userID === 150 ? (
                 <>
                     Edit Topics
                     <input type="checkbox" onChange={e => {setIsEditTopics(e.target.checked)}}/>

@@ -4,6 +4,7 @@ import { getTopics } from "./services/SQLService";
 import {AppContext} from "./AppContext";
 import './CSS/global.css'
 import './CSS/Module.css'
+import Progress from "./Progress";
 
 const Module = () => {
     // Previous code that sorted the site into Modules>Objectives. To be copied and modified into Modules>Topics
@@ -89,6 +90,7 @@ const Module = () => {
 
     useEffect(() => {
         getTopics(id, global.userID).then(result => {
+            result.avgFam = result.reduce((sum, next) => sum + next.topicFam, 0) / result.length;
             setTopics(result);
             // console.log(result[0].familiarity);
         })
@@ -96,7 +98,8 @@ const Module = () => {
 
     return (
         <div className="body-div">
-            <h1>Topics</h1>
+            <h1 className="page-title">Topics</h1>
+            <Progress value={topics.avgFam} height="6px" width="90%" />
             {/* {topics.sort((a, b) => a.combined - b.combined).map((topic, i) => ( */}
             {topics.sort((a, b) => (a.avgFam || a.avgFam === 0) ? a.avgFam - b.avgFam : b.avgFam - a.avgFam).map(topic => (
                 
@@ -138,37 +141,27 @@ const Module = () => {
                 //     </div>
                 // </Link>
 
-                <div className="topic-card track-card" key={topic.topic.id} style={{ margin: 3}}>
+                <div className={`topic-card track-card ${topic.topicFam >= 1 ? "familiarity-complete": ""}`} key={topic.topic.id} style={{ margin: 3}}>
 
                     <Link className="topic-link card-link" to={`/track/topic_questions/${topic.topic.id}`} style={{display:"block", padding: 0, margin: 0}}>
 
-                        <h2 className="track-card-heading" >
+                        <h2 className={`track-card-heading`} >
                             {topic.topic.name}
                         </h2>
-                        <div>
-                            <label for="avg">
-                                Familiarity ({topic.topicFam ? ((topic.topicFam  * 100).toFixed(2) + "%") : "None"})
-                            </label>
 
-                            <div className="progress" style={{overflow: "hidden", width: "100px", display:"inline-block"}}>
-                                <div className="progress-bg negative-progress-bg">
-                                    <div className="negative-progress" style={{maxWidth: "100%", width: topic.topicFam < 0 ? `${-topic.topicFam * 100}%` : 0}}/>
-                                </div>
-                                <div className="progress-bg positive-progress-bg">
-                                    <div className="positive-progress" style={{maxWidth: "100%", width: topic.topicFam > 0 ? `${topic.topicFam * 100}%` : 0}}/>
-                                </div>
-                            </div>
-                        </div>
+                        <Progress label="Familiarity" value={topic.topicFam} />
                     </Link>
-
-                    <Link className="topic-link card-link accent-link" to={`/track/objective_questions/${topic.objective.id}`} style={{display: "block", padding: 3, paddingLeft: 0, margin:0, fontSize:14}}>
-                        <p style={{display: "inline-block", padding: 0, margin:0}}>
-                            <p className="topic-card-heading" style={{fontWeight: 500, padding: 0, margin: 0, display: "inline"}}>Next Objective:</p> {topic.objective.info ? topic.objective.info : "None"}
-                        </p>
-                        <p style={{display: "inline-block", padding: 3, margin:0}}>
-                        <p style={{fontWeight: 500, padding: 3, margin: 0, display: "inline"}}>Familiarity:</p> {topic.lowestFamiliarity ? ((topic.lowestFamiliarity  * 100).toFixed(2) + "%") : "None"}
-                        </p>
-                    </Link>
+                    {topic.objective.id ? (
+                        <Link className="topic-link card-link accent-link" to={`/track/objective_questions/${topic.objective.id}`} style={{display: "block", padding: 3, paddingLeft: 0, margin:0, fontSize:14}}>
+                            <p style={{display: "inline-block", padding: 0, margin:0}}>
+                                <p className="topic-card-heading" style={{fontWeight: 500, padding: 0, margin: 0, display: "inline"}}>Next Objective:</p> {topic.objective.info ? topic.objective.info : "None"}
+                            </p>
+                            <p style={{display: "inline-block", padding: 3, margin:0}}>
+                            <p style={{fontWeight: 500, padding: 3, margin: 0, display: "inline"}}>Familiarity:</p> {topic.lowestFamiliarity ? ((topic.lowestFamiliarity  * 100).toFixed(2) + "%") : "None"}
+                            </p>
+                        </Link>
+                    ) : ""}
+                    
 
                     {/* <Link className="accent-link" to={`/topic_questions/${topic.topic.id}`}>
                         <p>Practice</p>
