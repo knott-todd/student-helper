@@ -219,3 +219,10 @@ button:disabled {
     opacity: 0.5;
     cursor: default;
 }
+
+textarea {
+    background-color: var(--content-background-color);
+    color: var(--primary-text-color);
+    border: none;
+    border-radius: 5px;
+}

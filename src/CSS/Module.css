@@ -11,6 +11,7 @@
     background-color:var(--content-background-color);
     overflow: hidden;
     box-sizing: border-box;
+    text-align: left;
 }
 
 .negative-progress-bg{

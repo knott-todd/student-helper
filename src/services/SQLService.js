@@ -79,6 +79,34 @@ export async function getUserExam (userID) {
     }
 }
 
+export async function getTaskInfo (taskID) {
+    try {
+        const response = await fetch(`${backendURL}/task_info/${taskID}`, {
+            headers: {
+                "Bypass-Tunnel-Reminder": "true"
+            }
+        });
+        return await response.json();
+    } catch(error) {
+        return [];
+    }
+}
+
+export async function getUserTasks (userID) {
+    try {
+        const response = await fetch(`${backendURL}/user_tasks/${userID}`, {
+            headers: {
+                "Bypass-Tunnel-Reminder": "true"
+            }
+        });
+        return await response.json();
+    } catch(error) {
+        return [];
+    }
+}
+
+
+
 export async function setUserExam(examID, userID) {
     const response = await fetch(`${backendURL}/set_user_exam`, {
         method: 'PUT',
@@ -99,6 +127,41 @@ export async function updateUserQuestion(data, userID) {
             "Bypass-Tunnel-Reminder": "true"
         },
         body: JSON.stringify({question: data, userID})
+    })
+    return await response.json();
+}
+
+export async function updateTask(taskID, taskText, subject, deadline) {
+    const response = await fetch(`${backendURL}/update_task`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            "Bypass-Tunnel-Reminder": "true"
+        },
+        body: JSON.stringify({taskID, taskText, subject, deadline})
+    })
+    return await response.json();
+}
+
+export async function updateTaskComplete (taskID, isCompleted) {
+    const response = await fetch(`${backendURL}/update_task_complete`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            "Bypass-Tunnel-Reminder": "true"
+        },
+        body: JSON.stringify({taskID, is_completed: isCompleted})
+    })
+    return await response.json();
+}
+
+export async function deleteTask (taskID) {
+    const response = await fetch(`${backendURL}/delete_task`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            "Bypass-Tunnel-Reminder": "true"
+        }
     })
     return await response.json();
 }
@@ -323,6 +386,19 @@ export async function getExams () {
     }
 }
 
+export async function getBuildVersion () {
+    try {
+        const response = await fetch(`${backendURL}/build_version`, {
+            headers: {
+                "Bypass-Tunnel-Reminder": "true"
+            }
+        });
+        return await response.json();
+    } catch(error) {
+        return [];
+    }
+}
+
 export async function getExamSubjects (examID) {
     try {
         const response = await fetch(`${backendURL}/exam_subjects/${examID}`, {
@@ -369,6 +445,18 @@ export async function addQuestion(question) {
             "Bypass-Tunnel-Reminder": "true"
         },
         body: JSON.stringify(question)
+    })
+    return await response.json();
+}
+
+export async function addTask(task) {
+    const response = await fetch(`${backendURL}/add_task`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            "Bypass-Tunnel-Reminder": "true"
+        },
+        body: JSON.stringify(task)
     })
     return await response.json();
 }
