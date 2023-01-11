@@ -10,6 +10,7 @@ import ObjectiveQuestions from './ObjectiveQuestions';
 import Module from './Module';
 import Header from './Header';
 import Topic from './Topic';
+import Homework from './Homework';
 import './CSS/global.css';
 import {AppContext} from './AppContext';
 import ObjectiveInsert from './ObjectiveInsert';
@@ -21,6 +22,7 @@ import Refresh from './Refresh';
 import { useContext, useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser } from '@fortawesome/free-solid-svg-icons'
+import TaskForm from './TaskForm';
 library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser)
 
 function App() {
@@ -96,7 +98,6 @@ function App() {
   return (
     <div className="App">
 
-
       <Router>
         <Header >
           <script src="https://kit.fontawesome.com/ed9cf2ed95.js" crossorigin="anonymous"></script>
@@ -118,6 +119,12 @@ function App() {
               <Route path = "topic_questions/:id" element={<TopicQuestions />} />
               <Route path = "module/:id" element={<Module />} />
               <Route path = "topic/:id" element={<Topic />} />
+            </Route>
+
+            <Route path='homework'>
+              <Route path = "" element={<Homework />} />
+              <Route path = "task_form/:id" element={<TaskForm />} />
+              <Route path = "task_form" element={<TaskForm />} />
             </Route>
 
             <Route path='/insert_objective' element={<ObjectiveInsert />} />

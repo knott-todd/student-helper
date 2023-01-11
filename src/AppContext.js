@@ -1,4 +1,4 @@
-import { getPaperQuestions, getPastpapers } from "./services/SQLService";
+import { getBuildVersion, getPaperQuestions, getPastpapers } from "./services/SQLService";
 
 const { createContext, useState, useEffect } = require("react");
 
@@ -82,15 +82,36 @@ export default ({children}) => {
     }, [userID])
 
     useEffect(() => {
-        if(currSub && currUnit && userID && currSub.id && currUnit.id){
-            getPastpapers(currSub.id, currUnit, userID)
+        if(currSub && currExam && userID && currSub.id){
+            getPastpapers(currSub.id, currExam, userID)
             .then(async result => {        
                 for(const paper of result){
                     await getPaperQuestions(paper.id, userID)
                 }
             })
         }
-    }, [currSub, currUnit, userID])
+    }, [currSub, currExam, userID])
+
+    useEffect(() => {
+        getBuildVersion()
+            .then(result => {
+
+                let version = result.version;
+
+                const last_version = localStorage.getItem('version');
+                if(last_version !== version) {
+                    localStorage.setItem('version', version);
+                    console.log("Updated! New version: ", version)
+                    // caches.keys().then((names) => {
+                    //     names.forEach((name) => {
+                    //         caches.delete(name);
+                    //     });
+                    // });
+                }
+                
+            })
+        
+    }, [])
 
     return (
         <AppContext.Provider value={global}>
