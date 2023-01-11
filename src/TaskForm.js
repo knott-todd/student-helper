@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AppContext } from "./AppContext";
-import { addTask, getTaskInfo, getUserSubjects } from "./services/SQLService";
+import { addTask, deleteTask, getTaskInfo, getUserSubjects, updateTask } from "./services/SQLService";
 
 const TaskForm = () => {
     const {id} = useParams();
@@ -40,7 +40,7 @@ const TaskForm = () => {
 
     const onSubmit = () => {
         if(id) {
-            updateTaskInfo(id, taskText, subject, deadline)
+            updateTask(id, taskText, subject, deadline)
         } else {
             addTask({taskText, subject, deadline})
         }

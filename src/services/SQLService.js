@@ -143,6 +143,29 @@ export async function updateTask(taskID, taskText, subject, deadline) {
     return await response.json();
 }
 
+export async function updateTaskComplete (taskID, isCompleted) {
+    const response = await fetch(`${backendURL}/update_task_complete`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            "Bypass-Tunnel-Reminder": "true"
+        },
+        body: JSON.stringify({taskID, is_completed: isCompleted})
+    })
+    return await response.json();
+}
+
+export async function deleteTask (taskID) {
+    const response = await fetch(`${backendURL}/delete_task`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            "Bypass-Tunnel-Reminder": "true"
+        }
+    })
+    return await response.json();
+}
+
 export async function setQuestObjective(data) {
     console.log(data);
     const response = await fetch(`${backendURL}/set_objective`, {

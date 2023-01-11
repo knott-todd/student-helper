@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import Progress from "./Progress"
-import { getUserTasks } from "./services/SQLService"
+import { getUserTasks, updateTaskComplete } from "./services/SQLService"
 import SingleProgress from "./SingleProgress"
 
 const Homework = () => {
