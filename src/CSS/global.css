@@ -7,6 +7,7 @@
     --green: #60b888;
     --red: #F2545B;
     --blue: #28afb0;
+    --faded-opacity: 0.5;
 }
 
 @media (prefers-color-scheme: light) {
@@ -65,7 +66,7 @@ select:hover {
 
 .complete p, .complete h2{
     color: var(--green);
-    opacity: 0.5;
+    opacity: var(--faded-opacity);
 }
 
 .list-link:hover {
@@ -138,10 +139,14 @@ a{
     padding-bottom: 2px;
 }
 
-.subject-label:hover {
+.subject-label label:hover {
     transition: 0.2s;
     cursor: pointer;
     color: var(--accent);
+}
+
+.notUserSub {
+    opacity: var(--faded-opacity);
 }
 
 .default-form button {
