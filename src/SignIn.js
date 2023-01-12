@@ -116,9 +116,11 @@ const SignIn = () => {
                 <h3 style={{display: (subs.length !== 0 ? "block" : "none")}}>Your Subjects</h3>
                 <div style={{textAlign: "left", maxWidth: "230px", margin: "auto"}}>
                     {subs.sort((a, b) => a.name.localeCompare(b.name)).sort((a, b) => b.isUserSub - a.isUserSub).map(sub => (
-                        <p className="subject-label" >
-                            {sub.name}
-                            <input type="checkbox" style={{float: "right", height: "100%"}} checked={sub.isUserSub} onChange={e => onUserSubChange(e, sub)} />
+                        <p className={`subject-label ${sub.isUserSub ? "" : "notUserSub"}`} >
+                            <label style={{cursor: "pointer"}}>
+                                {sub.name}
+                                <input type="checkbox" style={{float: "right", height: "100%"}} checked={sub.isUserSub} onChange={e => onUserSubChange(e, sub)} />
+                            </label>
                             <br />
                         </p>
                     ))}

@@ -120,6 +120,7 @@ export async function setUserExam(examID, userID) {
 }
 
 export async function updateUserQuestion(data, userID) {
+    console.log("Updated")
     const response = await fetch(`${backendURL}/update_user_question`, {
         method: 'PUT',
         headers: {

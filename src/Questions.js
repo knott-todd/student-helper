@@ -201,7 +201,7 @@ const Questions = () => {
 
                                     {/* <CompleteCheckbox question={s} id={s.id} onChange={onCheckboxChange} /> */}
 
-                                    <FamiliarityDropdown question={s} id={s.id} onChange = {onDropdownChange} />
+                                    <FamiliarityDropdown question={s} questions={{quests, setQuests}} id={s.id} onChange = {onDropdownChange} />
                                 </div>
                             ))
                                 

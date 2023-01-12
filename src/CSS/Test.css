@@ -80,7 +80,7 @@
 
 .badge-semi {
     transition: 0.2s;
-    opacity: 0.5;
+    opacity: var(--faded-opacity);
     height: auto;
 }
 
