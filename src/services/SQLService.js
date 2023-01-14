@@ -245,6 +245,19 @@ export async function getTopics (moduleID, userID) {
     }
 }
 
+export async function getModule (moduleID) {
+    try {
+        const response = await fetch(`${backendURL}/module_info/${moduleID}`, {
+            headers: {
+                "Bypass-Tunnel-Reminder": "true"
+            }
+        });
+        return await response.json();
+    } catch(error) {
+        return [];
+    }
+}
+
 export async function getUnitModules (unitID) {
     try {
         const response = await fetch(`${backendURL}/unit_modules/${unitID}`, {
