@@ -51,7 +51,7 @@ const Header = () => {
     return (
         <div className="header" style={{visibility: (global.userID ? "visible" : "hidden")}}>
             <form style={{padding: 10}}>
-                <FontAwesomeIcon icon={global.currSub && global.currSub.fa_icon ? global.currSub.fa_icon : ""} />
+                <FontAwesomeIcon style={{paddingLeft: "14px"}} icon={global.currSub && global.currSub.fa_icon ? global.currSub.fa_icon : ""} />
                 <select className="sub-select header-dropdown" value={global.currSub ? global.currSub.id : ""} style={{margin: "10px 10px 10px 5px"}} onChange={e => global.setCurrSub(subs.find(sub => sub.id === parseInt(e.target.value)))}>
                     {subs.map(sub => (
                         <option key={parseInt(sub.id)} value={sub.id}>{sub.name}</option>
