@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AppContext } from "./AppContext";
 import { addTask, deleteTask, getTaskInfo, getUserSubjects, updateTask } from "./services/SQLService";
 
@@ -9,12 +9,13 @@ const TaskForm = () => {
     const [task, setTask] = useState({});
 
     const [subject, setSubject] = useState();
-    const [taskText, setTaskText] = useState();
-    const [deadline, setDeadline] = useState();
+    const [taskText, setTaskText] = useState('');
+    const [deadline, setDeadline] = useState('');
 
     const [subs, setSubs] = useState([{}]);
 
     const global = useContext(AppContext);
+    const navigate = useNavigate();
 
     const onSubjectChange = e => {
 
@@ -25,7 +26,7 @@ const TaskForm = () => {
             getTaskInfo(id)
                 .then(result => {
                     setSubject(result.subject);
-                    setDeadline(result.deadline);
+                    setDeadline(result.deadline.substr(0, 10));
                     setTaskText(result.task_text);
                 })
         }
@@ -38,28 +39,33 @@ const TaskForm = () => {
         }
     }, [])
 
-    const onSubmit = () => {
+    const onSubmit = e => {
+        e.preventDefault();
+
         if(id) {
             updateTask(id, taskText, subject, deadline)
         } else {
-            addTask({taskText, subject, deadline})
+            console.log("Adding...", {taskText, subject, deadline}, global.userID)
+            addTask({taskText, subject, deadline}, global.userID)
         }
-        // Redirect to homework
+        
+        navigate("/tasks")
     }
 
     const onDelete = () => {
         if(id) {
             deleteTask(id);
         }
-        // Redirect to homework
+
+        navigate("/tasks")
     }
 
     return (
         <div>
-            <form>
+            <form className="default-form">
                 <label>Subject</label><br />
                 <select className="sub-select header-dropdown" value={subject} style={{margin: "10px 10px 10px 5px"}} onChange={e => setSubject(e.target.value)}>
-                    {subs.map(sub => (
+                    {[{}].concat(subs).map(sub => (
                         <option key={parseInt(sub.id)} value={sub.id}>{sub.name}</option>
                     ))} 
                 </select><br/>
