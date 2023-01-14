@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { getTopics } from "./services/SQLService";
+import { getModule, getTopics } from "./services/SQLService";
 import {AppContext} from "./AppContext";
 import './CSS/global.css'
 import './CSS/Module.css'
@@ -66,6 +66,7 @@ const Module = () => {
     const {id} = useParams();
 
     const [topics, setTopics] = useState([]);
+    const [module, setModule] = useState({});
 
     const global = useContext(AppContext);
 
@@ -89,6 +90,10 @@ const Module = () => {
     }
 
     useEffect(() => {
+        getModule(id).then(result => {
+            setModule(result);
+        })
+
         getTopics(id, global.userID).then(result => {
             result.avgFam = result.reduce((sum, next) => sum + next.topicFam, 0) / result.length;
             setTopics(result);
@@ -98,7 +103,7 @@ const Module = () => {
 
     return (
         <div className="body-div">
-            <h1 className="page-title">Topics</h1>
+            <h1 className="page-title">{module.name}</h1>
             <Progress value={topics.avgFam} height="6px" width="90%" />
             {/* {topics.sort((a, b) => a.combined - b.combined).map((topic, i) => ( */}
             {topics.sort((a, b) => (a.avgFam || a.avgFam === 0) ? a.avgFam - b.avgFam : b.avgFam - a.avgFam).map(topic => (
