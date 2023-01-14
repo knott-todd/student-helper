@@ -29,6 +29,7 @@ const Navbar = () => {
                 <div style={{display: (global.userID && global.currExam ? "inline-block" : "none")}}>
                     <a className="nav-back" onClick={() => nav(-1)}><FontAwesomeIcon icon="arrow-left" /></a>
                     
+                    <NavLink to='/tasks' currSection={currSection} onChange={setCurrSection} icon="list-check" />
                     <NavLink to="/test" currSection={currSection} onChange={setCurrSection} icon="file-pen" />
                     <NavLink to="/track" currSection={currSection} onChange={setCurrSection} icon="bars-progress" />
                     {global.userID === 150 ? <NavLink to="/insert_objective" currSection={currSection} onChange={setCurrSection} text="Insert" icon="folder-plus" /> : ""}

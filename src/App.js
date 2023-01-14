@@ -10,7 +10,7 @@ import ObjectiveQuestions from './ObjectiveQuestions';
 import Module from './Module';
 import Header from './Header';
 import Topic from './Topic';
-import Homework from './Homework';
+import Tasks from './Tasks';
 import './CSS/global.css';
 import {AppContext} from './AppContext';
 import ObjectiveInsert from './ObjectiveInsert';
@@ -21,9 +21,9 @@ import SignIn from './SignIn';
 import Refresh from './Refresh';
 import { useContext, useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas } from '@fortawesome/free-solid-svg-icons'
 import TaskForm from './TaskForm';
-library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser)
+library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas)
 
 function App() {
   const global = useContext(AppContext);
@@ -121,8 +121,8 @@ function App() {
               <Route path = "topic/:id" element={<Topic />} />
             </Route>
 
-            <Route path='homework'>
-              <Route path = "" element={<Homework />} />
+            <Route path='tasks'>
+              <Route path = "" element={<Tasks />} />
               <Route path = "task_form/:id" element={<TaskForm />} />
               <Route path = "task_form" element={<TaskForm />} />
             </Route>

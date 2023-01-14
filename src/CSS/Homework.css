@@ -1,0 +1,16 @@
+.task:hover{
+    cursor: pointer;
+    background-color: var(--content-background-color);
+}
+
+.completed_task {
+    opacity: var(--faded-opacity);
+}
+
+.add_new {
+    text-decoration: underline;
+}
+
+.add_new:hover {
+    color: var(--accent);
+}

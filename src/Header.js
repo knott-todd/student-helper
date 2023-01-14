@@ -3,6 +3,7 @@ import {AppContext} from "./AppContext";
 import { getSubjects, getUserExam, getUserSubjects } from "./services/SQLService";
 import './CSS/Header.css'
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Header = () => {
     const [subs, setSubs] = useState([{}]);
@@ -19,7 +20,7 @@ const Header = () => {
         if(global.userID){
             getUserSubjects(global.userID)
                 .then(result => {
-                    // console.log(result[0])
+                    console.log(result[0])
                     setSubs(result);
 
                     global.setCurrSub(result[0]);
@@ -50,6 +51,7 @@ const Header = () => {
     return (
         <div className="header" style={{visibility: (global.userID ? "visible" : "hidden")}}>
             <form style={{padding: 10}}>
+                <FontAwesomeIcon icon={global.currSub && global.currSub.fa_icon ? global.currSub.fa_icon : ""} />
                 <select className="sub-select header-dropdown" value={global.currSub ? global.currSub.id : ""} style={{margin: "10px 10px 10px 5px"}} onChange={e => global.setCurrSub(subs.find(sub => sub.id === parseInt(e.target.value)))}>
                     {subs.map(sub => (
                         <option key={parseInt(sub.id)} value={sub.id}>{sub.name}</option>

@@ -1,4 +1,5 @@
 // const backendURL = 'https://student-helper-backend.vercel.app';
+// const backendURL = 'https://nice-wasp-48.loca.lt/';
 const backendURL = 'https://studenthelperbackend.loca.lt';
 
 export async function getPastpapers (subID, examID, userID) {
@@ -146,7 +147,7 @@ export async function updateTask(taskID, taskText, subject, deadline) {
 
 export async function updateTaskComplete (taskID, isCompleted) {
     const response = await fetch(`${backendURL}/update_task_complete`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
             "Bypass-Tunnel-Reminder": "true"
@@ -157,7 +158,7 @@ export async function updateTaskComplete (taskID, isCompleted) {
 }
 
 export async function deleteTask (taskID) {
-    const response = await fetch(`${backendURL}/delete_task`, {
+    const response = await fetch(`${backendURL}/delete_task/${taskID}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -450,14 +451,14 @@ export async function addQuestion(question) {
     return await response.json();
 }
 
-export async function addTask(task) {
+export async function addTask(task, userID) {
     const response = await fetch(`${backendURL}/add_task`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             "Bypass-Tunnel-Reminder": "true"
         },
-        body: JSON.stringify(task)
+        body: JSON.stringify({...task, userID})
     })
     return await response.json();
 }

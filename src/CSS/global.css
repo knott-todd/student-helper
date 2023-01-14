@@ -231,3 +231,14 @@ textarea {
     border: none;
     border-radius: 5px;
 }
+
+.a_button {
+    padding: 7px 50px;
+    background-color: var(--primary-text-color);
+    color: var(--content-background-color);
+    border-radius: 3px;
+}
+
+.a_button:hover {
+    background-color: var(--accent);
+}
