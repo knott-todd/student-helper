@@ -45,8 +45,10 @@ const Tasks = () => {
             Notification.requestPermission();
         }
 
+        if(global.currSub)
+            console.log(global)
+
         if(global.userID){
-            console.log("idso")
             getUserTasks(global.userID)
                 .then(result => {
                     console.log("tasks: ", result)
@@ -102,7 +104,7 @@ const Tasks = () => {
             
             <br/>
             <div>
-                {tasks.filter(task => todayOnly ? isTaskForToday(task) : true).sort((a, b) => new Date(a.deadline) - new Date(b.deadline)).sort((a, b) => a.is_completed - b.is_completed).map(task => (
+                {tasks.filter(task => global.currSub && global.currSub.id ? task.subject === global.currSub.id : true).filter(task => todayOnly ? isTaskForToday(task) : true).sort((a, b) => new Date(a.deadline) - new Date(b.deadline)).sort((a, b) => a.is_completed - b.is_completed).map(task => (
                     <Link to={`task_form/${task.id}`} onClick={handleCheckboxInLink}>
                         <div className={`task ${task.is_completed ? "completed_task" : ""}`}>
                             <p style={{display: "inline-block", margin: "10px"}}>{task.task_text}</p>
