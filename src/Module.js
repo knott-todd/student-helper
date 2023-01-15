@@ -7,61 +7,6 @@ import './CSS/Module.css'
 import Progress from "./Progress";
 
 const Module = () => {
-    // Previous code that sorted the site into Modules>Objectives. To be copied and modified into Modules>Topics
-    // const {id} = useParams();
-
-    // const [objectives, setObjectives] = useState([]);
-
-    // useEffect(() => {
-    //     getModuleObjectives(id).then(result => {
-    //         setObjectives(result);
-    //         console.log(result[0].familiarity)
-    //     })
-    // }, [])
-
-    // return (
-    //     <div>
-    //         {objectives.sort((a, b) => a.combined - b.combined).map((objective, i) => (
-    //             <Link key={objective.id} to={`/objective_questions/${objective.id}`} style={{display: "block", padding: 0}}>
-    //                 <div className="list-item" key={objective.id} style={{padding: 12, margin: 0}}>
-    //                     {
-    //                         (i === 0) ? (
-    //                             <h2 style={{display: "inline-block", paddingRight: 10}}>
-    //                                 Next to Study:
-    //                             </h2>
-    //                         ) : null
-    //                     }
-    //                     <p style={{display: "inline-block"}}>
-    //                         {objective.info}
-    //                     </p>
-
-    //                     <div>
-    //                         <label htmlFor="fam">
-    //                             Familiarity (<Percent value={objective.familiarity} />)
-    //                         </label>
-    //                         <progress id="fam" value={objective.familiarity + 1} max="2" />    
-    //                     </div>            
-                        
-
-    //                     <div>
-    //                         <label htmlFor="prob">
-    //                             Probability (<Percent value={objective.probability} />)
-    //                         </label>
-    //                         <progress id="prob" value={objective.probability} max="1" />
-    //                     </div>
-
-    //                     <div>
-    //                             <label htmlFor="comb">
-    //                             Combined (<Percent value={objective.combined} />)
-    //                         </label>
-    //                         <progress id="comb" value={objective.combined + 1} max="2" />    
-    //                     </div>            
-                        
-    //                 </div>
-    //             </Link>
-    //         ))}
-    //     </div>
-    // )
 
     const {id} = useParams();
 
@@ -106,45 +51,7 @@ const Module = () => {
             <h1 className="page-title">{module.name}</h1>
             <Progress value={topics.avgFam} height="6px" width="90%" />
             {/* {topics.sort((a, b) => a.combined - b.combined).map((topic, i) => ( */}
-            {topics.sort((a, b) => (a.avgFam || a.avgFam === 0) ? a.avgFam - b.avgFam : b.avgFam - a.avgFam).map(topic => (
-                
-                // <Link key={topic.id} to={`/objective_questions/${topic.id}`} style={{display: "block", padding: 0}}>
-                //     <div className="list-item" key={topic.id} style={{padding: 12, margin: 0}}>
-                //         {
-                //             (i === 0) ? (
-                //                 <h2 style={{display: "inline-block", paddingRight: 10}}>
-                //                     Next to Study:
-                //                 </h2>
-                //             ) : null
-                //         }
-                //         <p style={{display: "inline-block"}}>
-                //             {topic.info}
-                //         </p>
-
-                //         <div>
-                //             <label htmlFor="fam">
-                //                 Familiarity (<Percent value={objective.familiarity} />)
-                //             </label>
-                //             <progress id="fam" value={objective.familiarity + 1} max="2" />    
-                //         </div>            
-                        
-
-                //         <div>
-                //             <label htmlFor="prob">
-                //                 Probability (<Percent value={objective.probability} />)
-                //             </label>
-                //             <progress id="prob" value={objective.probability} max="1" />
-                //         </div>
-
-                //         <div>
-                //                 <label htmlFor="comb">
-                //                 Combined (<Percent value={objective.combined} />)
-                //             </label>
-                //             <progress id="comb" value={objective.combined + 1} max="2" />    
-                //         </div>            
-                        
-                //     </div>
-                // </Link>
+            {topics.sort((a, b) => !a.topicFam || !b.topicFam ? (a.topicFam ? 1 : -1) : a.topicFam - b.topicFam).map(topic => (
 
                 <div className={`topic-card track-card ${topic.topicFam >= 1 ? "familiarity-complete": ""}`} key={topic.topic.id} style={{ margin: 3}}>
 
