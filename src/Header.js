@@ -20,7 +20,6 @@ const Header = () => {
         if(global.userID){
             getUserSubjects(global.userID)
                 .then(result => {
-                    console.log(result[0])
                     setSubs(result);
 
                     global.setCurrSub(result[0]);

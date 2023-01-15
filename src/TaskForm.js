@@ -29,6 +29,8 @@ const TaskForm = () => {
                     setDeadline(result.deadline.substr(0, 10));
                     setTaskText(result.task_text);
                 })
+        } else if(global.currSub) {
+            setSubject(global.currSub.id)
         }
         
         if(global.userID){
