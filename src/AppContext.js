@@ -8,7 +8,7 @@ export default ({children}) => {
     const [currSub, setCurrSub] = useState({});
     const [currUnit, setCurrUnit] = useState();
     const [currExam, setCurrExam] = useState();
-    const [userID, setUserID] = useState(JSON.parse(sessionStorage.getItem("user")));
+    const [userID, setUserID] = useState(JSON.parse(localStorage.getItem("user")));
     const [userSubs, setUserSubs] = useState([]);
     const [isLightMode, setIsLightMode] = useState();
 
@@ -77,7 +77,7 @@ export default ({children}) => {
 
     useEffect(() => {
         if(userID){
-            sessionStorage.setItem("user", JSON.stringify(userID))
+            localStorage.setItem("user", JSON.stringify(userID))
         }
     }, [userID])
 
@@ -93,23 +93,23 @@ export default ({children}) => {
     }, [currSub, currExam, userID])
 
     useEffect(() => {
-        getBuildVersion()
-            .then(result => {
+        // getBuildVersion()
+        //     .then(result => {
 
-                let version = result.version;
+        //         let version = result.version;
 
-                const last_version = localStorage.getItem('version');
-                if(last_version !== version) {
-                    localStorage.setItem('version', version);
-                    console.log("Updated! New version: ", version)
-                    // caches.keys().then((names) => {
-                    //     names.forEach((name) => {
-                    //         caches.delete(name);
-                    //     });
-                    // });
-                }
+        //         const last_version = localStorage.getItem('version');
+        //         if(last_version !== version) {
+        //             localStorage.setItem('version', version);
+        //             console.log("Updated! New version: ", version)
+        //             // caches.keys().then((names) => {
+        //             //     names.forEach((name) => {
+        //             //         caches.delete(name);
+        //             //     });
+        //             // });
+        //         }
                 
-            })
+        //     })
         
     }, [])
 
