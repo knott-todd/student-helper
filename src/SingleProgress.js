@@ -3,7 +3,7 @@ const SingleProgress = props => {
         <div>
             {props.label ? (
                 <label for="avg">
-                    {props.label} ({props.value ? ((props.value  * 100).toFixed(2) + "%") : "None"})
+                    {props.label} ({props.value || props.value === 0 ? ((props.value  * 100).toFixed(0) + "%") : "None"})
                 </label>
             ): ""}
 

@@ -23,6 +23,7 @@ import { useContext, useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase } from '@fortawesome/free-solid-svg-icons'
 import TaskForm from './TaskForm';
+import { saveInteraction } from './services/SQLService';
 library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase )
 
 function App() {
@@ -94,6 +95,14 @@ function App() {
   //   }
 
   // }, [])
+
+  useEffect(() => {
+    if(global.userID) {
+      
+      saveInteraction(global.userID)
+
+    }
+  }, [global.userID])
 
   return (
     <div className="App">

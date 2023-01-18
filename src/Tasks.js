@@ -33,6 +33,7 @@ const Tasks = () => {
     }]
 
     const [tasks, setTasks] = useState([{}]);
+    const [todaysTasks, setTodaysTasks] = useState([{}]);
     const [today, setToday] = useState(new Date());
     const [todayOnly, setTodayOnly] = useState(true);
 
@@ -53,6 +54,9 @@ const Tasks = () => {
                 .then(result => {
                     console.log("tasks: ", result)
                     setTasks(result);
+
+                    setTodaysTasks(result.filter(task => isTaskForToday(task)));
+                    console.log(todaysTasks)
                 })
         }
     }, []);
@@ -75,9 +79,12 @@ const Tasks = () => {
     }
 
     const isTaskForToday = task => {
-        if(tasks[0].deadline) {
+        if(task.deadline) {
+            today.setHours(0,0,0,0);
             const jsDeadline = sqlToJSDeadline(task.deadline);
-            const numDaysToDeadline = (jsDeadline.getTime() / (1000*60*60*24) - Math.ceil(today.getTime() / (1000*60*60*24)));
+            const numDaysToDeadline = ((jsDeadline.getTime() - today.getTime()) / (1000*60*60*24));
+
+            console.log(numDaysToDeadline)
             
             // If difference between today and deadline is > 0, <= 2, or < 0 and not completed
             return (numDaysToDeadline <= 2 && numDaysToDeadline > 0) || (numDaysToDeadline < 0 && !task.is_completed)
@@ -100,11 +107,11 @@ const Tasks = () => {
             </label>
             <br/>
             <h4 style={{marginBottom: "2px"}}>Progress</h4>
-            <SingleProgress height="5px" width="90%" value={tasks.filter(task => task.is_completed && isTaskForToday(task)).length / tasks.filter(task => isTaskForToday(task)).length}/>
+            <SingleProgress label={`${todaysTasks.filter(task => task.is_completed).length}/${todaysTasks.length}`} height="5px" width="90%" value={todaysTasks.filter(task => task.is_completed).length / todaysTasks.length}/>
             
             <br/>
             <div>
-                {tasks.filter(task => global.currSub && global.currSub.id ? task.subject === global.currSub.id : true).filter(task => todayOnly ? isTaskForToday(task) : true).sort((a, b) => new Date(a.deadline) - new Date(b.deadline)).sort((a, b) => a.is_completed - b.is_completed).map(task => (
+                {todaysTasks.filter(task => task.deadline).filter(task => global.currSub && global.currSub.id ? task.subject === global.currSub.id : true).sort((a, b) => new Date(a.deadline) - new Date(b.deadline)).sort((a, b) => a.is_completed - b.is_completed).map(task => (
                     <Link to={`task_form/${task.id}`} onClick={handleCheckboxInLink}>
                         <div className={`task ${task.is_completed ? "completed_task" : ""}`}>
                             <p style={{display: "inline-block", margin: "10px"}}>{task.task_text}</p>
