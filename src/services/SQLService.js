@@ -1,6 +1,6 @@
 // const backendURL = 'https://student-helper-backend.vercel.app';
 // const backendURL = 'https://nice-wasp-48.loca.lt/';
-const backendURL = 'https://studenthelperbackend.loca.lt';
+const backendURL = 'http://studnthelperbackend.ddns.net:3080';
 
 export async function getPastpapers (subID, examID, userID) {
     try {
@@ -507,4 +507,34 @@ export async function getUserID (fname, lname) {
     } catch(error) {
         return [];
     }
+}
+
+export async function saveInteraction (userID) {
+    try {
+        const response = await fetch(`${backendURL}/save_interaction/${userID}`, {
+            headers: {
+                "Bypass-Tunnel-Reminder": "true"
+            }
+        });
+        return await response.json();
+    } catch(error) {
+        return [];
+    }
+
+    // Let todaysUsers = {date: "", users: []}
+    // If current date is different to date of array, save to SQL
+    // if (new Date() !== todaysUsers.date)
+    //   saveArray()
+    //   clearArray()
+    //   return
+    // 
+    // If userID in already in array, ignore
+    // if(todaysUsers.users.includes(userID))
+    //   return
+    //
+    // If todaysUsers array is empty, save new date
+    // if(!todaysUsers.date)
+    //   todaysUsers.date = new Date()
+    // 
+    // todaysUsers.users.push(userID)
 }
