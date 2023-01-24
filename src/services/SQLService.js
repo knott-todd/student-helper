@@ -1,7 +1,7 @@
 // const backendURL = 'https://student-helper-backend.vercel.app';
 // const backendURL = 'https://nice-wasp-48.loca.lt/';
 // const backendURL = 'http://studnthelperbackend.ddns.net:3080';
-const backendURL = 'http://studenthelperbackend.loca.lt';
+const backendURL = 'https://studenthelperbackend.loca.lt';
 
 export async function getPastpapers (subID, examID, userID) {
     try {
