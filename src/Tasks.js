@@ -68,6 +68,7 @@ const Tasks = () => {
         let tempTasks = [...tasks];
         tempTasks[tempTasks.findIndex(_task => _task.id === task.id)].is_completed = newValue;
         setTasks(tempTasks);
+        setTodaysTasks(tempTasks.filter(task => isTaskForToday(task)));
 
         updateTaskComplete(task.id, newValue)
     }
@@ -83,8 +84,6 @@ const Tasks = () => {
             today.setHours(0,0,0,0);
             const jsDeadline = sqlToJSDeadline(task.deadline);
             const numDaysToDeadline = ((jsDeadline.getTime() - today.getTime()) / (1000*60*60*24));
-
-            console.log(numDaysToDeadline)
             
             // If difference between today and deadline is > 0, <= 2, or < 0 and not completed
             return (numDaysToDeadline <= 2 && numDaysToDeadline > 0) || (numDaysToDeadline < 0 && !task.is_completed)
@@ -92,10 +91,36 @@ const Tasks = () => {
         
     }
 
+    const isTaskOverdue = task => {
+        if(task.deadline) {
+            today.setHours(0,0,0,0);
+            const jsDeadline = sqlToJSDeadline(task.deadline);
+            const numDaysToDeadline = ((jsDeadline.getTime() - today.getTime()) / (1000*60*60*24));
+            
+            return (numDaysToDeadline < 0 && !task.is_completed)
+        }
+
+    }
+
     const handleCheckboxInLink = e => {
         if(e.target.tagName === "INPUT") {
             e.stopImmediatePropagation();
         }
+    }
+
+    const dateNumToDate= date => {
+        const jsDate = sqlToJSDeadline(date);
+        var weekdays = new Array(7);
+        weekdays[0] = "Sunday";
+        weekdays[1] = "Monday";
+        weekdays[2] = "Tuesday";
+        weekdays[3] = "Wednesday";
+        weekdays[4] = "Thursday";
+        weekdays[5] = "Friday";
+        weekdays[6] = "Saturday";
+        var day = weekdays[jsDate.getDay()];
+        return `${day.substring(0, 3)} ${jsDate.getDate()}`;
+
     }
 
     return (
@@ -111,11 +136,11 @@ const Tasks = () => {
             
             <br/>
             <div>
-                {todaysTasks.filter(task => task.deadline).filter(task => global.currSub && global.currSub.id ? task.subject === global.currSub.id : true).sort((a, b) => new Date(a.deadline) - new Date(b.deadline)).sort((a, b) => a.is_completed - b.is_completed).map(task => (
+                {(todayOnly ? todaysTasks : tasks).filter(task => task.deadline).filter(task => global.currSub && global.currSub.id ? task.subject === global.currSub.id : true).sort((a, b) => new Date(a.deadline) - new Date(b.deadline)).sort((a, b) => a.is_completed - b.is_completed).map(task => (
                     <Link to={`task_form/${task.id}`} onClick={handleCheckboxInLink}>
-                        <div className={`task ${task.is_completed ? "completed_task" : ""}`}>
+                        <div className={`task ${task.is_completed ? "completed_task" : ""} ${isTaskOverdue(task) ? "overdue_task" : ""}`}>
                             <p style={{display: "inline-block", margin: "10px"}}>{task.task_text}</p>
-                            <p style={{display: "inline-block", margin: "10px"}}>{task.deadline.substr(0, 10)}</p>
+                            <p className="task_deadline" style={{display: "inline-block", margin: "10px"}}>{/*task.deadline.substr(0, 10)*/ dateNumToDate(task.deadline)}</p>
                             <input type="checkbox" checked={task.is_completed} onChange={e => onIsCompleteChange(e, task)}/>
                         </div>
                     </Link>

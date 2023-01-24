@@ -14,3 +14,7 @@
 .add_new:hover {
     color: var(--accent);
 }
+
+.overdue_task .task_deadline {
+    color: var(--red);
+}
