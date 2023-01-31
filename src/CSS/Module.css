@@ -6,26 +6,29 @@
 }
 
 .progress {
-    border-radius: 5px;
+    /* border-radius: 0px 0px 5px 5px; */
     /* border: solid 1px var(--background-color); */
     background-color:var(--content-background-color);
     overflow: hidden;
     box-sizing: border-box;
     text-align: left;
+    display: inline-block;
+    left: 0px;
+    bottom: 0px;
 }
 
-.negative-progress-bg{
-    /* border-right-width: 0; */
-    /* border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px; */
-    /* border-right: solid 1px var(--content-background-color); */
-}
+.familiarity-wrapper {
+    
+    width: 100%;
+    margin-top: -4px;
+    text-align: center;
+    border-radius: 0px 0px 10px 10px;
+    border: 1px solid var(--content-background-color);
+    font-size: 0.8vw;
+    font-weight: 400;
+    padding: 4px 0px;
+    background-color: var(--background-color);
 
-.positive-progress-bg{
-    /* border-left-width: 0; */
-    /* border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px; */
-    /* border-left: solid 1px var(--content-background-color); */
 }
 
 .negative-progress {
@@ -33,15 +36,15 @@
     height: inherit;
     margin-left: auto;
     margin-right: 0;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+    border-top-left-radius: 1px;
+    border-bottom-left-radius: 1px;
 }
 
 .positive-progress {
     background-color:var(--blue);
     height: inherit;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-top-right-radius: 1px;
+    border-bottom-right-radius: 1px;
 }
 
 .familiarity-complete .progress {

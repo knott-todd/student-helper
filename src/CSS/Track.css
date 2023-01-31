@@ -1,14 +1,118 @@
 .track-card {
-    border-radius: 23px;
-    border: transparent solid 1px;
-    transition: 0.2s;
+    border-radius: 23px 23px 5px 5px;
+    border: var(--content-background-color) solid 3px;
+    /* transition: 0.2s; */
     background-color: transparent;
-    padding: 30px;
     text-align: left;
+    position: relative;
+    margin-bottom: 2vh;
+    overflow: hidden;
 }
 
-.track-card h2 {
-    font-size: 35px;
+.card-header {
+
+    background-position: center;
+    background-size: cover;
+    border-radius: 20px 20px 0px 0px;  /* parent radius - border width */
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), var(--background-color));
+    position: relative;
+
+}
+
+.card-content {
+    position: relative;
+}
+
+.track-card:hover .card-bg-img{
+    transform: scale(1.01);
+}
+
+.card-bg-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -10;
+    object-fit: cover;
+}
+
+.card-header::before {
+    opacity: 0;
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background-image: linear-gradient(to bottom, rgba(25,25, 25, 0.5), var(--content-background-color));
+
+}
+
+.track-card:hover .card-header::before {
+    opacity: 1;
+}
+
+.track-card:hover .card-header{
+    background-image: none;
+}
+
+.track-card:hover .track-card-module-num {
+    opacity: 1;
+}
+
+.next {
+    font-weight: 500;
+    padding-right: 3px;
+    margin: 0;
+    display: "inline";
+}
+
+.card-subtext {
+    display: block;
+    padding: 3px 0px 20px 30px;
+    margin: 0px;
+    font-size: 14;
+    background-color: var(--background-color);
+}
+
+.card-subtext p {
+    width: 100%;
+}
+
+.card-subtext .sub-description {
+    
+    max-width: 80%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    vertical-align: bottom;
+    padding-right: 3px;
+
+}
+
+.sub-description::first-letter {
+    text-transform: capitalize;
+}
+
+.card-subtext:hover .next {
+    letter-spacing: 0.01em;
+}
+
+.card-subtext:hover p:not(.next), .card-subtext:hover p :not(.next) {
+    color: var(--accent);
+}
+
+.track-card:hover .card-subtext{
+    background-color: var(--content-background-color);
+}
+
+.card-header .card-link {
+    padding: 60px 30px 0px 30px;
+    margin: 0;
+    display: block;
 }
 
 .card-link label{
@@ -17,17 +121,24 @@
 }
 
 .track-card:hover {
-    border: var(--accent) solid 1px;
-    background-color: var(--content-background-color);
+    border: var(--accent) solid 3px;
 }
 
 .card-link:hover .track-card-heading {
-    transition: 0.2s;
+    /* transition: 0.2s; */
     color: var(--accent);
 }
 
 .track-card-heading {
+    font-size: 30px;
     display: inline-block;
     margin: 0;
     padding: 10;
+}
+
+.track-card-module-num {
+    opacity: var(--faded-opacity);
+    font-size: 20px;
+    display: inline-block;
+    padding-right: 10px;
 }

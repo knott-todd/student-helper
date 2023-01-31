@@ -56,7 +56,6 @@ const Tasks = () => {
                     setTasks(result);
 
                     setTodaysTasks(result.filter(task => isTaskForToday(task)));
-                    console.log(todaysTasks)
                 })
         }
     }, []);
@@ -68,7 +67,8 @@ const Tasks = () => {
         let tempTasks = [...tasks];
         tempTasks[tempTasks.findIndex(_task => _task.id === task.id)].is_completed = newValue;
         setTasks(tempTasks);
-        setTodaysTasks(tempTasks.filter(task => isTaskForToday(task)));
+
+        setTodaysTasks(tempTasks.filter(task => isTaskForToday(task) || todaysTasks.filter(_task => _task.id === task.id).length > 0));
 
         updateTaskComplete(task.id, newValue)
     }
@@ -85,8 +85,9 @@ const Tasks = () => {
             const jsDeadline = sqlToJSDeadline(task.deadline);
             const numDaysToDeadline = ((jsDeadline.getTime() - today.getTime()) / (1000*60*60*24));
             
-            // If difference between today and deadline is > 0, <= 2, or < 0 and not completed
-            return (numDaysToDeadline <= 2 && numDaysToDeadline > 0) || (numDaysToDeadline < 0 && !task.is_completed)
+            // If difference between today and deadline is > 0, <= 2, or <= 0 and not completed
+            console.log(task, numDaysToDeadline)
+            return (numDaysToDeadline <= 2 && numDaysToDeadline > 0) || (numDaysToDeadline <= 0 && !task.is_completed)
         }
         
     }
@@ -97,7 +98,7 @@ const Tasks = () => {
             const jsDeadline = sqlToJSDeadline(task.deadline);
             const numDaysToDeadline = ((jsDeadline.getTime() - today.getTime()) / (1000*60*60*24));
             
-            return (numDaysToDeadline < 0 && !task.is_completed)
+            return (numDaysToDeadline <= 0 && !task.is_completed)
         }
 
     }
@@ -110,7 +111,7 @@ const Tasks = () => {
 
     const dateNumToDate= date => {
         const jsDate = sqlToJSDeadline(date);
-        var weekdays = new Array(7);
+        let weekdays = new Array(7);
         weekdays[0] = "Sunday";
         weekdays[1] = "Monday";
         weekdays[2] = "Tuesday";
@@ -118,8 +119,16 @@ const Tasks = () => {
         weekdays[4] = "Thursday";
         weekdays[5] = "Friday";
         weekdays[6] = "Saturday";
-        var day = weekdays[jsDate.getDay()];
-        return `${day.substring(0, 3)} ${jsDate.getDate()}`;
+        let day = weekdays[jsDate.getDay()];
+
+        let tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+        if (tomorrow.getFullYear() == jsDate.getFullYear() && tomorrow.getMonth() == jsDate.getMonth() && tomorrow.getDate() == jsDate.getDate()) {
+            return "Tomorrow"; // jsDate is one day after today.
+        } else if (today.getFullYear() == jsDate.getFullYear() && today.getMonth() == jsDate.getMonth() && today.getDate() == jsDate.getDate()) {
+            return "Today";
+        }
+
+        else return `${day.substring(0, 3)} ${jsDate.getDate()}`;
 
     }
 

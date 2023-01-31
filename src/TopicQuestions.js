@@ -120,7 +120,7 @@ const TopicQuestions = () => {
                                 {q.sub_sub_roman ? (<p style={{display: "inline", padding: 2}}>{q.sub_sub_roman})</p>) : null}
                                 {q.sub_sub_sub_letter ? (<p style={{display: "inline", padding: 2}}>{q.sub_sub_sub_letter})</p>) : null}
 
-                                <FamiliarityDropdown question={q} id={q.id} onChange = {onDropdownChange} />
+                                <FamiliarityDropdown question={q} questions={{quests, setQuests}} id={q.id} onChange = {onDropdownChange} />
 
                                 <CompleteCheckbox question={q} id={q.id} onChange={onCheckboxChange} />
                             </div>
