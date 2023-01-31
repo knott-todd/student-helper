@@ -83,7 +83,7 @@
 
 .card-subtext .sub-description {
     
-    max-width: 80%;
+    max-width: 60%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
