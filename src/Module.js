@@ -53,31 +53,47 @@ const Module = () => {
             {/* {topics.sort((a, b) => a.combined - b.combined).map((topic, i) => ( */}
             {topics.sort((a, b) => !a.topicFam || !b.topicFam ? (a.topicFam ? 1 : -1) : a.topicFam - b.topicFam).map(topic => (
 
-                <div className={`topic-card track-card ${topic.topicFam >= 1 ? "familiarity-complete": ""}`} key={topic.topic.id} style={{ margin: 3}}>
+                <div className={`topic-card track-card ${topic.topicFam >= 1 ? "familiarity-complete": ""}`} key={topic.topic.id}>
 
-                    <Link className="topic-link card-link" to={`/track/topic_questions/${topic.topic.id}`} style={{display:"block", padding: 0, margin: 0}}>
+                    <div className="card-content">
+                        <div className="card-header">
+                            <Link className="topic-link card-link" to={`/track/topic_questions/${topic.topic.id}`}>
 
-                        <h2 className={`track-card-heading`} >
-                            {topic.topic.name}
-                        </h2>
+                                <h2 className={`track-card-heading`} >
+                                    {topic.topic.name}
+                                </h2>
 
-                        <Progress label="Familiarity" value={topic.topicFam} />
-                    </Link>
-                    {topic.objective.id ? (
-                        <Link className="topic-link card-link accent-link" to={`/track/objective_questions/${topic.objective.id}`} style={{display: "block", padding: 3, paddingLeft: 0, margin:0, fontSize:14}}>
-                            <p style={{display: "inline-block", padding: 0, margin:0}}>
-                                <p className="topic-card-heading" style={{fontWeight: 500, padding: 0, margin: 0, display: "inline"}}>Next Objective:</p> {topic.objective.info ? topic.objective.info : "None"}
-                            </p>
-                            <p style={{display: "inline-block", padding: 3, margin:0}}>
-                            <p style={{fontWeight: 500, padding: 3, margin: 0, display: "inline"}}>Familiarity:</p> {topic.lowestFamiliarity ? ((topic.lowestFamiliarity  * 100).toFixed(2) + "%") : "None"}
-                            </p>
-                        </Link>
-                    ) : ""}
+                            </Link>
+                        </div>
+
+                        {/* {topic.objective.id ? (
+                            <Link className="topic-link card-link accent-link" to={`/track/objective_questions/${topic.objective.id}`} style={{display: "block", padding: 3, paddingLeft: 0, margin:0, fontSize:14}}>
+                                <p style={{display: "inline-block", padding: 0, margin:0}}>
+                                    <p className="topic-card-heading" style={{fontWeight: 500, padding: 0, margin: 0, display: "inline"}}>Next Objective:</p> {topic.objective.info ? topic.objective.info : "None"}
+                                </p>
+                                <p style={{display: "inline-block", padding: 3, margin:0}}>
+                                <p style={{fontWeight: 500, padding: 3, margin: 0, display: "inline"}}>Familiarity:</p> {topic.lowestFamiliarity ? ((topic.lowestFamiliarity  * 100).toFixed(2) + "%") : "None"}
+                                </p>
+                            </Link>
+                        ) : ""} */}
+
+                        {topic.objective.id ? (
+                            <Link className="card-subtext topic-link card-link accent-link" to={`/track/objective_questions/${topic.objective.id}`}>
+                                <p style={{display: "inline-block", padding: 0, margin:0}}>
+                                    <span className="next">Next:</span><span className="sub-description">  {topic.objective.info ? topic.objective.info : "None"} </span>({topic.lowestFamiliarity ? ((topic.lowestFamiliarity  * 100).toFixed(2) + "%") : "None"})
+                                </p>
+                            </Link>
+
+                        ) : ""}
+
+                        <Progress label="Familiarity" value={topic.topicFam} height="5px" width="100%" position="absolute" />
+
+                        {/* <Link className="accent-link" to={`/topic_questions/${topic.topic.id}`}>
+                            <p>Practice</p>
+                        </Link> */}
+                    </div>
+                    {/* {module.module.image_url ? <img className="card-bg-img" src={`${module.module.image_url}`}/> : ""} */}
                     
-
-                    {/* <Link className="accent-link" to={`/topic_questions/${topic.topic.id}`}>
-                        <p>Practice</p>
-                    </Link> */}
                 </div>
             ))}
         </div>

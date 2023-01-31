@@ -22,10 +22,37 @@
 @media (prefers-color-scheme: dark) {
     :root{
         color-scheme: dark;
-        --background-color: #191919;
+        --background-color: rgb(25, 25, 25);
         --content-background-color: #131313;
         --primary-text-color: white;
     }
+}
+
+@font-face {
+    font-family: 'verdanaregular';
+    src: url('../fonts/Verdana/verdana-webfont.woff2') format('woff2'),
+         url('../fonts/Verdana/verdana-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'verdanabold';
+    src: url('../fonts/Verdana/verdana-bold-webfont.woff2') format('woff2'),
+         url('../fonts/Verdana/verdana-bold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'verdanabold_italic';
+    src: url('../fonts/Verdana/verdana-bold-italic-webfont.woff2') format('woff2'),
+         url('../fonts/Verdana/verdana-bold-italic-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
 }
 
 body {
