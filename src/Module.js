@@ -78,7 +78,7 @@ const Module = () => {
                         ) : ""} */}
 
                         {topic.objective.id ? (
-                            <Link className="card-subtext topic-link card-link accent-link" to={`/track/objective_questions/${topic.objective.id}`}>
+                            <Link className="card-subtext topic-link card-link accent-link" to={`/track/topic/${topic.topic.id}`}>
                                 <p style={{display: "inline-block", padding: 0, margin:0}}>
                                     <span className="next">Next:</span><span className="sub-description">  {topic.objective.info ? topic.objective.info : "None"} </span>({topic.lowestFamiliarity ? ((topic.lowestFamiliarity  * 100).toFixed(2) + "%") : "None"})
                                 </p>
@@ -92,7 +92,7 @@ const Module = () => {
                             <p>Practice</p>
                         </Link> */}
                     </div>
-                    {/* {module.module.image_url ? <img className="card-bg-img" src={`${module.module.image_url}`}/> : ""} */}
+                    {topic.topic.image_url ? <img className="card-bg-img" src={`${topic.topic.image_url}`} onError={(event) => event.target.style.display = 'none'} /> : ""}
                     
                 </div>
             ))}

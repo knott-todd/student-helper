@@ -1,15 +1,17 @@
 import { useEffect, useState, useContext } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { getTopicObjectives } from "./services/SQLService";
+import { getTopic, getTopicObjectives } from "./services/SQLService";
 import {AppContext} from "./AppContext";
 import './CSS/global.css'
 import './CSS/Module.css'
+import './CSS/Topic.css'
 
 const Topic = () => {
     // Previous code that sorted the site into Modules>Objectives. To be copied and modified into Modules>Topics
     const {id} = useParams();
 
     const [objectives, setObjectives] = useState([]);
+    const [topic, setTopic] = useState({});
 
     const global = useContext(AppContext);
 
@@ -18,25 +20,38 @@ const Topic = () => {
             setObjectives(result);
             console.log(result[0].familiarity)
         })
+
+        getTopic(id, global.userID).then(result => {
+            setTopic(result)
+        });
     }, [])
+
+    useEffect(() => {
+        
+        getTopic(id, global.userID).then(result => {
+            setTopic(result)
+        });
+
+    }, [objectives]);
 
     return (
         <div className="body-div">
+            <h1 className="page-title">{topic.name}</h1>
             {objectives.sort((a, b) => a.combined - b.combined).map((objective, i) => (
-                <Link key={objective.id} to={`/objective_questions/${objective.id}`} style={{display: "block", padding: 0}}>
-                    <div className="list-item" key={objective.id} style={{padding: 12, margin: 0}}>
-                        {
+                // <Link key={objective.id} to={`/objective_questions/${objective.id}`} style={{display: "block", padding: 0}}>
+                    <div className="list-item" key={objective.id} style={{margin: 0}}>
+                        {/* {
                             (i === 0) ? (
                                 <h2 style={{display: "inline-block", paddingRight: 10}}>
                                     Next to Study:
                                 </h2>
                             ) : null
-                        }
-                        <p style={{display: "inline-block"}}>
+                        } */}
+                        <p className="topic-objective" style={{display: "inline-block"}}>
                             {objective.info}
                         </p>
 
-                        <div>
+                        {/* <div>
                             <label htmlFor="fam">
                                 Familiarity (<Percent value={objective.familiarity} />)
                             </label>
@@ -56,10 +71,10 @@ const Topic = () => {
                                 Combined (<Percent value={objective.combined} />)
                             </label>
                             <progress id="comb" value={objective.combined + 1} max="2" />    
-                        </div>            
+                        </div>             */}
                         
                     </div>
-                </Link>
+                // </Link>
             ))}
         </div>
     )

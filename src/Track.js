@@ -67,7 +67,7 @@ const Track = () => {
                         <Progress label="Familiarity" value={module.avgFam} height="5px" width="100%" position="absolute" />
                     </div>
 
-                    {module.module.image_url ? <img className="card-bg-img" src={`${module.module.image_url}`}/> : ""}
+                    {module.module.image_url ? <img className="card-bg-img" src={`${module.module.image_url}`} onError={(event) => event.target.style.display = 'none'} /> : ""}
                     
                 </div>
             ))}
