@@ -40,7 +40,7 @@ const Module = () => {
         })
 
         getTopics(id, global.userID).then(result => {
-            result.avgFam = result.reduce((sum, next) => sum + next.topicFam, 0) / result.length;
+            result.avgFam = result.reduce((sum, next) => sum + (next.topicFam >= 1 ? 1 : next.topicFam), 0) / result.length;
             setTopics(result);
             // console.log(result[0].familiarity);
         })
@@ -49,7 +49,7 @@ const Module = () => {
     return (
         <div className="body-div">
             <h1 className="page-title">{module.name}</h1>
-            <Progress value={topics.avgFam} height="6px" width="90%" />
+            <Progress label="Fam" value={topics.avgFam} height="6px" width="90%" />
             {/* {topics.sort((a, b) => a.combined - b.combined).map((topic, i) => ( */}
             {topics.sort((a, b) => !a.topicFam || !b.topicFam ? (a.topicFam ? 1 : -1) : a.topicFam - b.topicFam).map(topic => (
 
@@ -80,7 +80,7 @@ const Module = () => {
                         {topic.objective.id ? (
                             <Link className="card-subtext topic-link card-link accent-link" to={`/track/topic/${topic.topic.id}`}>
                                 <p style={{display: "inline-block", padding: 0, margin:0}}>
-                                    <span className="next">Next:</span><span className="sub-description">  {topic.objective.info ? topic.objective.info : "None"} </span>({topic.lowestFamiliarity ? ((topic.lowestFamiliarity  * 100).toFixed(2) + "%") : "None"})
+                                    <span className="next">Next:</span><span className="sub-description">  {topic.objective.info ? topic.objective.info : "None"} </span>{/* ({topic.lowestFamiliarity ? ((topic.lowestFamiliarity  * 100).toFixed(2) + "%") : (topic.lowestFamiliarity === 0 ? "0.00%" : "None")}) */}
                                 </p>
                             </Link>
 
