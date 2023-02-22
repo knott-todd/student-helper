@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, memo } from "react";
 import { Link } from "react-router-dom";
 import { getModules } from "./services/SQLService";
 import './CSS/global.css'
@@ -7,7 +7,7 @@ import { AppContext } from "./AppContext";
 import { faFutbolBall } from "@fortawesome/free-solid-svg-icons";
 import Progress from "./Progress";
 
-const Track = () => {
+const Track = memo(() => {
     const [modules, setModules] = useState([]);
 
     const global = useContext(AppContext);
@@ -59,7 +59,7 @@ const Track = () => {
 
                         <Link className="card-subtext card-link accent-link" to={`topic_questions/${module.topic.id}`}>
                             <p style={{ display: "inline-block", padding: 0, margin: 0 }}>
-                                <span className="next">Next:</span><span className="sub-description"> {module.topic.name ? module.topic.name : "None"} </span>({module.lowestFamiliarity ? ((module.lowestFamiliarity * 100).toFixed(2) + "%") : "None"})
+                                <span className="next">Next:</span><span className="sub-description"> {module.topic.name ? module.topic.name : "None"} </span>({module.lowestFamiliarity ? ((module.lowestFamiliarity * 100).toFixed(2) + "%") : (module.lowestFamiliarity === 0 ? "0.00%" : "None")})
                             </p>
                         </Link>
 
@@ -73,6 +73,6 @@ const Track = () => {
             ))}
         </div>
     )
-}
+})
 
 export default Track;

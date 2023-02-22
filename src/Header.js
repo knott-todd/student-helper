@@ -14,7 +14,9 @@ const Header = () => {
 
     const navigate = useNavigate();
 
-
+    useEffect(() => {
+        console.log(global.currSub)
+    }, [])
 
     useEffect(() => {
         if(global.userID){
@@ -22,7 +24,14 @@ const Header = () => {
                 .then(result => {
                     setSubs(result);
 
-                    global.setCurrSub(result[0]);
+                    console.log(result)
+                    console.log(global.currSub)
+
+                    if(!global.currSub || result.filter(sub => sub.id === global.currSub.id).length === 0){
+                        global.setCurrSub(result.sort((a, b) => a.name.localeCompare(b.name))[0]);
+                        console.log("Nok", global.currSub)
+                    } else console.log("SOk")
+
                     global.setCurrUnit(units[0]);
                     
                     // if(result.length !== 0)
@@ -39,12 +48,19 @@ const Header = () => {
     }, [global.userID]);
 
     useEffect(() => {
-        console.log("changed subs")
-        setSubs(global.userSubs)
+        if(global.userSubs) {
+            console.log(global.userSubs)
 
-        global.setCurrSub(global.userSubs[0]);
+            console.log("changed subs")
+            setSubs(global.userSubs)
+    
+            if(global.userSubs.length > 0 && (!global.currSub || global.userSubs.filter(sub => sub.id === global.currSub.id).length === 0)){
+                console.log(">>>", global.userSubs.sort((a, b) => a.name.localeCompare(b.name))[0])
+                global.setCurrSub(global.userSubs.sort((a, b) => a.name.localeCompare(b.name))[0]);
+            }
 
-        console.log(global.currSub)
+        }
+
     }, [global.userSubs])
 
     return (

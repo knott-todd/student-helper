@@ -5,12 +5,17 @@ const { createContext, useState, useEffect } = require("react");
 export const AppContext = createContext(null);
 
 export default ({children}) => {
-    const [currSub, setCurrSub] = useState({});
+    const [currSub, setCurrSub] = useState(JSON.parse(localStorage.getItem("sub")));
     const [currUnit, setCurrUnit] = useState();
     const [currExam, setCurrExam] = useState();
     const [userID, setUserID] = useState(JSON.parse(localStorage.getItem("user")));
     const [userSubs, setUserSubs] = useState([]);
     const [isLightMode, setIsLightMode] = useState();
+
+    const cacheVariables = {
+        sub: currSub,
+        user: userID
+    }
 
     const lightmodeAccentColors = [
         "A4031F",
@@ -76,10 +81,15 @@ export default ({children}) => {
     }, [])
 
     useEffect(() => {
-        if(userID){
-            localStorage.setItem("user", JSON.stringify(userID))
+        for (const item in cacheVariables) {
+
+            if(cacheVariables[item]) {
+                console.log(`${item}`, JSON.stringify(cacheVariables[item]))
+                localStorage.setItem(`${item}`, JSON.stringify(cacheVariables[item]))
+            }
+
         }
-    }, [userID])
+    }, [cacheVariables])
 
     useEffect(() => {
         if(currSub && currExam && userID && currSub.id){
