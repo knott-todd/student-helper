@@ -97,8 +97,8 @@ const Header = () => {
                 <h1 className="page-title">{(global.pageTitle ? global.pageTitle : "")}</h1>
 
             </div>
-            <Progress value={global.progressValue} height="4px" width={(window.location.pathname === "/track" ? "100%" : "0")} position="absolute" />
-            <SingleProgress height="4px" width={(window.location.pathname === "/tasks" ? "100%" : "0")} position="absolute" value={global.singleProgressValue} />
+            <Progress value={global.progressValue} height="4px" width={(window.location.pathname.includes("/track") ? "100%" : "0")} position="absolute" />
+            <SingleProgress height="4px" width={(window.location.pathname.includes("/tasks") ? "100%" : "0")} position="absolute" value={global.singleProgressValue} />
         </div>
     )
 }
