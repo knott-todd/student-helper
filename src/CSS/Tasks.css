@@ -93,6 +93,11 @@
     .strike::after, .strike::before {
         display: none;
     }
+
+    .add_new {
+        bottom: 85px;
+        right: 35px;        
+    }
 }
 
 .center-div {
