@@ -61,3 +61,30 @@
     }
     
 }
+
+.page-title {
+    transition: 0.2s;
+    /* font-size: 48px; */
+    margin: 20px 0px 20px 0px;
+    display: inline-block;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    overflow: scroll;
+    max-width: 50vw;
+    white-space: nowrap;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.page-title::-webkit-scrollbar {
+    display: none;
+}
+
+.page-title:hover {
+    transition: 0.2s;
+    color: var(--accent);
+    letter-spacing: 1px;
+    cursor: default;
+}
