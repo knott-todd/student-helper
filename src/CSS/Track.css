@@ -14,7 +14,7 @@
     background-position: center;
     background-size: cover;
     border-radius: 20px 20px 0px 0px;  /* parent radius - border width */
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), var(--background-color));
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, var(--content-background-color) 200%);
     position: relative;
 
 }
@@ -37,7 +37,7 @@
     object-fit: cover;
 }
 
-.card-header::before {
+/* .card-header::before {
     opacity: 0;
     position: absolute;
     content: "";
@@ -52,10 +52,10 @@
 
 .track-card:hover .card-header::before {
     opacity: 1;
-}
+} */
 
 .track-card:hover .card-header{
-    background-image: none;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, var(--content-background-color) 150%);;
 }
 
 .track-card:hover .track-card-module-num {
@@ -74,7 +74,7 @@
     padding: 3px 0px 20px 30px;
     margin: 0px;
     font-size: 14;
-    background-color: var(--background-color);
+    /* background-color: var(--background-color); */
 }
 
 .card-subtext p {
@@ -106,10 +106,10 @@
 }
 
 .track-card:hover .card-subtext{
-    background-color: var(--content-background-color);
+    /* background-color: var(--content-background-color); */
 }
 
-.card-header .card-link {
+.card-header .module-link {
     padding: 60px 30px 0px 30px;
     margin: 0;
     display: block;

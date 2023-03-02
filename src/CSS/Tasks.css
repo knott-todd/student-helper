@@ -1,0 +1,104 @@
+.task {
+    text-align: start;
+}
+
+.task:hover{
+    cursor: pointer;
+    background-color: var(--content-background-color);
+}
+
+.completed_task {
+    opacity: var(--faded-opacity);
+}
+
+.add_new {
+    text-decoration: underline;
+    position: fixed;
+    bottom: 100px;
+    right: 50px;
+    background-color: var(--accent);
+    border-radius: 100%;
+    width: 50px;
+    height: 50px;
+    vertical-align: middle;
+    transition: 0.2s cubic-bezier(0.42, 0.22, 0.38, 1.58);
+}
+
+.add_new * {
+    color: var(--background-color);
+}
+
+.add_new:hover {
+    color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.overdue_task .task_deadline {
+    color: var(--red);
+}
+
+.next-task :is(.task-text, .deadline-wrap) {
+    text-align: start;
+    margin: 0px;
+    cursor: default;
+}
+
+.next-task :is(.task-text, .deadline-wrap):hover {
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.next-task .task-text {
+    width: fit-content;
+    padding-right: 7px;
+    display: inline-block;
+}
+
+.next-task{
+    padding: 30px;
+    margin: 1vh 0px 24vh;
+    border: solid transparent 1px;
+    border-radius: 15px;
+    background-color: var(--content-background-color);
+    position: relative;
+    height: 22vh;
+    transform: translateX(-30px);
+}
+
+.next-task:hover {
+    border-color: var(--accent);
+    transform: translateX(0px);
+}
+
+.next-task.completed_task {
+    transform: translateX(-150vh);
+    opacity: 0;
+
+}
+
+@media (max-width: 768px) {
+    .next-task {
+
+        margin: 1vh -30px 24vh;
+        transform: none;
+
+    }
+
+    .next-task:hover {
+
+        margin: 1vh 0px 24vh;
+        
+    }
+
+    .strike::after, .strike::before {
+        display: none;
+    }
+}
+
+.center-div {
+    
+    top: 50%;
+    position: absolute;
+    transform: translateY(-55%);
+
+}

@@ -10,6 +10,10 @@
     box-sizing: border-box;
 }
 
+.header-dropdown:hover {
+    background-color: var(--content-background-color);
+}
+
 .header-dropdown:focus-visible{
     border-color: var(--accent);
     outline: none;
@@ -17,10 +21,43 @@
 
 .header {
     text-align: left;
+    background-color: var(--background-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+}
+
+.header.top .progress {
+    background-color: var(--background-color);
+}
+
+.header:not(.top) {
+    box-shadow: 0px -3px 15px 1px black;
+}
+
+.header:not(.top), .header:not(.top) .progress {
+    background-color: var(--content-background-color);
+}
+
+.header:not(.top) .header-dropdown{
+    background-color: var(--content-background-color);
+}
+
+.header:not(.top) .header-dropdown:hover{
+    background-color: var(--background-color);
 }
 
 .sub-select {
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+
+    .sub-select {
+        max-width: 0px;
+    }
+    
 }
