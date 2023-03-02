@@ -8,6 +8,7 @@ import SingleProgress from "./SingleProgress"
 import './CSS/Tasks.css'
 import './CSS/global.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { toast } from "react-toastify"
 
 const Tasks = () => {
 

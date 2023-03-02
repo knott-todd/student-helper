@@ -20,10 +20,12 @@ import TopicQuestions from './TopicQuestions';
 import SignIn from './SignIn';
 import Refresh from './Refresh';
 import { useContext, useEffect } from 'react';
+import 'react-toastify/dist/ReactToastify.css';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus } from '@fortawesome/free-solid-svg-icons'
 import TaskForm from './TaskForm';
 import { saveInteraction } from './services/SQLService';
+import { ToastContainer } from 'react-toastify';
 library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus )
 
 function App() {
@@ -148,6 +150,17 @@ function App() {
 
         <Navbar />
       </Router>
+
+      <ToastContainer
+        position="bottom-left"
+        autoClose={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        theme="colored"
+      />
       
     </div>
   );

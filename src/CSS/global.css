@@ -8,6 +8,8 @@
     --red: #F2545B;
     --blue: #28afb0;
     --faded-opacity: 0.5;
+    --toastify-color-info: var(--accent) !important;
+    --toastify-text-color-info: var(--primary-text-color) !important;
 }
 
 @media (prefers-color-scheme: light) {
@@ -137,23 +139,6 @@ a, a *{
 .accent-link:hover {
     transition: 0.2s;
     color: var(--accent);
-}
-
-.page-title {
-    transition: 0.2s;
-    /* font-size: 48px; */
-    margin: 20px 0px 20px 0px;
-    display: inline-block;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.page-title:hover {
-    transition: 0.2s;
-    color: var(--accent);
-    letter-spacing: 1px;
-    cursor: default;
 }
 
 .subject-list-item {
