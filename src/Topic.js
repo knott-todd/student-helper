@@ -27,6 +27,10 @@ const Topic = memo(() => {
     }, [])
 
     useEffect(() => {
+        global.setPageTitle(topic.name);
+    }, [])
+
+    useEffect(() => {
         
         getTopic(id, global.userID).then(result => {
             setTopic(result)
@@ -36,7 +40,7 @@ const Topic = memo(() => {
 
     return (
         <div className="body-div">
-            <h1 className="page-title">{topic.name}</h1>
+            {/* <h1 className="page-title">{topic.name}</h1> */}
             {objectives.sort((a, b) => a.combined - b.combined).map((objective, i) => (
                 // <Link key={objective.id} to={`/objective_questions/${objective.id}`} style={{display: "block", padding: 0}}>
                     <div className="list-item" key={objective.id} style={{margin: 0}}>

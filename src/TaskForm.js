@@ -63,7 +63,7 @@ const TaskForm = () => {
     }
 
     return (
-        <div>
+        <div className="body-div">
             <form className="default-form">
                 <label>Subject</label><br />
                 <select className="sub-select header-dropdown" value={subject} style={{margin: "10px 10px 10px 5px"}} onChange={e => setSubject(e.target.value)}>

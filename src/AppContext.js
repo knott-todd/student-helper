@@ -8,13 +8,42 @@ export default ({children}) => {
     const [currSub, setCurrSub] = useState(JSON.parse(localStorage.getItem("sub")));
     const [currUnit, setCurrUnit] = useState();
     const [currExam, setCurrExam] = useState();
-    const [userID, setUserID] = useState(JSON.parse(localStorage.getItem("user")));
+    const [userID, setUserID] = useState(JSON.parse(localStorage.getItem("userID")));
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
     const [userSubs, setUserSubs] = useState([]);
     const [isLightMode, setIsLightMode] = useState();
+    const [pageTitle, setPageTitle] = useState();
+    const [progressValue, setProgressVal] = useState();
+    const [singleProgressValue, setSingleProgressVal] = useState();
+
+    const setProgressValue = val => {
+        setSingleProgressVal();
+        setProgressVal(val);
+    }
+
+    const setSingleProgressValue = val => {
+        setProgressVal();
+        setSingleProgressVal(val);
+    }
 
     const cacheVariables = {
         sub: currSub,
-        user: userID
+        userID,
+        user
+    }
+
+    const cacheSetCommands = {
+        setCurrSub: "",
+        setUserID: "",
+        setUser: "",
+        setCurrExam: "",
+        setUserSubs: "[]"
+    }
+
+    const clearCache = () => {
+        Object.keys(cacheSetCommands).forEach(key => {
+            eval(`${key}(${cacheSetCommands[key]})`)
+        })
     }
 
     const lightmodeAccentColors = [
@@ -61,6 +90,7 @@ export default ({children}) => {
     }
 
     const global = {
+        clearCache,
         currSub,
         setCurrSub,
         currUnit,
@@ -73,7 +103,15 @@ export default ({children}) => {
         isLightMode,
         setIsLightMode,
         currExam,
-        setCurrExam
+        setCurrExam,
+        pageTitle,
+        setPageTitle,
+        user,
+        setUser,
+        progressValue,
+        setProgressValue,
+        singleProgressValue,
+        setSingleProgressValue
     }
 
     useEffect(() => {
