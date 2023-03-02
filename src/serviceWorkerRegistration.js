@@ -81,10 +81,13 @@ function registerValidSW(swUrl, config) {
                   'tabs for this page are closed. See https://cra.link/PWA.'
               );
 
-              toast.info(`Update available! To update, close all windows and reopen.`, {
+              toast.info((
+                <div>
+                    <b>Upgrades people, upgrades!</b>
+                    <br />
+                    To update, close all Student Helper tabs and reopen.
+                </div>), {
                 toastId: "appUpdateAvailable", // Prevent duplicate toasts
-                onClick: () => window.close(), // Closes windows on click
-                autoClose: false // Prevents toast from auto closing
               });
 
               // Execute callback
