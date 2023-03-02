@@ -73,6 +73,7 @@ const Header = () => {
         window.removeEventListener('scroll', onScroll);
         window.addEventListener('scroll', onScroll, { passive: true });
         return () => window.removeEventListener('scroll', onScroll);
+
     }, [])
 
     return (
@@ -96,8 +97,8 @@ const Header = () => {
                 <h1 className="page-title">{(global.pageTitle ? global.pageTitle : "")}</h1>
 
             </div>
-            <Progress value={global.progressValue} height="4px" width={(global.progressValue ? "100%" : "0")} position="absolute" />
-            <SingleProgress height="4px" width={(global.singleProgressValue ? "100%" : "0")} position="absolute" value={global.singleProgressValue} />
+            <Progress value={global.progressValue} height="4px" width={(window.location.pathname === "/track" ? "100%" : "0")} position="absolute" />
+            <SingleProgress height="4px" width={(window.location.pathname === "/tasks" ? "100%" : "0")} position="absolute" value={global.singleProgressValue} />
         </div>
     )
 }
