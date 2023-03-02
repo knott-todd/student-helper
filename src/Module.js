@@ -78,7 +78,11 @@ const Module = () => {
                                         </p>
                                     </Link>
 
-                                ) : ""}
+                                ) : (
+                                    <div className="card-subtext topic-link card-link accent-link">
+
+                                    </div>
+                                )}
                             </div>
 
                             {/* {topic.objective.id ? (
