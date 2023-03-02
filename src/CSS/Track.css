@@ -109,7 +109,7 @@
     /* background-color: var(--content-background-color); */
 }
 
-.card-header .module-link {
+.card-header .card-link:not(.card-subtext) {
     padding: 60px 30px 0px 30px;
     margin: 0;
     display: block;

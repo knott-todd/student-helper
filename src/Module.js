@@ -71,6 +71,14 @@ const Module = () => {
                                     </h2>
 
                                 </Link>
+                                {topic.objective.id ? (
+                                    <Link className="card-subtext topic-link card-link accent-link" to={`/track/topic/${topic.topic.id}`}>
+                                        <p style={{display: "inline-block", padding: 0, margin:0}}>
+                                            <span className="next">Next:</span><span className="sub-description">  {topic.objective.info ? topic.objective.info : "None"} </span>{/* ({topic.lowestFamiliarity ? ((topic.lowestFamiliarity  * 100).toFixed(2) + "%") : (topic.lowestFamiliarity === 0 ? "0.00%" : "None")}) */}
+                                        </p>
+                                    </Link>
+
+                                ) : ""}
                             </div>
 
                             {/* {topic.objective.id ? (
@@ -84,14 +92,6 @@ const Module = () => {
                                 </Link>
                             ) : ""} */}
 
-                            {topic.objective.id ? (
-                                <Link className="card-subtext topic-link card-link accent-link" to={`/track/topic/${topic.topic.id}`}>
-                                    <p style={{display: "inline-block", padding: 0, margin:0}}>
-                                        <span className="next">Next:</span><span className="sub-description">  {topic.objective.info ? topic.objective.info : "None"} </span>{/* ({topic.lowestFamiliarity ? ((topic.lowestFamiliarity  * 100).toFixed(2) + "%") : (topic.lowestFamiliarity === 0 ? "0.00%" : "None")}) */}
-                                    </p>
-                                </Link>
-
-                            ) : ""}
 
                             <Progress label="Familiarity" value={topic.topicFam} height="5px" width="100%" position="absolute" />
 
