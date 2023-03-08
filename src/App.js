@@ -26,6 +26,7 @@ import { faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListChe
 import TaskForm from './TaskForm';
 import { saveInteraction } from './services/SQLService';
 import { ToastContainer } from 'react-toastify';
+import OneSignal from 'react-onesignal';
 library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus )
 
 function App() {
@@ -97,6 +98,12 @@ function App() {
   //   }
 
   // }, [])
+
+  useEffect(() => {
+    OneSignal.init({
+      appId: "99b7a99a-31e5-4656-86d7-ab456591292b"
+    });
+  }, []);
 
   useEffect(() => {
     if(global.userID) {

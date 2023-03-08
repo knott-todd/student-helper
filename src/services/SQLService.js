@@ -1,7 +1,16 @@
 // const backendURL = 'https://student-helper-backend.vercel.app';
 // const backendURL = 'https://nice-wasp-48.loca.lt/';
 // const backendURL = 'http://studnthelperbackend.ddns.net:3080';
-const backendURL = 'https://studenthelperbackend.loca.lt';
+const backendURL = 'https://student-helper-backend.vercel.app';
+
+const onesignalURL = 'https://onesignal.com/api/v1/notifications';
+const onesignalAppID = '99b7a99a-31e5-4656-86d7-ab456591292b';
+
+const sqlToJSDeadline = deadline => {
+    const dateParts = deadline.split("-");
+    return new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0,2));
+
+}
 
 export async function getPastpapers (subID, examID, userID) {
     try {
@@ -143,6 +152,28 @@ export async function updateTask(taskID, taskText, subject, deadline) {
         },
         body: JSON.stringify({taskID, taskText, subject, deadline})
     })
+
+    const signalOptions = {
+        method: 'PUT',
+        headers: {
+            accept: 'application/json',
+            Authorization: 'Basic MWNlZjkwNjItOGVmOS00N2JkLWIyZWItNzlmOTNkN2VkYTM2',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            contents: {en: `${taskText}`},
+            app_id: onesignalAppID,
+            send_after: `${deadline.slice(0, 10)}`,
+            delayed_option: "timezone",
+            delivery_time_of_day: "9:00AM"
+        })
+    };
+      
+    fetch(onesignalURL + `/${taskID}`, signalOptions)
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .catch(err => console.error('error:' + err));
+
     return await response.json();
 }
 
@@ -159,14 +190,37 @@ export async function updateTaskComplete (taskID, isCompleted) {
 }
 
 export async function deleteTask (taskID) {
-    const response = await fetch(`${backendURL}/delete_task/${taskID}`, {
+
+    const signalOptions = {
         method: 'DELETE',
         headers: {
-            'Content-Type': 'application/json',
-            "Bypass-Tunnel-Reminder": "true"
+            accept: 'application/json',
+            Authorization: 'Basic MWNlZjkwNjItOGVmOS00N2JkLWIyZWItNzlmOTNkN2VkYTM2',
+            'Content-Type': 'application/json'
         }
+    };
+
+    const taskInfo = await getTaskInfo(taskID);
+      
+    fetch(onesignalURL + `/${taskInfo.notification}?app_id=${onesignalAppID}`, signalOptions)
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .then(async () => {
+
+        const response = await fetch(`${backendURL}/delete_task/${taskID}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                "Bypass-Tunnel-Reminder": "true"
+            }
+        })
+
+        return await response.json();
+
     })
-    return await response.json();
+    .catch(err => console.error('error:' + err));
+
+
 }
 
 export async function setQuestObjective(data) {
@@ -466,14 +520,48 @@ export async function addQuestion(question) {
 }
 
 export async function addTask(task, userID) {
+
+    const deadlineTimeInHours = 15;
+
+    const jsDeadline = sqlToJSDeadline(task.deadline);
+    jsDeadline.setHours(deadlineTimeInHours);
+    const jsDeadlineUTC = jsDeadline.toUTCString();
+
+    const signalOptions = {
+        method: 'POST',
+        headers: {
+            accept: 'application/json',
+            Authorization: 'Basic MWNlZjkwNjItOGVmOS00N2JkLWIyZWItNzlmOTNkN2VkYTM2',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            include_external_user_ids: [`${userID}`],
+            contents: {en: `${task.taskText}`},
+            external_id: task.id,
+            name: `Task: ${task.taskText}`,
+            app_id: onesignalAppID,
+            send_after: `${jsDeadlineUTC}`,
+            delayed_option: "timezone",
+            delivery_time_of_day: `${deadlineTimeInHours}:00`
+        })
+    };
+      
+    const signalResponse = await (await fetch(onesignalURL, signalOptions)).json()
+    console.log(signalResponse)
+    // .then(res => res.json())
+    // .then(json => console.log(json))
+    // .catch(err => console.error('error:' + err));
+
+
     const response = await fetch(`${backendURL}/add_task`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             "Bypass-Tunnel-Reminder": "true"
         },
-        body: JSON.stringify({...task, userID})
+        body: JSON.stringify({...task, userID, notificationID: signalResponse.id})
     })
+    
     return await response.json();
 }
 

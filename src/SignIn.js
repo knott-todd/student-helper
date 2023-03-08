@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {AppContext} from "./AppContext";
+import OneSignal from 'react-onesignal';
 import { setUser, getUserID, getSubjects, getUserSubjects, setUserSub, getExamSubjects, getExams, getUserExam, setUserExam } from "./services/SQLService";
 
 const SignIn = () => {
@@ -57,6 +58,8 @@ const SignIn = () => {
                     .then(result => {
                         global.setUserID(result[0].id);
                         global.setUser(result[0]);
+
+                        OneSignal.setExternalUserId(result[0].id);
 
                         getUserExam(result[0].id)
                             .then(result => {
