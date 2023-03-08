@@ -43,7 +43,7 @@
     font-family: 'verdanabold';
     src: url('../fonts/Verdana/verdana-bold-webfont.woff2') format('woff2'),
          url('../fonts/Verdana/verdana-bold-webfont.woff') format('woff');
-    font-weight: normal;
+    font-weight: bold;
     font-style: normal;
 
 }
@@ -52,9 +52,147 @@
     font-family: 'verdanabold_italic';
     src: url('../fonts/Verdana/verdana-bold-italic-webfont.woff2') format('woff2'),
          url('../fonts/Verdana/verdana-bold-italic-webfont.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+
+}
+
+@font-face {
+    font-family: 'beach-sound';
+    src: url('../fonts/beach-sound-font/BeachSoundIkiikocom-Wy2l9.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
+}
 
+@font-face {
+    font-family: 'glafton';
+    src: url('../fonts/glafton-font/GlaftonDemo-nRwpO.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'replay';
+    src: url('../fonts/replay-font/ReplayDemo-2OV1e.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ropers';
+    src: url('../fonts/ropers-2-font/RopersRegular-Wyawn.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'josefin-bold';
+    src: url('../fonts/Josefin/JosefinSans-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'josefin-bold-italic';
+    src: url('../fonts/Josefin/JosefinSans-BoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'josefin-italic';
+    src: url('../fonts/Josefin/JosefinSans-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'josefin-light';
+    src: url('../fonts/Josefin/JosefinSans-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'josefin-light-italic';
+    src: url('../fonts/Josefin/JosefinSans-LightItalic.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'josefin-regular';
+    src: url('../fonts/Josefin/JosefinSans-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'josefin-semibold';
+    src: url('../fonts/Josefin/JosefinSans-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'josefin-semibold-italic';
+    src: url('../fonts/Josefin/JosefinSans-SemiBoldItalic.ttf') format('truetype');
+    font-weight: 600;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'josefin-thin';
+    src: url('../fonts/Josefin/JosefinSans-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'josefin-thin-italic';
+    src: url('../fonts/Josefin/JosefinSans-ThinItalic.ttf') format('truetype');
+    font-weight: 100;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'altone-bold';
+    src: url('../fonts/Altone/AltoneTrial-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'altone-bold-italic';
+    src: url('../fonts/Altone/AltoneTrial-BoldOblique.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'altone-regular';
+    src: url('../fonts/Altone/AltoneTrial-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'altone-regular-italic';
+    src: url('../fonts/Altone/AltoneTrial-RegularOblique.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'montserrat';
+    src: url('../fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format("truetype-variations");
+    font-weight: 1 999;
+}
+
+@font-face {
+    font-family: 'montserrat-italic';
+    src: url('../fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format("truetype-variations");
+    font-weight: 1 999;
 }
 
 body {
@@ -70,6 +208,10 @@ p, h1, h2, h3, h4, h5, h6 {
     
     cursor: default;
     
+}
+
+p {
+    font-size: 15px;
 }
 
 select {

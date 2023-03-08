@@ -5,6 +5,7 @@
 .task:hover{
     cursor: pointer;
     background-color: var(--content-background-color);
+    transform: translateX(10px);
 }
 
 .completed_task {
@@ -17,11 +18,11 @@
     bottom: 100px;
     right: 50px;
     background-color: var(--accent);
-    border-radius: 100%;
+    border-radius: 25px;
     width: 50px;
     height: 50px;
     vertical-align: middle;
-    transition: 0.2s cubic-bezier(0.42, 0.22, 0.38, 1.58);
+    /* transition: 0.2s cubic-bezier(0.42, 0.22, 0.38, 1.58); */
 }
 
 .add_new * {
@@ -31,6 +32,7 @@
 .add_new:hover {
     color: var(--accent);
     transform: translateY(-2px);
+    /* width: 100px; */
 }
 
 .overdue_task .task_deadline {

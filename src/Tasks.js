@@ -8,7 +8,6 @@ import SingleProgress from "./SingleProgress"
 import './CSS/Tasks.css'
 import './CSS/global.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { toast } from "react-toastify"
 
 const Tasks = () => {
 
@@ -26,6 +25,14 @@ const Tasks = () => {
         } else {
             Notification.requestPermission();
         }
+
+        // const schedule = require('node-schedule');
+
+        // const job = schedule.scheduleJob('*/1 * * * *', function(){
+        //     console.log('The answer to life, the universe, and everything!');
+
+            
+        // });
 
         if(global.currSub)
             console.log(global)
@@ -91,7 +98,7 @@ const Tasks = () => {
             const numDaysToDeadline = ((jsDeadline.getTime() - today.getTime()) / (1000*60*60*24));
             
             // If difference between today and deadline is > 0, <= 2, or <= 0 and not completed
-            console.log(task, numDaysToDeadline)
+            // console.log(task, numDaysToDeadline)
             return (numDaysToDeadline <= 2 && numDaysToDeadline > 0) || (numDaysToDeadline <= 0 && !task.is_completed)
         }
         
@@ -173,7 +180,7 @@ const Tasks = () => {
                     <div style={{marginLeft: "9%", marginRight: "9%"}}>
                         <div>
                             <h1 style={{textAlign: "start", margin: "11vh 0px 1vh"}}>Hey, {(global.user ? global.user.first_name : "")}</h1>
-                            <h4 style={{textAlign: "start", margin: 0}}>Next for today:</h4>
+                            <p style={{textAlign: "start", margin: 0}}>Next for today:</p>
                             <div className={`next-task task ${displayedTasks[0].is_completed ? "completed_task" : ""} ${isTaskOverdue(displayedTasks[0]) ? "overdue_task" : ""}`}>
                                 <div className="center-div" style={{margin: "auto", marginRight: "30px"}}>
                                     <h1 className="task-text strike" onClick={e => onIsCompleteChange({target: {checked: true}}, displayedTasks[0]) }>{displayedTasks[0].task_text}</h1>
@@ -192,7 +199,7 @@ const Tasks = () => {
                             </label> */}
                             {[...new Set(displayedTasks.slice(1).map((task) => task.deadline))].map(deadline => (
                                 <div>
-                                    <h4 className={``} style={{textAlign: "start", margin: "3px 0px", color: (isTaskOverdue({deadline}) ? "var(--red)" : ""), opacity: (displayedTasks.slice(1).filter(task => task.deadline === deadline).some(task => task.is_completed) ? "var(--faded-opacity)" : "") }}>{dateNumToDate(deadline)}</h4>
+                                    <h4 className={``} style={{textAlign: "start", margin: "3px 0px", color: (isTaskOverdue({deadline}) ? "var(--red)" : ""), opacity: (displayedTasks.slice(1).filter(task => task.deadline === deadline).every(task => task.is_completed) ? "var(--faded-opacity)" : "") }}>{dateNumToDate(deadline)}</h4>
                                     {displayedTasks.slice(1).filter(task => task.deadline === deadline).map(task => (
                                         <Link to={`task_form/${task.id}`} onClick={handleCheckboxInLink}>
                                             <div className={`task ${task.is_completed ? "completed_task" : ""} ${isTaskOverdue(task) ? "overdue_task" : ""}`}>
