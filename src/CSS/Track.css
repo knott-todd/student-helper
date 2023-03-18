@@ -1,5 +1,5 @@
 .track-card {
-    border-radius: 23px 23px 5px 5px;
+    border-radius: 23px;
     border: var(--content-background-color) solid 3px;
     /* transition: 0.2s; */
     background-color: transparent;

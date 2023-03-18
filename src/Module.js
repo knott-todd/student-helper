@@ -97,7 +97,7 @@ const Module = () => {
                             ) : ""} */}
 
 
-                            <Progress label="Familiarity" value={topic.topicFam} height="5px" width="100%" position="absolute" />
+                            <Progress label="Familiarity" value={topic.topicFam} height="4px" width="100%" position="absolute" />
 
                             {/* <Link className="accent-link" to={`/topic_questions/${topic.topic.id}`}>
                                 <p>Practice</p>

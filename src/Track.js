@@ -54,7 +54,7 @@ const Track = memo(() => {
                                 </Link>
                                 <Link className="card-subtext card-link accent-link" to={`topic_questions/${module.topic.id}`}>
                                     <p style={{ display: "inline-block", padding: 0, margin: 0 }}>
-                                        <span className="next">Next:</span><span className="sub-description"> {module.topic.name ? module.topic.name : "None"} </span>({module.lowestFamiliarity ? ((module.lowestFamiliarity * 100).toFixed(2) + "%") : (module.lowestFamiliarity === 0 ? "0.00%" : "None")})
+                                        <span className="next">Next:</span><span className="sub-description"> {module.topic.name ? module.topic.name : "None"} </span>{/*({module.lowestFamiliarity ? ((module.lowestFamiliarity * 100).toFixed(2) + "%") : (module.lowestFamiliarity === 0 ? "0.00%" : "None")})*/}
                                     </p>
                                 </Link>
                             </div>
@@ -71,7 +71,7 @@ const Track = memo(() => {
 
 
 
-                            <Progress label="Familiarity" value={module.avgFam} height="5px" width="100%" position="absolute" />
+                            <Progress label="Familiarity" value={module.avgFam} height="4px" width="100%" position="absolute" />
                         </div>
 
                         {module.module.image_url ? <img className="card-bg-img" src={`${module.module.image_url}`} onError={(event) => event.target.style.display = 'none'} /> : ""}

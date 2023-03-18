@@ -201,11 +201,11 @@ const Tasks = () => {
                                 <div>
                                     <h4 className={``} style={{textAlign: "start", margin: "3px 0px", color: (isTaskOverdue({deadline}) ? "var(--red)" : ""), opacity: (displayedTasks.slice(1).filter(task => task.deadline === deadline).every(task => task.is_completed) ? "var(--faded-opacity)" : "") }}>{dateNumToDate(deadline)}</h4>
                                     {displayedTasks.slice(1).filter(task => task.deadline === deadline).map(task => (
-                                        <Link to={`task_form/${task.id}`} onClick={handleCheckboxInLink}>
+                                        <Link key={task.id} to={`task_form/${task.id}`} onClick={handleCheckboxInLink}>
                                             <div className={`task ${task.is_completed ? "completed_task" : ""} ${isTaskOverdue(task) ? "overdue_task" : ""}`}>
+                                                <input type="checkbox" checked={task.is_completed} onChange={e => onIsCompleteChange(e, task)}/>
                                                 <p style={{display: "inline-block", margin: "10px"}}>{task.task_text}</p>
                                                 {/* <p className="task_deadline" style={{display: "inline-block", margin: "10px"}}>{ dateNumToDate(task.deadline)}</p> */}
-                                                <input type="checkbox" checked={task.is_completed} onChange={e => onIsCompleteChange(e, task)}/>
                                             </div>
                                         </Link>
                                     ))}

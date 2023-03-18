@@ -62,7 +62,7 @@ const TopicQuestions = () => {
 
     useEffect(() => {
         global.setPageTitle(topic.name);
-    }, [])
+    }, [topic.name])
 
     useEffect(() => {
         
@@ -103,7 +103,7 @@ const TopicQuestions = () => {
     return (
         <div className="body-div objective-questions">
             {/* <h1 className="page-title">{topic.name}</h1> */}
-            <h4>Familiarity: {(topic.familiarity * 100).toFixed(2)}%</h4>
+            {/* <h4>Familiarity: {(topic.familiarity * 100).toFixed(2)}%</h4> */}
 
             <h2>
                 Appears in:

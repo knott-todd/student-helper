@@ -524,8 +524,11 @@ export async function addTask(task, userID) {
     const deadlineTimeInHours = 15;
 
     const jsDeadline = sqlToJSDeadline(task.deadline);
-    jsDeadline.setHours(deadlineTimeInHours);
-    const jsDeadlineUTC = jsDeadline.toUTCString();
+    // If 2 days before deadline is before today, set reminder for today, otherwise set as 2 days before deadline
+    let reminder = new Date();
+    reminder.setDate(((jsDeadline.getDate() - 2) < new Date().getDate() ? new Date().getDate() : (jsDeadline.getDate() - 2)));
+    reminder.setHours(deadlineTimeInHours);
+    const reminderUTC = reminder.toUTCString();
 
     const signalOptions = {
         method: 'POST',
@@ -540,7 +543,7 @@ export async function addTask(task, userID) {
             external_id: task.id,
             name: `Task: ${task.taskText}`,
             app_id: onesignalAppID,
-            send_after: `${jsDeadlineUTC}`,
+            send_after: `${reminderUTC}`,
             delayed_option: "timezone",
             delivery_time_of_day: `${deadlineTimeInHours}:00`
         })
