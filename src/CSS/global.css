@@ -368,13 +368,13 @@ a, a *{
 
 input[type="checkbox"] {
     accent-color: var(--accent);
+    vertical-align: middle;
+    margin-left: 13px;
+    margin-right: 0px;
 }
 
 input[type="checkbox"]:hover {
     cursor: pointer;
-    vertical-align: middle;
-    margin-left: 13px;
-    margin-right: 0px;
 }
 
 button {
