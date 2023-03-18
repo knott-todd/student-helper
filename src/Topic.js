@@ -28,7 +28,7 @@ const Topic = memo(() => {
 
     useEffect(() => {
         global.setPageTitle(topic.name);
-    }, [])
+    }, [topic.name])
 
     useEffect(() => {
         

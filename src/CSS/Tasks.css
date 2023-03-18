@@ -12,6 +12,10 @@
     opacity: var(--faded-opacity);
 }
 
+.completed_task p {
+    text-decoration: line-through;
+}
+
 .add_new {
     text-decoration: underline;
     position: fixed;

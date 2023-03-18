@@ -372,6 +372,9 @@ input[type="checkbox"] {
 
 input[type="checkbox"]:hover {
     cursor: pointer;
+    vertical-align: middle;
+    margin-left: 13px;
+    margin-right: 0px;
 }
 
 button {
