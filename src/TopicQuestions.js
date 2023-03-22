@@ -53,10 +53,12 @@ const TopicQuestions = () => {
             console.log("He")
             console.log(id, global.userID, result)
             setQuests(result);
+            
         });
 
         getTopic(id, global.userID).then(result => {
             setTopic(result)
+            global.setProgressValue(result.familiarity);
         });
     }, []);
 

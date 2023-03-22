@@ -76,6 +76,11 @@ const Header = () => {
 
     }, [])
 
+    const handleSubDropdownChange = e => {
+        navigate(window.location.pathname.match(/\/.*?(?=\/)/g)[0]);
+        global.setCurrSub(subs.find(sub => sub.id === parseInt(e.target.value)))
+    }
+
     return (
         <div className={`header ${scrollTop === 0 ? "top" : ""}`} style={{visibility: (global.userID ? "visible" : "hidden")}} onScroll={e => setScrollTop(e.currentTarget.scrollTop)}>
             <div>
@@ -83,7 +88,7 @@ const Header = () => {
                     <span style={{width: "30px", display: "inline-block"}}>
                         <FontAwesomeIcon style={{paddingLeft: "14px"}} icon={global.currSub && global.currSub.fa_icon ? global.currSub.fa_icon : ""} />
                     </span>
-                    <select className="sub-select header-dropdown" value={global.currSub ? global.currSub.id : ""} style={{margin: "5px 0px 0px 5px"}} onChange={e => global.setCurrSub(subs.find(sub => sub.id === parseInt(e.target.value)))}>
+                    <select className="sub-select header-dropdown" value={global.currSub ? global.currSub.id : ""} style={{margin: "5px 0px 0px 5px"}} onChange={e => handleSubDropdownChange(e)}>
                         {subs.map(sub => (
                             <option key={parseInt(sub.id)} value={sub.id}>{sub.name}</option>
                         ))} 
