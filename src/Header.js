@@ -77,7 +77,7 @@ const Header = () => {
     }, [])
 
     const handleSubDropdownChange = e => {
-        navigate(window.location.pathname.match(/\/.*?(?=\/)/g)[0]);
+        navigate(window.location.pathname.match(/\/.*?(?=\/|$)/g)[0]);
         global.setCurrSub(subs.find(sub => sub.id === parseInt(e.target.value)))
     }
 
