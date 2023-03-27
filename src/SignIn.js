@@ -154,7 +154,7 @@ const SignIn = () => {
             {global.userID ? (
                 <form style={{display: "block", paddingTop: "40px"}}>
                     <label>
-                        Select Exam 
+                        Select Default Exam 
                     </label>
                     <select className="header-dropdown dropdown" value={global.currExam} style={{margin: "10px 10px 10px 5px"}} onChange={onUserExamChange}>
                         <option value='' />
@@ -171,8 +171,8 @@ const SignIn = () => {
                         {subs.sort((a, b) => a.name.localeCompare(b.name)).sort((a, b) => b.isUserSub - a.isUserSub).map(sub => (
                             <p className={`subject-label ${sub.isUserSub ? "" : "notUserSub"}`} >
                                 {sub.isUserSub ? (
-                                    <select className="dropdown" value={sub.exam ? sub.exam : global.currExam} style={{margin: "10px 10px 10px 5px"}} onChange={e => onSubExamChange(e, sub.id)}>
-                                        <option key="null" value={"NULL"} />
+                                    <select className="dropdown" value={sub.exam ? sub.exam : "NULL"} style={{margin: "10px 10px 10px 5px", opacity: (sub.exam ? 1 : "var(--faded-opacity)")}} onChange={e => onSubExamChange(e, sub.id)}>
+                                        <option key="null" value={"NULL"}>Default</option>
                                         {exams.map(exam => (
                                             <option key={parseInt(exam.id)} value={exam.id}>{exam.short_name}</option>
                                         ))}
