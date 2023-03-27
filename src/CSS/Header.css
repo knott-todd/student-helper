@@ -72,7 +72,12 @@
 @media (max-width: 768px) {
 
     .sub-select {
-        max-width: 0px;
+        max-width: 18px;
+        border: none;
+    }
+
+    .header-dropdown:hover,  .header:not(.top) .header-dropdown:hover{
+        background-color: transparent;
     }
     
 }
