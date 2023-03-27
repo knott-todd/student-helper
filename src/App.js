@@ -298,51 +298,72 @@ function App() {
     }
 
     let mouseX, mouseY
+    let isMouseMoving = false;
+    let throttleDelay = 0;
+
     // Handle mouse movement
     window.addEventListener("mousemove", (event) => {
-      const canvasRect = canvas.getBoundingClientRect();
-      mouseX = event.clientX - canvasRect.left;
-      mouseY = event.clientY - canvasRect.top;
+      if (!isMouseMoving) {
+        isMouseMoving = true;
+        const canvasRect = canvas.getBoundingClientRect();
+        mouseX = event.clientX - canvasRect.left;
+        mouseY = event.clientY - canvasRect.top;
+        setTimeout(() => {
+          isMouseMoving = false;
+        }, throttleDelay); // set the delay time here (in milliseconds)
+      }
     });
 
-    // Handle touch events
-    let touchId = null;
+    // // Handle touch events
+    // let touchId = null;
+    // let isTouchMoving = false;
 
-    function handleTouchStart(event) {
-      if (event.touches.length === 1) {
-        const canvasRect = canvas.getBoundingClientRect();
-        const touch = event.touches[0];
-        mouseX = touch.clientX - canvasRect.left;
-        mouseY = touch.clientY - canvasRect.top;
-        touchId = touch.identifier;
-      }
-    }
+    // function handleTouchStart(event) {
+    //   if (event.touches.length === 1) {
+    //     if (!isTouchMoving) {
+    //       isTouchMoving = true;
+    //       const canvasRect = canvas.getBoundingClientRect();
+    //       const touch = event.touches[0];
+    //       mouseX = touch.clientX - canvasRect.left;
+    //       mouseY = touch.clientY - canvasRect.top;
+    //       touchId = touch.identifier;
+    //       setTimeout(() => {
+    //         isTouchMoving = false;
+    //       }, throttleDelay); // set the delay time here (in milliseconds)
+    //     }
+    //   }
+    // }
 
-    function handleTouchMove(event) {
-      for (let i = 0; i < event.changedTouches.length; i++) {
-        const touch = event.changedTouches[i];
-        if (touch.identifier === touchId) {
-          const canvasRect = canvas.getBoundingClientRect();
-          mouseX = touch.clientX - canvasRect.left;
-          mouseY = touch.clientY - canvasRect.top;
-        }
-      }
-    }
+    // function handleTouchMove(event) {
+    //   for (let i = 0; i < event.changedTouches.length; i++) {
+    //     const touch = event.changedTouches[i];
+    //     if (touch.identifier === touchId && !isTouchMoving) {
+    //       isTouchMoving = true;
+    //       // const canvasRect = canvas.getBoundingClientRect();
+    //       mouseX = touch.clientX;
+    //       mouseY = touch.clientY;
 
-    function handleTouchEnd(event) {
-      for (let i = 0; i < event.changedTouches.length; i++) {
-        const touch = event.changedTouches[i];
-        if (touch.identifier === touchId) {
-          touchId = null;
-          mouseX = undefined;
-          mouseY = undefined;
-        }
-      }
-    }
+    //       setTimeout(() => {
+    //         isTouchMoving = false;
+    //       }, throttleDelay); // set the delay time here (in milliseconds)
+    //     }
+    //   }
+    // }
 
-    window.addEventListener("touchstart", handleTouchStart);
-    window.addEventListener("touchmove", handleTouchMove);
-    window.addEventListener("touchend", handleTouchEnd);
+    // function handleTouchEnd(event) {
+    //   for (let i = 0; i < event.changedTouches.length; i++) {
+    //     const touch = event.changedTouches[i];
+    //     if (touch.identifier === touchId) {
+    //       touchId = null;
+    //       mouseX = undefined;
+    //       mouseY = undefined;
+    //     }
+    //   }
+    // }
+
+    // window.addEventListener("touchstart", handleTouchStart);
+    // window.addEventListener("touchmove", handleTouchMove);
+    // window.addEventListener("touchend", handleTouchEnd);
 
     // Redraw on window resize
     window.addEventListener("resize", () => {
