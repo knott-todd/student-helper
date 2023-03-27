@@ -1,13 +1,20 @@
-.header-dropdown {
-    padding: 14px;
-    padding-left: 0px;
-    margin: 0;
+.dropdown.header-dropdown {
+    padding: 14px 0px;
     border-radius: 10px;
-    border: solid 2px transparent;
     font-size: 18px;
+}
+
+.dropdown {
+
+    padding: 3px 0px;
+    margin: 0;
+    border-radius: 6px;
+    border: solid 2px transparent;
+    font-size: 1em;
     font-weight: 500;
-    background-color: var(--background-color);
+    background-color: transparent;
     box-sizing: border-box;
+
 }
 
 .header-dropdown:hover {
@@ -21,15 +28,23 @@
 
 .header {
     text-align: left;
-    background-color: var(--background-color);
+    background-color: transparent;
     position: sticky;
     top: 0;
     z-index: 1000;
     width: 100%;
 }
 
+.header-content {
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
 .header.top .progress {
-    background-color: var(--background-color);
+    background-color: transparent;
 }
 
 .header:not(.top) {
@@ -37,15 +52,15 @@
 }
 
 .header:not(.top), .header:not(.top) .progress {
-    background-color: var(--content-background-color);
+    background-color: var(--background-color);
 }
 
 .header:not(.top) .header-dropdown{
-    background-color: var(--content-background-color);
+    background-color: var(--background-color);
 }
 
 .header:not(.top) .header-dropdown:hover{
-    background-color: var(--background-color);
+    background-color: var(--content-background-color);
 }
 
 .sub-select {
@@ -67,14 +82,25 @@
     /* font-size: 48px; */
     margin: 20px 0px 20px 0px;
     display: inline-block;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
     overflow: scroll;
-    max-width: 50vw;
     white-space: nowrap;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
+    margin-left: 7vw;
+    font-size: 1.6em;
+    animation: enter 0.8s;
+}
+
+@keyframes enter {
+    0% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -85,6 +111,6 @@
 .page-title:hover {
     transition: 0.2s;
     color: var(--accent);
-    letter-spacing: 1px;
+    letter-spacing: 0.3px;
     cursor: default;
 }

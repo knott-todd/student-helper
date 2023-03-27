@@ -24,7 +24,13 @@ const Pastpaper = () => {
         console.log("Ran")
         
         getPastpaper(id).then(result => {
+
             setPaper(result)
+
+            console.log(result)
+            
+            global.setPageTitle(result.year);
+
         })
         
     }, []);

@@ -60,6 +60,8 @@ const Header = () => {
             if(global.userSubs.length > 0 && (!global.currSub || global.userSubs.filter(sub => sub.id === global.currSub.id).length === 0)){
                 console.log(">>>", global.userSubs.sort((a, b) => a.name.localeCompare(b.name))[0])
                 global.setCurrSub(global.userSubs.sort((a, b) => a.name.localeCompare(b.name))[0]);
+            } else if(global.userSubs.length > 0 && global.currSub) {
+                global.setCurrSub(global.userSubs.find(sub => sub.id === global.currSub.id))
             }
 
         }
@@ -83,12 +85,14 @@ const Header = () => {
 
     return (
         <div className={`header ${scrollTop === 0 ? "top" : ""}`} style={{visibility: (global.userID ? "visible" : "hidden")}} onScroll={e => setScrollTop(e.currentTarget.scrollTop)}>
-            <div>
-                <form style={{padding: 10}}>
+            <div className="header-content">
+                
+                <h1 key={global.pageTitle ? global.pageTitle : ""} className="page-title">{(global.pageTitle ? global.pageTitle : "")}</h1>
+                <form style={{padding: 10, justifySelf: "end", marginRight: "7%", flex: "0 0 auto"}}>
                     <span style={{width: "30px", display: "inline-block"}}>
                         <FontAwesomeIcon style={{paddingLeft: "14px"}} icon={global.currSub && global.currSub.fa_icon ? global.currSub.fa_icon : ""} />
                     </span>
-                    <select className="sub-select header-dropdown" value={global.currSub ? global.currSub.id : ""} style={{margin: "5px 0px 0px 5px"}} onChange={e => handleSubDropdownChange(e)}>
+                    <select className="sub-select header-dropdown dropdown" value={global.currSub ? global.currSub.id : ""} style={{margin: "5px 0px 0px 5px"}} onChange={e => handleSubDropdownChange(e)}>
                         {subs.map(sub => (
                             <option key={parseInt(sub.id)} value={sub.id}>{sub.name}</option>
                         ))} 
@@ -99,7 +103,6 @@ const Header = () => {
                         ))} 
                     </select> */}
                 </form>
-                <h1 className="page-title">{(global.pageTitle ? global.pageTitle : "")}</h1>
 
             </div>
             <Progress value={global.progressValue} height="4px" width={(window.location.pathname.includes("/track") ? "100%" : "0")} position="absolute" />

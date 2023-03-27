@@ -145,6 +145,12 @@ const Tasks = () => {
         }
     }
 
+    const skipTaskForNow = () => {
+        let temp = [...displayedTasks];
+        temp.push(temp.shift());
+        setDisplayedTasks(temp);
+    }
+
     return (
         <div style={{position: "relative"}}>
             {/* <SingleProgress label={`${todaysTasks.filter(task => task.is_completed).length}/${todaysTasks.length}`} height="4px" width="100%" position="absolute" overstyle={{top: 0}} value={todaysTasks.filter(task => task.is_completed).length / todaysTasks.length}/> */}
@@ -176,21 +182,25 @@ const Tasks = () => {
 
                 {/* Design revamp */}
                 
-                {((displayedTasks[0] && displayedTasks.some(task => !task.is_completed)) ? (
+                {(((displayedTasks[0] && displayedTasks.some(task => !task.is_completed)) || !todayOnly) ? (
                     <div style={{marginLeft: "9%", marginRight: "9%"}}>
-                        <div>
-                            <h1 style={{textAlign: "start", margin: "11vh 0px 1vh"}}>Hey, {(global.user ? global.user.first_name : "")}</h1>
-                            <p style={{textAlign: "start", margin: 0}}>Next for today:</p>
-                            <div className={`next-task task ${displayedTasks[0].is_completed ? "completed_task" : ""} ${isTaskOverdue(displayedTasks[0]) ? "overdue_task" : ""}`}>
-                                <div className="center-div" style={{margin: "auto", marginRight: "30px"}}>
-                                    <h1 className="task-text strike" onClick={e => onIsCompleteChange({target: {checked: true}}, displayedTasks[0]) }>{displayedTasks[0].task_text}</h1>
-                                    <Link style={{display: "inline", verticalAlign: "10%", paddingLeft: "5px"}} to={`task_form/${displayedTasks[0].id}`}>
-                                        <FontAwesomeIcon icon="pencil" />
-                                    </Link>
-                                    <p className="deadline-wrap">Due: <span className="task_deadline">{dateNumToDate(displayedTasks[0].deadline)}</span></p>
+                        {displayedTasks[0] && displayedTasks.some(task => !task.is_completed) ? (
+                            <div>
+                                <h1 className="hey-heading" style={{textAlign: "start", margin: "11vh 0px 1vh"}}>Hey, {(global.user ? global.user.first_name : "")}</h1>
+                                <p style={{textAlign: "start", margin: 0}}>Next for today:</p>
+                                <div className={`next-task task ${displayedTasks[0].is_completed ? "completed_task" : ""} ${isTaskOverdue(displayedTasks[0]) ? "overdue_task" : ""}`}>
+                                    <div className="center-div" >
+                                        <h1 className="task-text strike" onClick={e => onIsCompleteChange({target: {checked: true}}, displayedTasks[0]) }>{displayedTasks[0].task_text}</h1>
+                                        <Link className="next-icon tooltip" id="edit-task" to={`task_form/${displayedTasks[0].id}`}>
+                                            <FontAwesomeIcon icon="pencil" />
+                                            <span className="tooltip-text">Edit</span>
+                                        </Link>
+                                        <span id="skip-for-now" className="next-icon tooltip" onClick={skipTaskForNow} ><FontAwesomeIcon icon="forward"/><span className="tooltip-text">Skip for now</span></span>
+                                        <p className="deadline-wrap">Due: <span className="task_deadline">{dateNumToDate(displayedTasks[0].deadline)}</span></p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        ) : ""}
                         <div>
                             {displayedTasks.length > 1 ? (<h4 style={{textAlign: "start", marginTop: "5vh", marginBottom: "7px"}}>Next up...</h4>) : ""}
                             {/* <label>
@@ -198,7 +208,7 @@ const Tasks = () => {
                                 <input type="checkbox" checked={todayOnly} onChange={e => setTodayOnly(e.target.checked)} />
                             </label> */}
                             {[...new Set(displayedTasks.slice(1).map((task) => task.deadline))].map(deadline => (
-                                <div>
+                                <div key={deadline}>
                                     <h4 className={``} style={{textAlign: "start", margin: "3px 0px", color: (isTaskOverdue({deadline}) ? "var(--red)" : ""), opacity: (displayedTasks.slice(1).filter(task => task.deadline === deadline).every(task => task.is_completed) ? "var(--faded-opacity)" : "") }}>{dateNumToDate(deadline)}</h4>
                                     {displayedTasks.slice(1).filter(task => task.deadline === deadline).map(task => (
                                         <Link key={task.id} to={`task_form/${task.id}`} onClick={handleCheckboxInLink}>
@@ -215,8 +225,8 @@ const Tasks = () => {
                         <p style={{textDecoration: "underline", cursor: "pointer", textAlign: "start"}} onClick={e => setTodayOnly(!todayOnly)}>{(todayOnly ? "View all" : "View today only")}</p>
                     </div>
                 ) : (
-                    <div>
-                        <p style={{opacity: "var(--faded-opacity)"}}>Looks like there's nothing left for today...</p>
+                    <div style={{marginLeft: "9%", marginRight: "9%"}}>
+                        <p className="no-content-text">Looks like there's nothing left for today...</p>
                         {((tasks.length > 0 && tasks[0].deadline) ? <p style={{textDecoration: "underline", cursor: "pointer"}} onClick={e => setTodayOnly(!todayOnly)}>{(todayOnly ? "View all" : "View today only")}</p> : "")}
                     </div>
                 ))}

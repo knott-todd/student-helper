@@ -26,7 +26,7 @@ const Navbar = () => {
     return (
         <div className="navbar">
             <nav>
-                <div style={{display: (global.userID && global.currExam ? "inline-block" : "none")}}>
+                <div style={{display: (global.userID && global.currExam ? "inline-flex" : "none"), alignItems: "center"}}>
                     <a className="nav-back" onClick={() => nav(-1)}><FontAwesomeIcon icon="arrow-left" /></a>
                     
                     <NavLink to='/tasks' currSection={currSection} onChange={setCurrSection} icon="list-check" />

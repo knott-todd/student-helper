@@ -130,6 +130,18 @@ export async function setUserExam(examID, userID) {
     return await response.json();
 }
 
+export async function setSubExam(examID, subID, userID) {
+    const response = await fetch(`${backendURL}/set_sub_exam`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            "Bypass-Tunnel-Reminder": "true"
+        },
+        body: JSON.stringify({examID, subID, userID})
+    })
+    return await response.json();
+}
+
 export async function updateUserQuestion(data, userID) {
     console.log("Updated")
     const response = await fetch(`${backendURL}/update_user_question`, {
@@ -202,7 +214,7 @@ export async function deleteTask (taskID) {
 
     const taskInfo = await getTaskInfo(taskID);
       
-    fetch(onesignalURL + `/${taskInfo.notification}?app_id=${onesignalAppID}`, signalOptions)
+    return fetch(onesignalURL + `/${taskInfo.notification}?app_id=${onesignalAppID}`, signalOptions)
     .then(res => res.json())
     .then(json => console.log(json))
     .then(async () => {
@@ -215,7 +227,7 @@ export async function deleteTask (taskID) {
             }
         })
 
-        return await response.json();
+        return response;
 
     })
     .catch(err => console.error('error:' + err));

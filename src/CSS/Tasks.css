@@ -5,6 +5,9 @@
 .task:hover{
     cursor: pointer;
     background-color: var(--content-background-color);
+}
+
+.task:not(.next-task):hover {
     transform: translateX(10px);
 }
 
@@ -50,7 +53,7 @@
 }
 
 .next-task :is(.task-text, .deadline-wrap):hover {
-    margin-left: 5px;
+    padding-left: 5px;
     cursor: pointer;
 }
 
@@ -58,28 +61,34 @@
     width: fit-content;
     padding-right: 7px;
     display: inline-block;
+    font-size: 3em;
 }
 
 .next-task{
-    padding: 30px;
+    padding-left: 30px;
     margin: 1vh 0px 24vh;
     border: solid transparent 1px;
     border-radius: 15px;
-    background-color: var(--content-background-color);
-    position: relative;
-    height: 22vh;
-    transform: translateX(-30px);
+    background-color: transparent;
+    position: relative; 
+    display: flex;
+    align-items: center;
 }
 
 .next-task:hover {
-    border-color: var(--accent);
-    transform: translateX(0px);
+    margin-left: -30px;
+    padding-right: 30px;
 }
 
 .next-task.completed_task {
     transform: translateX(-150vh);
-    opacity: 0;
+    visibility: hidden;
 
+}
+
+.deadline-wrap {
+    font-size: 1em;
+    opacity: calc(0.4 + var(--faded-opacity));
 }
 
 @media (max-width: 768px) {
@@ -108,8 +117,52 @@
 
 .center-div {
     
-    top: 50%;
+    padding-top: 6vh;
+    padding-bottom: 6.8vh;
+
+}
+
+.next-icon {
+    
     position: absolute;
-    transform: translateY(-55%);
+    right: 19px;
+    font-size: large;
+    opacity: var(--faded-opacity)
+
+}
+
+@media (min-width: 768px){
+    
+    .next-icon {
+
+        opacity: 0;
+        visibility: hidden;
+
+    }
+
+}
+
+.next-task:hover .next-icon:hover {
+
+    opacity: 1;
+    
+}
+
+#skip-for-now {
+    
+    bottom: 10px;
+
+}
+
+#edit-task {
+
+    top: 10px;
+
+}
+
+.next-task:hover .next-icon {
+
+    opacity: var(--faded-opacity);
+    visibility: visible;
 
 }

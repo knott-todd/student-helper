@@ -75,7 +75,7 @@
 
 .next {
     font-weight: 500;
-    padding-right: 3px;
+    padding-right: 8px;
     margin: 0;
     display: "inline";
 }
@@ -139,6 +139,7 @@
 
 .card-subtext:hover .next {
     letter-spacing: 0.01em;
+    padding-right: 10px;
 }
 
 .card-subtext:hover p:not(.next), .card-subtext:hover p :not(.next) {

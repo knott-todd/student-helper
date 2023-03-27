@@ -4,10 +4,11 @@
     bottom: 0;
     width: 100%;
     max-height: var(--max-nav-height);
-    background-color: var(--content-background-color);
+    background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: linear-gradient(180deg, transparent -10%, var(--background-color) );
 }
 
 nav .current {
@@ -32,10 +33,11 @@ nav a {
     display: block;
     float: left;
     text-align: center;
-    padding: 10px 10px 3px 10px;
+    padding: 10px 5px 3px 5px;
     border-bottom: 3px solid transparent;
     box-sizing: border-box;
     font-size: 18px;
+    min-width: 55px;
 }
 
 nav a p {
@@ -46,5 +48,14 @@ nav a p {
 }
 
 nav a:not(.nav-back):hover {
-    background-color: var(--background-color);
+    background-color: var(--content-background-color);
+    border-radius: 2px 2px 0px 0px;
+}
+
+.navbar>nav {
+    display: flex;
+}
+
+.nav-back:hover {
+    transform: translateX(-2px);
 }

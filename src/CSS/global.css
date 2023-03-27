@@ -7,6 +7,7 @@
     --green: #60b888;
     --red: #F2545B;
     --blue: #28afb0;
+    --gold: #ffc71f;
     --faded-opacity: 0.5;
     --toastify-color-info: var(--accent) !important;
     --toastify-text-color-info: var(--primary-text-color) !important;
@@ -15,8 +16,8 @@
 @media (prefers-color-scheme: light) {
     :root{
         color-scheme: light;
-        --background-color: #f2f2f2;
-        --content-background-color: white;
+        --background-color: #f7f7f7;
+        --content-background-color: #c5c5c57d;
         --primary-text-color: black;
     }
 }
@@ -24,8 +25,8 @@
 @media (prefers-color-scheme: dark) {
     :root{
         color-scheme: dark;
-        --background-color: rgb(25, 25, 25);
-        --content-background-color: #131313;
+        --background-color: #0b0b0b;
+        --content-background-color: #2d2d2d7d;
         --primary-text-color: white;
     }
 }
@@ -199,6 +200,22 @@ body {
     background-color: var(--background-color);
 }
 
+/* body::before {
+    
+    content: "";
+    background-color: var(--primary-text-color);
+    height: 41px;
+    aspect-ratio: 1;
+    position: absolute;
+    top: var(--mouseY);
+    left: var(--mouseX);
+    opacity: var(--faded-opacity);
+    border-radius: 50%;
+    mix-blend-mode: overlay;
+    box-shadow: var(--primary-text-color) 0px 0px 20px 16px;
+
+} */
+
 * {
     transition: 0.2s;
     color: var(--primary-text-color);
@@ -218,6 +235,10 @@ select {
     background-color: var(--content-background-color);
     border-radius: 2px;
     border: solid 1px var(--background-color);
+}
+
+select option {
+    background-color: var(--background-color);
 }
 
 select:hover {
@@ -243,9 +264,14 @@ select:hover {
     justify-content: space-evenly;
 }
 
-.complete p, .complete h2{
-    color: var(--green);
+.complete :is(p, h2) {
+    color: var(--gold);
+}
+
+.complete {
+    
     opacity: var(--faded-opacity);
+    
 }
 
 .list-link:hover {
@@ -304,6 +330,8 @@ a, a *{
     margin: 0;
     padding-top: 2px;
     padding-bottom: 2px;
+    display: flex;
+    align-items: center;
 }
 
 .subject-label label:hover {
@@ -323,7 +351,7 @@ a, a *{
     margin-top: 10px;
     border-radius: 4px;
     border: none;
-    color: var(--content-background-color);
+    color: var(--background-color);
     font-weight: bold;
     letter-spacing: 1px;
     cursor: pointer;
@@ -447,8 +475,8 @@ textarea {
   content: '';
   position: absolute;
   width: 0%;
-  height: 2.5px;
-  top: 58%;
+  height: 4px;
+  top: 54%;
   background: var(--primary-text-color);
 }
 
@@ -496,4 +524,93 @@ textarea {
   /* background: var(--content-background-color); */
   opacity: 1;
   cursor: grab;
+}
+
+.hey-heading {
+    
+    text-transform: uppercase;
+    font-size: 0.9em;
+    color: var(--accent);
+    font-weight: 600;
+
+}
+
+.no-content-text {
+    opacity: var(--faded-opacity);
+}
+
+.tooltip .tooltip-text {
+  
+    visibility: hidden;
+    background-color: var(--background-color);
+    color: var(--primary-text-color);
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 10px;
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    bottom: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: x-small;
+    letter-spacing: 0.7px;
+
+}
+
+.tooltip .tooltip-text::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent var(--background-color) transparent;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0.5s;
+  bottom: -140%;
+}
+
+#tiles {
+    height: 100vh;
+    width: 100%;
+
+    position: fixed;
+    z-index: -10;
+
+    display: grid;
+    grid-template-columns: repeat(var(--bg-columns), 1fr);
+    grid-template-rows: repeat(var(--bg-rows), 1fr);
+
+}
+
+#tiles div {
+    /* outline: solid red 1px; */
+    background-image: radial-gradient(circle at 5px 5px, var(--content-background-color) 2px, transparent 0);
+    background-size: 4vh 4vh;
+    /* animation: scroll 6s linear infinite; */
+}
+
+@keyframes scroll {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0px 4vh; /* adjust to the size of your grid */
+  }
+}
+
+#dots {
+
+    position: fixed;
+    z-index: -10;
+    top: 0;
+    left: 0;
+
 }
