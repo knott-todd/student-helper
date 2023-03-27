@@ -305,6 +305,45 @@ function App() {
       mouseY = event.clientY - canvasRect.top;
     });
 
+    // Handle touch events
+    let touchId = null;
+
+    function handleTouchStart(event) {
+      if (event.touches.length === 1) {
+        const canvasRect = canvas.getBoundingClientRect();
+        const touch = event.touches[0];
+        mouseX = touch.clientX - canvasRect.left;
+        mouseY = touch.clientY - canvasRect.top;
+        touchId = touch.identifier;
+      }
+    }
+
+    function handleTouchMove(event) {
+      for (let i = 0; i < event.changedTouches.length; i++) {
+        const touch = event.changedTouches[i];
+        if (touch.identifier === touchId) {
+          const canvasRect = canvas.getBoundingClientRect();
+          mouseX = touch.clientX - canvasRect.left;
+          mouseY = touch.clientY - canvasRect.top;
+        }
+      }
+    }
+
+    function handleTouchEnd(event) {
+      for (let i = 0; i < event.changedTouches.length; i++) {
+        const touch = event.changedTouches[i];
+        if (touch.identifier === touchId) {
+          touchId = null;
+          mouseX = undefined;
+          mouseY = undefined;
+        }
+      }
+    }
+
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchmove", handleTouchMove);
+    window.addEventListener("touchend", handleTouchEnd);
+
     // Redraw on window resize
     window.addEventListener("resize", () => {
       canvas.width = window.innerWidth;
