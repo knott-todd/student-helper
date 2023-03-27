@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {AppContext} from "./AppContext";
 import OneSignal from 'react-onesignal';
-import { setUser, getUserID, getSubjects, getUserSubjects, setUserSub, getExamSubjects, getExams, getUserExam, setUserExam } from "./services/SQLService";
+import { setUser, getUserID, getSubjects, getUserSubjects, setUserSub, getExamSubjects, getExams, getUserExam, setUserExam, setSubExam } from "./services/SQLService";
 
 const SignIn = () => {
 
@@ -37,6 +37,9 @@ const SignIn = () => {
                             for (const sub of result) {
                                 
                                 sub.isUserSub = (typeof res2.find(sub2 => sub2.id === sub.id) !== 'undefined');
+
+                                if (sub.isUserSub) sub.exam = res2.find(sub2 => sub2.id === sub.id).exam
+
                             }
 
                             setSubs(result);
@@ -100,6 +103,7 @@ const SignIn = () => {
         getUserSubjects(global.userID)
             .then(res => {
                 global.setUserSubs(res);
+                console.log(res)
             })
     }
 
@@ -110,6 +114,28 @@ const SignIn = () => {
         if(e.target.value) {
             setUserExam(e.target.value, global.userID);
         }
+    }
+
+    const onSubExamChange = (e, subID) => {
+
+        if(e.target.value) {
+            setSubExam(e.target.value, subID, global.userID)
+            .then(() => {
+                getUserSubjects(global.userID)
+                .then(res => {
+                    global.setUserSubs(res);
+                    console.log(res)
+                })    
+            })
+
+            let tempSubs = [...subs];
+
+            tempSubs.find(sub => sub.id === subID).exam = e.target.value;
+
+            setSubs(tempSubs);
+
+        }
+
     }
     
 
@@ -130,7 +156,7 @@ const SignIn = () => {
                     <label>
                         Select Exam 
                     </label>
-                    <select className="header-dropdown" value={global.currExam} style={{margin: "10px 10px 10px 5px"}} onChange={onUserExamChange}>
+                    <select className="header-dropdown dropdown" value={global.currExam} style={{margin: "10px 10px 10px 5px"}} onChange={onUserExamChange}>
                         <option value='' />
                         {exams.map(exam => (
                             <option key={parseInt(exam.id)} value={exam.id}>{exam.short_name}</option>
@@ -144,7 +170,15 @@ const SignIn = () => {
                     <div style={{textAlign: "left", maxWidth: "230px", margin: "auto"}}>
                         {subs.sort((a, b) => a.name.localeCompare(b.name)).sort((a, b) => b.isUserSub - a.isUserSub).map(sub => (
                             <p className={`subject-label ${sub.isUserSub ? "" : "notUserSub"}`} >
-                                <label style={{cursor: "pointer"}}>
+                                {sub.isUserSub ? (
+                                    <select className="dropdown" value={sub.exam ? sub.exam : global.currExam} style={{margin: "10px 10px 10px 5px"}} onChange={e => onSubExamChange(e, sub.id)}>
+                                        <option key="null" value={"NULL"} />
+                                        {exams.map(exam => (
+                                            <option key={parseInt(exam.id)} value={exam.id}>{exam.short_name}</option>
+                                        ))}
+                                    </select>
+                                ) : ""}
+                                <label style={{cursor: "pointer", display: "inline-flex", justifyContent: "space-between", flex: 1}}>
                                     {sub.name}
                                     <input type="checkbox" style={{float: "right", height: "100%"}} checked={sub.isUserSub} onChange={e => onUserSubChange(e, sub)} />
                                 </label>

@@ -15,6 +15,7 @@ export default ({children}) => {
     const [pageTitle, setPageTitle] = useState();
     const [progressValue, setProgressVal] = useState();
     const [singleProgressValue, setSingleProgressVal] = useState();
+    const [accent, setAccent] = useState('brown');
 
     const setProgressValue = val => {
         setSingleProgressVal();
@@ -76,17 +77,17 @@ export default ({children}) => {
     ]
 
     const setRandomAccent = () => {
+        let _accent;
         if(isLightMode){
-            document.documentElement.style.setProperty(
-                '--accent',
-                `#${lightmodeAccentColors[Math.floor(Math.random() * lightmodeAccentColors.length)]}`
-            );
+            _accent = lightmodeAccentColors[Math.floor(Math.random() * lightmodeAccentColors.length)];
         } else{
-            document.documentElement.style.setProperty(
-                '--accent',
-                `#${darkmodeAccentColors[Math.floor(Math.random() * darkmodeAccentColors.length)]}`
-            );
+            _accent = darkmodeAccentColors[Math.floor(Math.random() * darkmodeAccentColors.length)];
         }
+        setAccent(_accent);
+        document.documentElement.style.setProperty(
+            '--accent',
+            `#${_accent}`
+        );
     }
 
     const global = {
@@ -111,7 +112,9 @@ export default ({children}) => {
         progressValue,
         setProgressValue,
         singleProgressValue,
-        setSingleProgressValue
+        setSingleProgressValue,
+        accent,
+        setAccent
     }
 
     useEffect(() => {

@@ -47,6 +47,13 @@
     border-bottom-right-radius: 1px;
 }
 
+.single-progress {
+    background-color:var(--accent);
+    height: inherit;
+    border-top-right-radius: 1px;
+    border-bottom-right-radius: 1px;
+}
+
 .familiarity-complete .progress {
     background: hsla(45, 100%, 56%, 1);
 
@@ -61,11 +68,11 @@
 }
 
 .familiarity-complete .card-link:hover .track-card-heading {
-    color: #ffc71f;
+    color: var(--gold);
 }
 
 .familiarity-complete:hover {
-    border-color:#ffc71f;
+    border-color:var(--gold);
 }
 
 .familiarity-complete .progress *{

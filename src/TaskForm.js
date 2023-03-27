@@ -46,29 +46,30 @@ const TaskForm = () => {
 
         if(id) {
             updateTask(id, taskText, subject, deadline)
+                .then(res => navigate("/tasks"))
         } else {
             console.log("Adding...", {taskText, subject, deadline}, global.userID)
             addTask({taskText, subject, deadline}, global.userID)
+                .then(res => navigate("/tasks"))
         }
-        
-        navigate("/tasks")
     }
 
     const onDelete = () => {
         if(id) {
-            deleteTask(id);
+            deleteTask(id)
+                .then(res => navigate("/tasks"))
+        } else {
+            navigate("/tasks")
         }
-
-        navigate("/tasks")
     }
 
     return (
         <div className="body-div">
             <form className="default-form">
                 <label>Subject</label><br />
-                <select className="sub-select header-dropdown" value={subject} style={{margin: "10px 10px 10px 5px"}} onChange={e => setSubject(e.target.value)}>
+                <select className="sub-select header-dropdown dropdown" value={subject} style={{margin: "10px 10px 10px 5px"}} onChange={e => setSubject(e.target.value)}>
                     {[{}].concat(subs).map(sub => (
-                        <option key={parseInt(sub.id)} value={sub.id}>{sub.name}</option>
+                        <option key={sub.id} value={sub.id}>{sub.name}</option>
                     ))} 
                 </select><br/>
                 <label>Task</label><br />
@@ -76,7 +77,7 @@ const TaskForm = () => {
                 <label>Deadline</label><br />
                 <input type="date" value={deadline} onChange={e => setDeadline(e.target.value)} /><br />
                 <button onClick={onSubmit}>Save</button>
-                <button onClick={onDelete}>Delete</button>
+                <button onClick={onDelete} type="button">Delete</button>
             </form>
         </div>
     )

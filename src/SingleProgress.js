@@ -13,7 +13,7 @@ const SingleProgress = props => {
                     <div className="negative-progress" style={{maxWidth: "100%", width: props.value < 0 ? `${-props.value * 100}%` : 0}}/>
                 </div> */}
                 {/* <div className="progress-bg positive-progress-bg"> */}
-                    <div className="positive-progress" style={{backgroundColor: props.value >= 1 ? "gold" : "", maxWidth: "100%", width: props.value > 0 ? `${props.value * 100}%` : 0}}/>
+                    <div className="single-progress" style={{backgroundColor: props.value >= 1 ? "gold" : "", maxWidth: "100%", width: props.value > 0 ? `${props.value * 100}%` : 0}}/>
                 {/* </div> */}
             </div>
         </div>

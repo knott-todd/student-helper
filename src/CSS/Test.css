@@ -37,23 +37,17 @@
 
 .test-paper:hover {
     background-color: var(--content-background-color);
-    border-color: var(--accent);
 }
 
 .complete:hover {
-    border-color: var(--green);
+    border-color: var(--gold);
 }
 
-.test-paper:hover:not(.complete) .paper-year-head {
+.test-paper:hover:not(.complete)  :not(.whats-inside *) {
     color: var(--accent);
 }
 
-.test-paper:hover:not(.complete) .badges-wrapper * {
-    color: var(--accent);
-}
-
-.complete:hover p, .complete:hover h2 {
-    color: var(--green);
+.complete:hover :is(p, h2) {
     opacity: 1;
 }
 
