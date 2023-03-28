@@ -84,7 +84,7 @@ const Header = () => {
     }
 
     return (
-        <div className={`header ${scrollTop === 0 ? "top" : ""}`} style={{visibility: (global.userID ? "visible" : "hidden")}} onScroll={e => setScrollTop(e.currentTarget.scrollTop)}>
+        <div className={`header tooltip ${scrollTop === 0 ? "top" : ""}`} style={{visibility: (global.userID ? "visible" : "hidden")}} onScroll={e => setScrollTop(e.currentTarget.scrollTop)}>
             <div className="header-content">
                 
                 <h1 key={global.pageTitle ? global.pageTitle : ""} className="page-title">{(global.pageTitle ? global.pageTitle : "")}</h1>
@@ -107,6 +107,8 @@ const Header = () => {
             </div>
             <Progress value={global.progressValue} height="4px" width={(window.location.pathname.includes("/track") ? "100%" : "0")} position="absolute" />
             <SingleProgress height="4px" width={(window.location.pathname.includes("/tasks") ? "100%" : "0")} position="absolute" value={global.singleProgressValue} />
+                
+            {global.progressValue ? <span className="tooltip-text">{Math.round(global.progressValue * 100, 4)}%</span> : ""}
         </div>
     )
 }

@@ -314,25 +314,36 @@ function App() {
       }
     });
 
-    // // Handle touch events
-    // let touchId = null;
-    // let isTouchMoving = false;
+    window.addEventListener("mouseup", e => {
 
-    // function handleTouchStart(event) {
-    //   if (event.touches.length === 1) {
-    //     if (!isTouchMoving) {
-    //       isTouchMoving = true;
-    //       const canvasRect = canvas.getBoundingClientRect();
-    //       const touch = event.touches[0];
-    //       mouseX = touch.clientX - canvasRect.left;
-    //       mouseY = touch.clientY - canvasRect.top;
-    //       touchId = touch.identifier;
-    //       setTimeout(() => {
-    //         isTouchMoving = false;
-    //       }, throttleDelay); // set the delay time here (in milliseconds)
-    //     }
-    //   }
-    // }
+      setTimeout(() => {
+
+        mouseX = undefined;
+        mouseY = undefined;
+
+      }, 100);
+
+    })
+
+    // // Handle touch events
+    let touchId = null;
+    let isTouchMoving = false;
+
+    function handleTouchStart(event) {
+      if (event.touches.length === 1) {
+        if (!isTouchMoving) {
+          isTouchMoving = true;
+          const canvasRect = canvas.getBoundingClientRect();
+          const touch = event.touches[0];
+          // mouseX = touch.clientX - canvasRect.left;
+          // mouseY = touch.clientY - canvasRect.top;
+          touchId = touch.identifier;
+          setTimeout(() => {
+            isTouchMoving = false;
+          }, throttleDelay); // set the delay time here (in milliseconds)
+        }
+      }
+    }
 
     // function handleTouchMove(event) {
     //   for (let i = 0; i < event.changedTouches.length; i++) {
@@ -350,20 +361,20 @@ function App() {
     //   }
     // }
 
-    // function handleTouchEnd(event) {
-    //   for (let i = 0; i < event.changedTouches.length; i++) {
-    //     const touch = event.changedTouches[i];
-    //     if (touch.identifier === touchId) {
-    //       touchId = null;
-    //       mouseX = undefined;
-    //       mouseY = undefined;
-    //     }
-    //   }
-    // }
+    function handleTouchEnd(event) {
+      for (let i = 0; i < event.changedTouches.length; i++) {
+        const touch = event.changedTouches[i];
+        if (touch.identifier === touchId) {
+          touchId = null;
+          mouseX = undefined;
+          mouseY = undefined;
+        }
+      }
+    }
 
-    // window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchstart", handleTouchStart);
     // window.addEventListener("touchmove", handleTouchMove);
-    // window.addEventListener("touchend", handleTouchEnd);
+    window.addEventListener("touchend", handleTouchEnd);
 
     // Redraw on window resize
     window.addEventListener("resize", () => {
