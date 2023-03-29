@@ -155,7 +155,7 @@ function App() {
     //   gravitateToMouse(e.clientX, e.clientY);
     // })
 
-  }, [])
+  }, [global.accent])
 
   const createDotGrid = () => {
     let columns = Math.floor(document.body.clientWidth / 30);
@@ -257,8 +257,8 @@ function App() {
     const dotSize = 2;
     const dotSpacingFraction = 0.04; // Fraction of screenHeight
     let dotSpacing = dotSpacingFraction * canvas.height;
-    const radius = 100;
-    const maxDisplacement = 6;
+    const radius = 60;
+    const maxDisplacement = 8;
     const timeToMove1DotSpacing = 6000;
     const defaultDotColor = getComputedStyle(document.documentElement).getPropertyValue('--content-background-color');
     const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent');
@@ -302,7 +302,8 @@ function App() {
     let throttleDelay = 0;
 
     // Handle mouse movement
-    window.addEventListener("mousemove", (event) => {
+    const handleMouseMove = event => {
+
       if (!isMouseMoving) {
         isMouseMoving = true;
         const canvasRect = canvas.getBoundingClientRect();
@@ -312,9 +313,12 @@ function App() {
           isMouseMoving = false;
         }, throttleDelay); // set the delay time here (in milliseconds)
       }
-    });
 
-    window.addEventListener("mouseup", e => {
+    }
+    window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
+
+    const handleMouseUp = e => {
 
       setTimeout(() => {
 
@@ -323,7 +327,9 @@ function App() {
 
       }, 100);
 
-    })
+    }
+    window.removeEventListener("mouseup", handleMouseUp)
+    window.addEventListener("mouseup", handleMouseUp)
 
     // // Handle touch events
     let touchId = null;
@@ -372,6 +378,8 @@ function App() {
       }
     }
 
+    window.removeEventListener('touchstart', handleTouchStart);
+    window.removeEventListener('touchend', handleTouchEnd);
     window.addEventListener("touchstart", handleTouchStart);
     // window.addEventListener("touchmove", handleTouchMove);
     window.addEventListener("touchend", handleTouchEnd);
@@ -417,8 +425,8 @@ function App() {
           pos.displacedY = pos.y + displacement * Math.sin(angle);
 
           // Light up dots
-          let {r, g, b, a} = hexToRgba(defaultDotColor);
-          pos.color = `rgba(${r}, ${g}, ${b}, ${ 0.8 * radius / (distance * 2)})`;
+          let {r, g, b, a} = hexToRgba(global.accent);
+          pos.color = `rgba(${r}, ${g}, ${b}, ${ 0.5 * radius / (distance * 2)})`;
 
         } else {
           pos.displacedX = pos.x;
