@@ -182,11 +182,11 @@ const ObjectiveSetter = (props) => {
                     <DependentDropdown setPrev={setPrevTopic} currVal={topic} vals={topics} setObj={setTopic} required={[module.id]} label="Topic" />
                     {/* <DependentDropdown vals={objectives} setObj={setObjective} required={[module, topic.id]} label="Objective" labelColumn="info" /> */}
 
-                    <div style={{marginTop: "10px"}}>
+                    <div style={{margin: "10px 0px", display: "grid", gridTemplateColumns: "1fr 4fr 1fr", alignItems: "center", justifyItems: "center"}}>
 
                         <button disabled={questIndex === 0} onClick={e => navigateQues(e, -1)}>&lt;</button>
                         
-                        <div style={{display: "inline-block", verticalAlign: "middle", paddingBottom: "30px"}}>
+                        <div style={{display: 'grid', verticalAlign: "middle", gridTemplateRows: "1fr 1fr", rowGap: "3px"}}>
                             
                             <button style={{display: "block", margin: "auto", width: "100px"}} disabled={!prevTopic.id} onClick={copyPrevTopic} >Copy Prev All</button>
                             <button style={{width: "100px", margin: "0px 10px"}} disabled={!topic.id || topic.id === -1} onClick={handleSubmit} >Submit</button>
