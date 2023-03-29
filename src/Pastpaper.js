@@ -36,9 +36,9 @@ const Pastpaper = () => {
     }, []);
 
     return (
-        <div className="pastpaper body-div" style={{height: "75vh"}}>
+        <div className="pastpaper body-div">
 
-            <iframe src={paper.pdf_link} width="99%" height={(global.userID === 150 ? "350" : "100%")}></iframe>
+            <iframe src={paper.pdf_link} width="99%" height="100%" style={{height: "75vh"}}></iframe>
 
             
             {global.userID === 150 ? (
