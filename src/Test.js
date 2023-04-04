@@ -10,6 +10,7 @@ import SingleProgress from "./SingleProgress";
 
 const Test = () => {
     const [papers, setPapers] = useState([]);
+    const [paperNum, setPaperNum] = useState(2);
 
     const sqlUrl = "http://localhost:3080";
 
@@ -57,19 +58,38 @@ const Test = () => {
 
             {/* <h1 className="page-title">Test</h1> */}
             <div className="body-div">
-                <div style={{display: "flex", justifyContent: "center", flexWrap: "wrap", marginBottom: "10px"}}>
-                    {badges.map(badge => (
-                        <span style={{paddingRight: "10px", cursor: "default"}}>
-                            <p style={{display: "inline"}} className={`badge topic-badge ${badge.enabledCondition ? "badge-enabled" : (badge.semiCondition ? "badge-semi" : "badge-disabled")}`}>
-                                {badge.icon} <span style={{fontWeight: 300, opacity: 1}}>{badge.description}</span>
-                            </p>
-                        </span>
-                    ))}
+                <div className="test-top">
+
+                    <div className="badge-key">
+                        {badges.map(badge => (
+                            <span style={{paddingRight: "10px", cursor: "default"}}>
+                                <p style={{display: "inline"}} className={`badge topic-badge ${badge.enabledCondition ? "badge-enabled" : (badge.semiCondition ? "badge-semi" : "badge-disabled")}`}>
+                                    {badge.icon} <span style={{fontWeight: 300, opacity: 1}}>{badge.description}</span>
+                                </p>
+                            </span>
+                        ))}
+                    </div>
+
+                    <label>
+                        Paper
+
+                        <select className="dropdown" value={paperNum} style={{marginLeft: "5px"}} onChange={e => setPaperNum(e.target.value)}>
+                            <option key={1} value={1}>{1}</option>
+                            <option key={2} value={2}>{2}</option>
+                        </select> 
+                    </label>
+
                 </div>
 
-                {papers.length > 0 ? (
+                {papers.filter(paper => paper.num === paperNum.toString()).length > 0 ? (
                     <div className="pastpapers list-container">
-                        {papers.sort((a, b) => b.year.match(/\d{4}/)[0] - a.year.match(/\d{4}/)[0]).sort((a,b) => Number(b.areTopicsLinked) - Number(a.areTopicsLinked)).sort((a,b) => Number(b.areAnyTopicsLinked) - Number(a.areAnyTopicsLinked)).sort((a, b) => Number(a.is_complete) - Number(b.is_complete)).map(paper => (
+                        {papers
+                            .filter(paper => paper.num === paperNum.toString())
+                            .sort((a, b) => b.year.match(/\d{4}/)[0] - a.year.match(/\d{4}/)[0])
+                            .sort((a,b) => Number(b.areTopicsLinked) - Number(a.areTopicsLinked))
+                            .sort((a,b) => Number(b.areAnyTopicsLinked) - Number(a.areAnyTopicsLinked))
+                            .sort((a, b) => Number(a.is_complete) - Number(b.is_complete))
+                            .map(paper => (
                             <Link to={`pastpaper/${paper.id}`} className={`list-link test-paper ${paper.is_complete ? "complete" : ""}`} key={paper.id} >
                                 
                                 <div className="head-badge-wrapper" style={{display: "block"}}>
@@ -101,7 +121,7 @@ const Test = () => {
 
                     </div>
                 ) : (
-                    <p className="no-content-text">Sorry! We don't have any{global.currSub ? " " + global.currSub.name : ""} papers yet.</p>
+                    global.currSub ? (<p className="no-content-text">Sorry! We don't have any {global.currSub.name} P{paperNum}'s yet.</p>) : ""
                 )}
                 
                 

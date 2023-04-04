@@ -108,3 +108,17 @@
     overflow: hidden;
     padding-top: 10px;
 }
+
+.badge-key {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.test-top {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 10px;
+}
