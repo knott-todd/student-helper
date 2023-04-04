@@ -263,6 +263,10 @@ function App() {
     const defaultDotColor = getComputedStyle(document.documentElement).getPropertyValue('--content-background-color');
     const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent');
 
+    function lerp( a, b, alpha ) {
+      return a + alpha * ( b - a );
+    }
+
     // Generate dot positions
     let positions = [];
     const generatePositions = () => {
@@ -425,8 +429,11 @@ function App() {
           pos.displacedY = pos.y + displacement * Math.sin(angle);
 
           // Light up dots
-          let {r, g, b, a} = hexToRgba(global.accent);
-          pos.color = `rgba(${r}, ${g}, ${b}, ${ 0.5 * radius / (distance * 2)})`;
+          let {r, g, b} = hexToRgba(global.accent);
+          let {r: dotR, g: dotG, b: dotB, a: dotA} = hexToRgba(defaultDotColor)
+
+          // console.log(a, a + (0.5 * (radius - distance) / radius), (0.5 * (radius - distance) / radius));
+          pos.color = `rgba(${lerp(r, dotR, distance / radius)}, ${lerp(g, dotG, distance / radius)}, ${lerp(b, dotB, distance / radius)}, ${ lerp(0.5, dotA, distance / radius) })`;
 
         } else {
           pos.displacedX = pos.x;
