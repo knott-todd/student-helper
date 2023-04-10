@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { addQuestion } from "./services/SQLService";
+import { addQuestion, deletePaperQuestions } from "./services/SQLService";
 
 const StructureParser = props => {
     const [quests, setQuests] = useState([{}]);
@@ -29,14 +29,24 @@ const StructureParser = props => {
     }
 
     const sendQuests = () => {
-        quests.forEach(q => {
-            const fixed = Object.fromEntries(Object.entries(q).map(val => {
-                if (!val[1]) val[1] = null;
-                return val;
-            }))
+        deletePaperQuestions(props.paperID)
+        .then(() => {
             
-            fixed.paperID = props.paperID;
-            addQuestion(fixed);
+            quests.forEach((q, i) => {
+                const fixed = Object.fromEntries(Object.entries(q).map(val => {
+                    if (!val[1]) val[1] = null;
+                    return val;
+                }))
+                
+                fixed.paperID = props.paperID;
+                addQuestion(fixed)
+                .then(()=>{
+                    if(i === quests.length - 1) {
+                        setInput("")
+                    }
+                })
+            })
+
         })
     }
 
@@ -209,7 +219,7 @@ const StructureParser = props => {
     return (
         <div className="structure-parser">
             <form>
-                <textarea rows={10} cols={100} onChange={e => setInput(e.target.value)} />
+                <textarea rows={10} cols={100} value={input} onChange={e => setInput(e.target.value)} />
                 <button onClick={e => {e.preventDefault(); ParseStructure(input);}}>Parse</button>
                 <button disabled={quests[0].num === undefined} onClick={e => {e.preventDefault(); sendQuests();}}>Submit</button>
             </form>
