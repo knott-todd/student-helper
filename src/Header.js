@@ -52,10 +52,10 @@ const Header = () => {
 
     useEffect(() => {
         if(global.userSubs) {
-            console.log(global.userSubs)
+            console.log(global.userSubs, global.examSubs)
 
             console.log("changed subs")
-            setSubs(global.userSubs)
+            setSubs(global.userSubs.filter(sub => global.examSubs.some(examSub => examSub.id === sub.id)))
     
             if(global.userSubs.length > 0 && (!global.currSub || global.userSubs.filter(sub => sub.id === global.currSub.id).length === 0)){
                 console.log(">>>", global.userSubs.sort((a, b) => a.name.localeCompare(b.name))[0])
@@ -66,7 +66,7 @@ const Header = () => {
 
         }
 
-    }, [global.userSubs])
+    }, [global.userSubs, global.currExam, global.examSubs])
 
     useEffect(() => {
         
