@@ -32,11 +32,11 @@ button.mcq-nav:hover {
 }
 
 button.mcq-nav.nav-right:not(.disabled):hover {
-    transform: translateX(3px);
+    padding-left: 10px;
 }
 
 button.mcq-nav.nav-left:not(.disabled):hover {
-    transform: translateX(-3px);
+    padding-right: 10px;
 }
 
 button.mcq-nav {

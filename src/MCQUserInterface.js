@@ -119,7 +119,16 @@ const MCQUserInterface = (props) => {
 
         // Update local answers
         let tempAnswers = [...userAnswers];
-        tempAnswers[questIndex] = userAns;
+        // Toggle selected: if defined already then deselect, select otherwise
+        if(tempAnswers[questIndex] === userAns) {
+
+            tempAnswers[questIndex] = undefined;
+
+        } else {
+
+            tempAnswers[questIndex] = userAns;
+
+        }
         setUserAnswers(tempAnswers)
 
     }
