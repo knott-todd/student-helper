@@ -1,0 +1,71 @@
+.mcq.correct-mcq, .mcq.correct-mcq:hover {
+    background-color: var(--blue);
+    color: var(--primary-text-color);
+}
+
+.mcq.incorrect-mcq, .mcq.incorrect-mcq:hover {
+    background-color: var(--red);
+    border-color: var(--red);
+    color: var(--primary-text-color);
+}
+
+.mcq.answered {
+    opacity: var(--faded-opacity);
+    cursor: default;
+    pointer-events: none;
+}
+
+.mcq {
+    background-color: transparent;
+    color: var(--primary-text-color);
+    border: solid 1px var(--primary-text-color);
+}
+
+button.mcq:hover {
+    background-color: var(--primary-text-color);
+    color: var(--background-color);
+    opacity: 1;
+}
+
+button.mcq-nav:hover {
+    background-color: transparent;
+}
+
+button.mcq-nav.nav-right:not(.disabled):hover {
+    transform: translateX(3px);
+}
+
+button.mcq-nav.nav-left:not(.disabled):hover {
+    transform: translateX(-3px);
+}
+
+button.mcq-nav {
+    
+    font-size: 18px;
+    background-color: transparent;
+    border-radius: 50%;
+    width: 35px;
+    aspect-ratio: 1;
+    transform: translateX(0px);
+
+}
+
+.mcq-answer {
+    border-color: var(--blue);
+}
+
+.selected-mcq{
+    background-color: var(--primary-text-color);
+    color: var(--background-color);
+}
+
+.mcq-num-select {
+    
+    margin: auto;
+    display: block;
+    font-size: medium;
+    padding-right: 4px;
+    transform: translateX(4px);
+    background-color: transparent;
+
+}

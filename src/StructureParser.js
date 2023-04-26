@@ -31,7 +31,7 @@ const StructureParser = props => {
     const sendQuests = () => {
         deletePaperQuestions(props.paperID)
         .then(() => {
-            
+
             quests.forEach((q, i) => {
                 const fixed = Object.fromEntries(Object.entries(q).map(val => {
                     if (!val[1]) val[1] = null;
