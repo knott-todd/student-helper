@@ -29,6 +29,7 @@ import { ToastContainer } from 'react-toastify';
 import OneSignal from 'react-onesignal';
 import { eventWrapper } from '@testing-library/user-event/dist/utils';
 import { useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight )
 
 function App() {
@@ -511,6 +512,7 @@ function App() {
 
   return (
     <div className="App">
+      <Analytics />
 
       <div id="tiles" />
       <canvas id="dots" />
