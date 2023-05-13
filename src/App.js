@@ -29,7 +29,7 @@ import { ToastContainer } from 'react-toastify';
 import OneSignal from 'react-onesignal';
 import { eventWrapper } from '@testing-library/user-event/dist/utils';
 import { useState } from 'react';
-import { Analytics } from '@vercel/analytics/react';
+import { inject } from '@vercel/analytics';
 library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight )
 
 function App() {
@@ -500,6 +500,8 @@ function App() {
     OneSignal.init({
       appId: "99b7a99a-31e5-4656-86d7-ab456591292b"
     });
+ 
+    inject();
   }, []);
 
   useEffect(() => {
@@ -512,7 +514,6 @@ function App() {
 
   return (
     <div className="App">
-      <Analytics />
 
       <div id="tiles" />
       <canvas id="dots" />
