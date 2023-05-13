@@ -30,6 +30,8 @@ const SignIn = () => {
         if(global.currExam) {
             getExamSubjects(global.currExam)
                 .then(result => {
+
+                    global.setExamSubs(result)
                     
                     getUserSubjects(global.userID)
                         .then(res2 => {
@@ -92,24 +94,38 @@ const SignIn = () => {
 
     }
 
+    useEffect(() => {
+
+        getUserSubjects(global.userID)
+        .then(res => {
+            
+            global.setUserSubs(res);
+
+        })
+
+    }, [])
+
     const onUserSubChange = (e, subject) => {
         const tempSubs = [...subs];
         tempSubs.find(sub => sub.id === subject.id).isUserSub = e.target.checked;
         setSubs(tempSubs);
 
         subject.isUserSub = e.target.checked;
-        setUserSub(subject, global.userID);
+        setUserSub(subject, global.userID)
+        .then(() => {
 
-        getUserSubjects(global.userID)
+            getUserSubjects(global.userID)
             .then(res => {
+                
                 global.setUserSubs(res);
-                console.log(res)
+    
             })
+
+        })
     }
 
     const onUserExamChange = e => {
         global.setCurrExam(parseInt(e.target.value))
-        console.log("New e")
 
         if(e.target.value) {
             setUserExam(e.target.value, global.userID);

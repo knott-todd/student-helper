@@ -1,7 +1,5 @@
-// const backendURL = 'https://student-helper-backend.vercel.app';
-// const backendURL = 'https://nice-wasp-48.loca.lt/';
-// const backendURL = 'http://studnthelperbackend.ddns.net:3080';
 const backendURL = 'https://student-helper-backend.vercel.app';
+// const backendURL = 'http://localhost:3080'
 
 const onesignalURL = 'https://onesignal.com/api/v1/notifications';
 const onesignalAppID = '99b7a99a-31e5-4656-86d7-ab456591292b';
@@ -235,6 +233,20 @@ export async function deleteTask (taskID) {
 
 }
 
+export async function deletePaperQuestions (paperID) {
+
+    const response = await fetch(`${backendURL}/del_paper_questions/${paperID}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            "Bypass-Tunnel-Reminder": "true"
+        }
+    })
+
+    return response;
+
+
+}
 export async function setQuestObjective(data) {
     console.log(data);
     const response = await fetch(`${backendURL}/set_objective`, {

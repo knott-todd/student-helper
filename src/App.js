@@ -22,14 +22,14 @@ import Refresh from './Refresh';
 import { useContext, useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward } from '@fortawesome/free-solid-svg-icons'
+import { faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import TaskForm from './TaskForm';
 import { saveInteraction } from './services/SQLService';
 import { ToastContainer } from 'react-toastify';
 import OneSignal from 'react-onesignal';
 import { eventWrapper } from '@testing-library/user-event/dist/utils';
 import { useState } from 'react';
-library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward )
+library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight )
 
 function App() {
   const global = useContext(AppContext);
@@ -263,6 +263,10 @@ function App() {
     const defaultDotColor = getComputedStyle(document.documentElement).getPropertyValue('--content-background-color');
     const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent');
 
+    function lerp( a, b, alpha ) {
+      return a + alpha * ( b - a );
+    }
+
     // Generate dot positions
     let positions = [];
     const generatePositions = () => {
@@ -425,8 +429,11 @@ function App() {
           pos.displacedY = pos.y + displacement * Math.sin(angle);
 
           // Light up dots
-          let {r, g, b, a} = hexToRgba(global.accent);
-          pos.color = `rgba(${r}, ${g}, ${b}, ${ 0.5 * radius / (distance * 2)})`;
+          let {r, g, b} = hexToRgba(global.accent);
+          let {r: dotR, g: dotG, b: dotB, a: dotA} = hexToRgba(defaultDotColor)
+
+          // console.log(a, a + (0.5 * (radius - distance) / radius), (0.5 * (radius - distance) / radius));
+          pos.color = `rgba(${lerp(r, dotR, distance / radius)}, ${lerp(g, dotG, distance / radius)}, ${lerp(b, dotB, distance / radius)}, ${ lerp(0.5, dotA, distance / radius) })`;
 
         } else {
           pos.displacedX = pos.x;

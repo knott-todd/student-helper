@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import ObjectiveSetter from "./ObjectiveSetter";
 import StructureParser from "./StructureParser";
 import {AppContext} from "./AppContext";
+import MCQUserInterface from "./MCQUserInterface";
 
 const Pastpaper = () => {
     const {id} = useParams();
@@ -57,6 +58,10 @@ const Pastpaper = () => {
 
             {isEditTopics ? <ObjectiveSetter paperID={id} unit={paper.unit}/> : null}
             {isEditStructure ? <StructureParser paperID={id} /> : null}
+
+            {paper.num === "1" ? (
+                <MCQUserInterface paperID={paper.id} />
+            ) : ""}
         </div>
     )
 }

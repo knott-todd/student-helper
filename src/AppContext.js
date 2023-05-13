@@ -16,6 +16,7 @@ export default ({children}) => {
     const [progressValue, setProgressVal] = useState();
     const [singleProgressValue, setSingleProgressVal] = useState();
     const [accent, setAccent] = useState('brown');
+    const [examSubs, setExamSubs] = useState([]);
 
     const setProgressValue = val => {
         setSingleProgressVal();
@@ -113,6 +114,8 @@ export default ({children}) => {
         setProgressValue,
         singleProgressValue,
         setSingleProgressValue,
+        examSubs,
+        setExamSubs,
         accent,
         setAccent
     }

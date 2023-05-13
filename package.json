@@ -9,14 +9,23 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "browserify-zlib": "^0.2.0",
+    "buffer": "^6.0.3",
     "concurrently": "^7.2.1",
     "cross-env": "^7.0.3",
+    "crypto": "^1.0.1",
     "depcheck": "^1.4.3",
     "express": "^4.18.1",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
     "localtunnel": "^2.0.2",
     "mysql": "^2.18.1",
+    "net": "^1.0.2",
     "node-schedule": "^2.1.1",
     "nodemon": "^2.0.16",
+    "path": "^0.12.7",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
     "react": "^18.1.0",
     "react-document-meta": "^3.0.0-beta.2",
     "react-dom": "^18.1.0",
@@ -26,8 +35,12 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-toastify": "^9.1.1",
+    "stream": "^0.0.2",
+    "stream-browserify": "^3.0.0",
     "sync-sql": "^1.0.2",
-    "web-vitals": "^2.1.4"
+    "url": "^0.11.0",
+    "web-vitals": "^2.1.4",
+    "zlib": "^1.0.5"
   },
   "scripts": {
     "start": "concurrently --names REACT,LOCALTUNNEL --prefix-colors blue,white \"cross-env BROWSER=none react-scripts start\" \"lt --port 3000 --local-host localhost --subdomain studenthelper -o\"",
@@ -54,5 +67,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "node-polyfill-webpack-plugin": "^2.0.1"
   }
 }
