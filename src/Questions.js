@@ -58,7 +58,7 @@ const Questions = () => {
                         subLetters.sort((a,b) => a.localeCompare(b)).forEach(subLetter => {
                             
                             const row = quests.find(q => q.num === num && q.sub_letter === letter && q.sub_sub_roman === roman && q.sub_sub_sub_letter === subLetter);
-                            restructured.find(q => q.num === num).letters.find(l => l.letter === letter).romans.find(r => r.roman === roman).subLetters.push({subLetter, info: row.info, is_complete: row.is_complete, id: row.id, i: quests.indexOf(row), objectiveID: row.objective_id});
+                            restructured.find(q => q.num === num).letters.find(l => l.letter === letter).romans.find(r => r.roman === roman).subLetters.push({subLetter, info: row.info, is_complete: row.is_complete, id: row.id, i: quests.indexOf(row), objectiveID: row.objective_id, familiarity: row.familiarity});
 
                         })
 

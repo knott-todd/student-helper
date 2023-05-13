@@ -10,6 +10,8 @@ const FamiliarityDropdown = props => {
 
     useEffect(() => {
 
+        console.log(props.question)
+
         getFamiliarities().then(result => {
             setFams(result);
         })
