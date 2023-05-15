@@ -20,17 +20,22 @@ const FamiliarityDropdown = props => {
 
     const globalOnChange = e => {
         if(e.target.value !== ""){
+            const newValue = parseInt(e.target.value);
 
             props.question.is_complete = true;
             console.log("PHAT", props.question)
 
             let tempQuests = [...props.questions.quests];
-            tempQuests[tempQuests.findIndex(quest => quest.id === props.question.id)] = props.question;
+            let tempQuest = {...tempQuests.find(quest => quest.id === props.question.id), familiarity: newValue}
+            tempQuests[tempQuests.findIndex(quest => quest.id === props.question.id)] = tempQuest;
 
             console.log(tempQuests[tempQuests.findIndex(quest => quest.id === props.question.id)])
     
             props.questions.setQuests(tempQuests);
-            updateUserQuestion(props.question, global.userID);
+            updateUserQuestion(tempQuests.find(quest => quest.id === props.question.id), global.userID)
+            .then(result => {
+                console.log("Question updated: ", result)
+            })
 
         }
 

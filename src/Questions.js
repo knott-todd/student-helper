@@ -88,14 +88,17 @@ const Questions = () => {
     }, [quests]);
 
     const onDropdownChange = (e, id) => {
-        const newValue = parseInt(e.target.value);
+        // const newValue = parseInt(e.target.value);
 
-        let tempQuests = [...quests];
-        let tempQuest = {...tempQuests.find(quest => quest.id === id), familiarity: newValue}
-        tempQuests[tempQuests.findIndex(quest => quest.id === id)] = tempQuest;
+        // let tempQuests = [...quests];
+        // let tempQuest = {...tempQuests.find(quest => quest.id === id), familiarity: newValue}
+        // tempQuests[tempQuests.findIndex(quest => quest.id === id)] = tempQuest;
 
-        setQuests(tempQuests);
-        updateUserQuestion(tempQuests.find(quest => quest.id === id), global.userID);
+        // setQuests(tempQuests);
+        // updateUserQuestion(tempQuests.find(quest => quest.id === id), global.userID)
+        // .then(result => {
+        //     console.log("Question updated: ", result)
+        // })
     }
 
     const onCheckboxChange = (e, id) => {
