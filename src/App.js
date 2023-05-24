@@ -30,6 +30,8 @@ import OneSignal from 'react-onesignal';
 import { eventWrapper } from '@testing-library/user-event/dist/utils';
 import { useState } from 'react';
 import { inject } from '@vercel/analytics';
+import SentenceSimilarity from './SentenceSimilarity';
+import Home from './Home';
 library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight )
 
 function App() {
@@ -221,6 +223,18 @@ function App() {
     const b = parseInt(hex.slice(4, 6), 16);
     const a = parseInt(hex.slice(6, 8), 16) / 255;
     return {r, g, b, a};
+  };
+
+  const hslToRgb = (h, s, l) => {
+
+    s /= 100;
+    l /= 100;
+    const k = n => (n + h / 30) % 12;
+    const a = s * Math.min(l, 1 - l);
+    const f = n =>
+      l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+    
+    return {r: 255 * f(0), g: 255 * f(8), b: 255 * f(4)};
   };
 
   // Define a function to convert CSS color name to hex
@@ -430,7 +444,7 @@ function App() {
           pos.displacedY = pos.y + displacement * Math.sin(angle);
 
           // Light up dots
-          let {r, g, b} = hexToRgba(global.accent);
+          let {r, g, b} = hslToRgb(global.accent[0], parseInt(global.accent[1].slice(0, -1)), parseInt(global.accent[2].slice(0, -1)));
           let {r: dotR, g: dotG, b: dotB, a: dotA} = hexToRgba(defaultDotColor)
 
           // console.log(a, a + (0.5 * (radius - distance) / radius), (0.5 * (radius - distance) / radius));
@@ -552,6 +566,10 @@ function App() {
             <Route path='/parse_structure' element={<StructureParser />} />
 
             <Route path="/sign_in" element={<SignIn />} />
+
+            <Route path="/sentence_similarity" element={<SentenceSimilarity />} />
+
+            <Route path="/home" element={<Home />} />
 
             
           </Route>

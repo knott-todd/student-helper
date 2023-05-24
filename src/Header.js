@@ -105,7 +105,7 @@ const Header = () => {
                 </form>
 
             </div>
-            <Progress value={global.progressValue} height="4px" width={(window.location.pathname.includes("/track") ? "100%" : "0")} position="absolute" />
+            <Progress className={global.progressValue >= 1 ? "familiarity-complete": ""} value={global.progressValue} height="4px" width={(window.location.pathname.includes("/track") ? "100%" : "0")} position="absolute" />
             <SingleProgress height="4px" width={(window.location.pathname.includes("/tasks") ? "100%" : "0")} position="absolute" value={global.singleProgressValue} />
                 
             {global.progressValue ? <span className="tooltip-text">{Math.round(global.progressValue * 100, 4)}%</span> : ""}

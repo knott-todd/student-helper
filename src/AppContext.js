@@ -49,33 +49,63 @@ export default ({children}) => {
     }
 
     const lightmodeAccentColors = [
-        "A4031F",
-        "067BC2",
-        "ECC30B",
-        "4B7F52",
-        "080357",
-        "FF9F1C",
-        "B95F89",
-        "2EC0F9",
-        "67AAF9",
-        "F0386B",
-        "6B2D5C",
-        "99D5C9"
+        [350, "96%", "33%"],
+        [203, "94%", "39%"],
+        [49, "91%", "48%"],
+        [128, "26%", "40%"],
+        [244, "93%", "18%"],
+        [35, "100%", "55%"],
+        [332, "39%", "55%"],
+        [197, "94%", "58%"],
+        [212, "92%", "69%"],
+        [343, "86%", "58%"],
+        [315, "41%", "30%"],
+        [168, "42%", "72%"]
     ]
     const darkmodeAccentColors = [
-        "067BC2",
-        "ECC30B",
-        "FF9F1C",
-        "B95F89",
-        "2EC0F9",
-        "67AAF9",
-        "F0386B",
-        "C9F0FF",
-        "F75C03",
-        "5F4BB6",
-        "A6D49F",
-        "99D5C9"
+        [203, "94%", "39%"],
+        [49, "91%", "48%"],
+        [35, "100%", "55%"],
+        [332, "39%", "55%"],
+        [197, "94%", "58%"],
+        [212, "92%", "69%"],
+        [343, "86%", "58%"],
+        [197, "100%", "89%"],
+        [22, "98%", "49%"],
+        [251, "42%", "50%"],
+        [112, "38%", "73%"],
+        [168, "42%", "72%"]
     ]
+
+    // Hex
+    // const darkmodeAccentColors = [
+    //     "067BC2",
+    //     "ECC30B",
+    //     "FF9F1C",
+    //     "B95F89",
+    //     "2EC0F9",
+    //     "67AAF9",
+    //     "F0386B",
+    //     "C9F0FF",
+    //     "F75C03",
+    //     "5F4BB6",
+    //     "A6D49F",
+    //     "99D5C9"
+    // ]
+    // const lightmodeAccentColors = [
+    //     "A4031F",
+    //     "067BC2",
+    //     "ECC30B",
+    //     "4B7F52",
+    //     "080357",
+    //     "FF9F1C",
+    //     "B95F89",
+    //     "2EC0F9",
+    //     "67AAF9",
+    //     "F0386B",
+    //     "6B2D5C",
+    //     "99D5C9"
+    // ]
 
     const setRandomAccent = () => {
         let _accent;
@@ -86,8 +116,17 @@ export default ({children}) => {
         }
         setAccent(_accent);
         document.documentElement.style.setProperty(
+            '--accent-l',
+            `${_accent[2]}`
+        );
+        document.documentElement.style.setProperty(
+            '--accent-lighten',
+            `hsl(${_accent[0]}, ${_accent[1]}, calc(var(--accent-l) + 7%))`
+        );
+        document.documentElement.style.setProperty(
             '--accent',
-            `#${_accent}`
+            `hsl(${_accent[0]}, ${_accent[1]}, var(--accent-l))`
+            // `#${_accent}`
         );
     }
 
