@@ -39,7 +39,7 @@ const Track = memo(() => {
             <div className="track body-div">
                 {modules.sort((a, b) => (a.avgFam || a.avgFam === 0) ? a.avgFam - b.avgFam : b.avgFam - a.avgFam).map(module => (
                     
-                    <div className="module-card track-card" key={module.module.id}>
+                    <div className={`module-card track-card ${module.avgFam >= 1 ? "familiarity-complete": ""}`} key={module.module.id}>
                         
                         <div className="card-content">
                             <div className="card-header" >

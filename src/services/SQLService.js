@@ -311,6 +311,7 @@ export async function getModules (subID, examID, userID) {
     }
 }
 
+// Get user topics
 export async function getTopics (moduleID, userID) {
     try {
         const response = await fetch(`${backendURL}/topics_familiarity/${moduleID}/${userID}`, {

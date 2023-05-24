@@ -172,7 +172,7 @@ const SignIn = () => {
                     <label>
                         Select Default Exam 
                     </label>
-                    <select className="header-dropdown dropdown" value={global.currExam} style={{margin: "10px 10px 10px 5px"}} onChange={onUserExamChange}>
+                    <select className="header-dropdown dropdown" value={global.currExam} style={{margin: "10px 10px 10px 5px", borderBottomColor: "var(--accent)"}} onChange={onUserExamChange}>
                         <option value='' />
                         {exams.map(exam => (
                             <option key={parseInt(exam.id)} value={exam.id}>{exam.short_name}</option>
