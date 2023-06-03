@@ -179,8 +179,9 @@ const MCQUserInterface = (props) => {
 
             ): ""}
 
-            <button style={{backgroundColor: "transparent", color: "var(--primary-text-color)", fontSize: "medium"}} onClick={handleDoneMCQ}>{!isUserDoneMCQ ? "Show Answers" : "Hide Answers"}</button>
+            {quests.length > 0 && !quests.every(quest => quest.answer === null) ? <button style={{backgroundColor: "transparent", color: "var(--primary-text-color)", fontSize: "medium"}} onClick={handleDoneMCQ}>{!isUserDoneMCQ ? "Show Answers" : "Hide Answers"}</button> : ""}
             
+            <p style={{fontSize: "smaller", opacity: "var(--faded-opacity)"}}>Note: MCQ inputs aren't saved.</p>
         </div>
     )
 }
