@@ -532,6 +532,18 @@ export async function addObjective(objective) {
     return await response.json();
 }
 
+export async function addMCQs(paperID, qAmount) {
+    const response = await fetch(`${backendURL}/add_mcqs`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            "Bypass-Tunnel-Reminder": "true"
+        },
+        body: JSON.stringify({paperID, qAmount})
+    })
+    return await response.json();
+}
+
 export async function addQuestion(question) {
     const response = await fetch(`${backendURL}/add_question`, {
         method: 'POST',

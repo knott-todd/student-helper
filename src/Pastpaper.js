@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react";
-import { getPaperQuestions, getPastpaper } from "./services/SQLService";
+import { addMCQs, getPaperQuestions, getPastpaper } from "./services/SQLService";
 import { Link } from "react-router-dom";
 import ObjectiveSetter from "./ObjectiveSetter";
 import StructureParser from "./StructureParser";
@@ -24,15 +24,6 @@ const Pastpaper = () => {
     useEffect(() => {
 
         console.log("Ran")
-
-        getPaperQuestions(id, global.userID)
-        .then(result => {
-            if(typeof result[0] !== 'undefined'){
-                
-                setQuests(result)
-
-            }
-        })
         
         getPastpaper(id).then(result => {
 
@@ -45,6 +36,37 @@ const Pastpaper = () => {
         })
         
     }, []);
+
+    useEffect(() => {
+
+        if(paper.id) {
+
+            getPaperQuestions(id, global.userID)
+            .then(result => {
+                if(typeof result[0] !== 'undefined'){
+                    
+                    setQuests(result)
+    
+                } else if(paper.num === "1") {
+
+                    addMCQs(paper.id, 45)
+                        .then(() => {
+                            getPaperQuestions(id, global.userID)
+                            .then(res2 => {
+                                if(typeof res2[0] !== 'undefined'){
+                    
+                                    setQuests(res2)
+                    
+                                }
+                            })
+                        })
+
+                }
+            })
+
+        }
+
+    }, [paper])
 
     return (
         <div className="pastpaper body-div">
