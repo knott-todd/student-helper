@@ -119,6 +119,7 @@ const MCQUserInterface = (props) => {
 
         // Update local answers
         let tempAnswers = [...userAnswers];
+
         // Toggle selected: if defined already then deselect, select otherwise
         if(tempAnswers[questIndex] === userAns) {
 
@@ -130,6 +131,10 @@ const MCQUserInterface = (props) => {
 
         }
         setUserAnswers(tempAnswers)
+
+        // Auto increment question
+        if(questIndex < quests.length-1)
+            questIndex++;
 
     }
 
