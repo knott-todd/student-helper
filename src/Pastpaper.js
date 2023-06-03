@@ -49,7 +49,7 @@ const Pastpaper = () => {
     
                 } else if(paper.num === "1") {
 
-                    addMCQs(paper.id, 45)
+                    addMCQs(paper.id, (global.currExam === 2 ? 60 : 45))
                         .then(() => {
                             getPaperQuestions(id, global.userID)
                             .then(res2 => {
