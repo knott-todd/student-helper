@@ -134,7 +134,7 @@ const MCQUserInterface = (props) => {
 
         // Auto increment question
         if(questIndex < quests.length-1)
-            questIndex++;
+            setQuestIndex(questIndex + 1);
 
     }
 
