@@ -17,6 +17,7 @@ export default ({children}) => {
     const [singleProgressValue, setSingleProgressVal] = useState();
     const [accent, setAccent] = useState('brown');
     const [examSubs, setExamSubs] = useState([]);
+    const [paperType, setPaperType] = useState(2);
 
     const setProgressValue = val => {
         setSingleProgressVal();
@@ -156,7 +157,9 @@ export default ({children}) => {
         examSubs,
         setExamSubs,
         accent,
-        setAccent
+        setAccent,
+        paperType,
+        setPaperType
     }
 
     useEffect(() => {
