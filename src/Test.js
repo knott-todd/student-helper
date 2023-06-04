@@ -10,7 +10,6 @@ import SingleProgress from "./SingleProgress";
 
 const Test = () => {
     const [papers, setPapers] = useState([]);
-    const [paperNum, setPaperNum] = useState(2);
 
     const sqlUrl = "http://localhost:3080";
 
@@ -73,7 +72,7 @@ const Test = () => {
                     <label>
                         Paper
 
-                        <select className="dropdown" value={paperNum} style={{marginLeft: "5px"}} onChange={e => setPaperNum(e.target.value)}>
+                        <select className="dropdown" value={global.paperType} style={{marginLeft: "5px"}} onChange={e => global.setPaperType(e.target.value)}>
                             <option key={1} value={1}>{1}</option>
                             <option key={2} value={2}>{2}</option>
                         </select> 
@@ -81,10 +80,10 @@ const Test = () => {
 
                 </div>
 
-                {papers.filter(paper => paper.num === paperNum.toString()).length > 0 ? (
+                {papers.filter(paper => paper.num === global.paperType.toString()).length > 0 ? (
                     <div className="pastpapers list-container">
                         {papers
-                            .filter(paper => paper.num === paperNum.toString())
+                            .filter(paper => paper.num === global.paperType.toString())
                             .sort((a, b) => b.year.match(/\d{4}/)[0] - a.year.match(/\d{4}/)[0])
                             .sort((a,b) => Number(b.areTopicsLinked) - Number(a.areTopicsLinked))
                             .sort((a,b) => Number(b.areAnyTopicsLinked) - Number(a.areAnyTopicsLinked))
@@ -121,7 +120,7 @@ const Test = () => {
 
                     </div>
                 ) : (
-                    global.currSub ? (<p className="no-content-text">Sorry! We don't have any {global.currSub.name} P{paperNum}'s yet.</p>) : ""
+                    global.currSub ? (<p className="no-content-text">Sorry! We don't have any {global.currSub.name} P{global.paperType}'s yet.</p>) : ""
                 )}
                 
                 
