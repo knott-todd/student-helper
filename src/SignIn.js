@@ -94,17 +94,6 @@ const SignIn = () => {
 
     }
 
-    useEffect(() => {
-
-        getUserSubjects(global.userID)
-        .then(res => {
-            
-            global.setUserSubs(res);
-
-        })
-
-    }, [])
-
     const onUserSubChange = (e, subject) => {
         const tempSubs = [...subs];
         tempSubs.find(sub => sub.id === subject.id).isUserSub = e.target.checked;
