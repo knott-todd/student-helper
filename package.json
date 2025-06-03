@@ -6,6 +6,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@react-oauth/google": "^0.12.2",
     "@tensorflow-models/universal-sentence-encoder": "^1.3.3",
     "@tensorflow/tfjs": "^4.5.0",
     "@testing-library/jest-dom": "^5.16.4",
@@ -21,20 +22,20 @@
     "express": "^4.18.1",
     "fs": "^0.0.1-security",
     "http": "^0.0.1-security",
-    "localtunnel": "^2.0.2",
     "mysql": "^2.18.1",
     "net": "^1.0.2",
     "node-schedule": "^2.1.1",
-    "nodemon": "^2.0.16",
+    "nodemon": "^3.1.10",
     "path": "^0.12.7",
     "path-browserify": "^1.0.1",
+    "pg": "^8.16.0",
     "process": "^0.11.10",
     "react": "^18.1.0",
     "react-document-meta": "^3.0.0-beta.2",
     "react-dom": "^18.1.0",
     "react-icons": "^4.7.1",
     "react-onesignal": "^2.0.4",
-    "react-pdf": "^5.7.2",
+    "react-pdf": "^9.2.1",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-toastify": "^9.1.1",
@@ -46,7 +47,7 @@
     "zlib": "^1.0.5"
   },
   "scripts": {
-    "start": "concurrently --names REACT,LOCALTUNNEL --prefix-colors blue,white \"cross-env BROWSER=none react-scripts start\" \"lt --port 3000 --local-host localhost --subdomain studenthelper -o\"",
+    "start": "concurrently --names REACT --prefix-colors blue \"cross-env BROWSER=none react-scripts start\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -73,5 +74,9 @@
   },
   "devDependencies": {
     "node-polyfill-webpack-plugin": "^2.0.1"
+  },
+  "overrides": {
+    "semver": "7.5.4",
+    "nth-check": "^2.0.1"
   }
 }

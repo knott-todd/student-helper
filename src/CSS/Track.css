@@ -163,6 +163,12 @@
 .track-card:hover {
     border: var(--accent) solid 3px;
 }
+/* 
+.track-card:hover .card-content {
+    
+    background-color: var(--background-color);
+
+} */
 
 .card-link:hover .track-card-heading {
     /* transition: 0.2s; */
