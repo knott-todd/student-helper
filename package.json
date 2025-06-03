@@ -22,7 +22,6 @@
     "express": "^4.18.1",
     "fs": "^0.0.1-security",
     "http": "^0.0.1-security",
-    "localtunnel": "^2.0.2",
     "mysql": "^2.18.1",
     "net": "^1.0.2",
     "node-schedule": "^2.1.1",
@@ -48,7 +47,7 @@
     "zlib": "^1.0.5"
   },
   "scripts": {
-    "start": "concurrently --names REACT,LOCALTUNNEL --prefix-colors blue,white \"cross-env BROWSER=none react-scripts start\" \"lt --port 3000 --local-host localhost --subdomain studenthelper -o\"",
+    "start": "concurrently --names REACT --prefix-colors blue \"cross-env BROWSER=none react-scripts start\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
