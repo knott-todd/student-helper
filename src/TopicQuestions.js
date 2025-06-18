@@ -107,6 +107,11 @@ const TopicQuestions = () => {
             {/* <h1 className="page-title">{topic.name}</h1> */}
             {/* <h4>Familiarity: {(topic.familiarity * 100).toFixed(2)}%</h4> */}
 
+
+            <button type="button">
+                <Link to={`/quiz/${quiz_id}`}>Take Quiz</Link>
+            </button>
+
             <h2>
                 Appears in:
             </h2>
