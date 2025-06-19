@@ -7,7 +7,7 @@ import ObjectiveSetter from "../data_processing/ObjectiveSetter";
 import StructureParser from "../data_processing/StructureParser";
 import {AppContext} from "../../AppContext";
 import MCQUserInterface from "../../MCQUserInterface";
-import "./CSS/Pastpaper.css"
+import "../../CSS/Pastpaper.css";
 
 const Pastpaper = () => {
     const {id} = useParams();

@@ -1,4 +1,4 @@
-import { useQuizContext } from "../../contexts/QuizContext";
+import { useQuizContext } from "./QuizContext";
 
 const QuizPreview = () => {
     // get topics

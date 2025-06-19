@@ -1,5 +1,5 @@
 import { Outlet, useLocation, useParams } from "react-router-dom";
-import { QuizProvider } from "../../contexts/QuizContext";
+import { QuizProvider } from "./QuizContext";
 
 const QuizWrapper = () => {
   const { id } = useParams();

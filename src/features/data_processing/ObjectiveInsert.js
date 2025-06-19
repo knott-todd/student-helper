@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import {AppContext} from "../../AppContext";
 import { getExams, getExamSubjects, getUnitModules, getSubjectUnits, getModuleTopics, addObjective } from "../../services/SQLService";
-import './CSS/ObjectiveInsert.css';
+import '../../CSS/ObjectiveInsert.css';
 import DependentDropdown from "../../DependentDropdown";
 
 const ObjectiveInsert = () => {

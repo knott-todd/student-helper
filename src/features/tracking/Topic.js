@@ -2,9 +2,9 @@ import { useEffect, useState, useContext, memo } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { getTopic, getTopicObjectives } from "../../services/SQLService";
 import {AppContext} from "../../AppContext";
-import './CSS/global.css'
-import './CSS/Module.css'
-import './CSS/Topic.css'
+import '../../CSS/global.css'
+import '../../CSS/Module.css'
+import '../../CSS/Topic.css'
 
 const Topic = memo(() => {
     // Previous code that sorted the site into Modules>Objectives. To be copied and modified into Modules>Topics

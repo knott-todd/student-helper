@@ -4,8 +4,8 @@ import { getTopic, getTopicQuestions, updateUserQuestion, getPastpaper, addQuizA
 import FamiliarityDropdown from "../../FamiliarityDropdown";
 import CompleteCheckbox from "../../CompleteCheckbox";
 import {AppContext} from "../../AppContext";
-import './CSS/global.css'
-import './CSS/TopicQuestions.css'
+import '../../CSS/global.css'
+import '../../CSS/TopicQuestions.css'
 
 const TopicQuestions = () => {
     const {id} = useParams();
