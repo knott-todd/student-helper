@@ -1,32 +1,45 @@
-// context/QuizContext.jsx
 import { createContext, useContext, useState } from 'react';
 
 const QuizContext = createContext();
 
-export const useQuiz = () => useContext(QuizContext);
+export const useQuizContext = () => useContext(QuizContext);
 
-export const QuizProvider = ({ children, quizId }) => {
-  const [questions, setQuestions] = useState([]);
-  const [topics, setTopics] = useState([]);
-  const [answers, setAnswers] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+export const QuizProvider = ({
+    children,
+    quizId,
+    initialTopics = [],
+    initialQuestions = [],
+}) => {
+    const [topics, setTopics] = useState(initialTopics);
+    const [questions, setQuestions] = useState(initialQuestions);
+    const [answers, setAnswers] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-  const setAnswer = (index, answer) => {
-    setAnswers(prev => {
-      const updated = [...prev];
-      updated[index] = answer;
-      return updated;
-    });
-  };
+    useEffect(() => {
+        if (topics.length && questions.length) return; // Data already present, skip fetch
 
-  return (
-    <QuizContext.Provider value={{
-      quizId, questions, setQuestions,
-      topics, setTopics,
-      answers, setAnswer,
-      currentIndex, setCurrentIndex
-    }}>
-      {children}
-    </QuizContext.Provider>
-  );
+        getQuizData(quizId).then(data => {
+            setTopics(data.topics || []);
+            setQuestions(data.questions || []);
+        });
+    }, [quizId]);
+
+    const setAnswer = (index, answer) => {
+        setAnswers(prev => {
+            const updated = [...prev];
+            updated[index] = answer;
+            return updated;
+        });
+    };
+
+    return (
+        <QuizContext.Provider value={{
+            quizId, questions, setQuestions,
+            topics, setTopics,
+            answers, setAnswer,
+            currentIndex, setCurrentIndex
+        }}>
+            {children}
+        </QuizContext.Provider>
+    );
 };

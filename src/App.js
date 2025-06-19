@@ -32,7 +32,7 @@ import { useState } from 'react';
 import { inject } from '@vercel/analytics';
 import SentenceSimilarity from './SentenceSimilarity';
 import Home from './Home';
-import Quiz from './Quiz';
+import Quiz from './QuizWrapper';
 library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight )
 
 function App() {
