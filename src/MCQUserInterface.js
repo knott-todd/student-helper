@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react";
 import { getPaperQuestions, getPastpaper } from "./services/SQLService";
 import { Link } from "react-router-dom";
-import ObjectiveSetter from "./ObjectiveSetter";
-import StructureParser from "./StructureParser";
+import ObjectiveSetter from "./features/data_processing/ObjectiveSetter";
+import StructureParser from "./features/data_processing/StructureParser";
 import {AppContext} from "./AppContext";
 import './CSS/MCQUserInterface.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

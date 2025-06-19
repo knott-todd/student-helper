@@ -1,8 +1,8 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import {AppContext} from "./AppContext";
-import DependentDropdown from "./DependentDropdown";
-import Questions from "./Questions";
-import { getModuleTopics, getPaperQuestions, getQuestTopic, getTopicObjectives, getUnitModules, setQuestObjective, setQuestTopic } from "./services/SQLService";
+import {AppContext} from "../../AppContext";
+import DependentDropdown from "../../DependentDropdown";
+import Questions from "../pastpapers/Questions";
+import { getModuleTopics, getPaperQuestions, getQuestTopic, getTopicObjectives, getUnitModules, setQuestObjective, setQuestTopic } from "../../services/SQLService";
 import React from "react";
 
 // Really is a TopicSetter after reconsideration :/

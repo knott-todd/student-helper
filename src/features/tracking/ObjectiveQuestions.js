@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getObjective, getObjectiveQuestions, updateUserQuestion } from "./services/SQLService";
-import FamiliarityDropdown from "./FamiliarityDropdown";
-import CompleteCheckbox from "./CompleteCheckbox";
+import { getObjective, getObjectiveQuestions, updateUserQuestion } from "../../services/SQLService";
+import FamiliarityDropdown from "../../FamiliarityDropdown";
+import CompleteCheckbox from "../../CompleteCheckbox";
 import './CSS/global.css'
 import './CSS/ObjectiveQuestions.css'
-import { AppContext } from "./AppContext";
+import { AppContext } from "../../AppContext";
 
 const ObjectiveQuestions = () => {
     const {id} = useParams();

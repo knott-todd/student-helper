@@ -1,10 +1,10 @@
 import { useEffect, useState, useContext } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { getModule, getTopics } from "./services/SQLService";
-import {AppContext} from "./AppContext";
+import { getModule, getTopics } from "../../services/SQLService";
+import {AppContext} from "../../AppContext";
 import './CSS/global.css'
 import './CSS/Module.css'
-import Progress from "./Progress";
+import Progress from "../../Progress";
 
 const Module = () => {
 

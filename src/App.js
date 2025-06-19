@@ -1,22 +1,22 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import './CSS/App.css';
-import Pastpaper from './Pastpaper';
-import Test from './Test';
-import Markscheme from './Markscheme';
-import Questions from './Questions';
+import Pastpaper from './features/pastpapers/Pastpaper';
+import Test from './features/pastpapers/Test';
+import Markscheme from './features/pastpapers/Markscheme';
+import Questions from './features/pastpapers/Questions';
 import Navbar from './Navbar';
-import Track from './Track';
-import ObjectiveQuestions from './ObjectiveQuestions';
-import Module from './Module';
+import Track from './features/tracking/Track';
+import ObjectiveQuestions from './features/tracking/ObjectiveQuestions';
+import Module from './features/tracking/Module';
 import Header from './Header';
-import Topic from './Topic';
+import Topic from './features/tracking/Topic';
 import Tasks from './Tasks';
 import './CSS/global.css';
 import {AppContext} from './AppContext';
-import ObjectiveInsert from './ObjectiveInsert';
-import ObjectiveSetter from './ObjectiveSetter';
-import StructureParser from './StructureParser';
-import TopicQuestions from './TopicQuestions';
+import ObjectiveInsert from './features/data_processing/ObjectiveInsert';
+import ObjectiveSetter from './features/data_processing/ObjectiveSetter';
+import StructureParser from './features/data_processing/StructureParser';
+import TopicQuestions from './features/tracking/TopicQuestions';
 import SignIn from './SignIn';
 import Refresh from './Refresh';
 import { useContext, useEffect } from 'react';
@@ -32,7 +32,7 @@ import { useState } from 'react';
 import { inject } from '@vercel/analytics';
 import SentenceSimilarity from './SentenceSimilarity';
 import Home from './Home';
-import Quiz from './QuizWrapper';
+import Quiz from './features/quiz/QuizWrapper';
 library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight )
 
 function App() {

@@ -1,9 +1,9 @@
 import { useEffect, useState, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getTopic, getTopicQuestions, updateUserQuestion, getPastpaper, addQuizAttempt } from "./services/SQLService";
-import FamiliarityDropdown from "./FamiliarityDropdown";
-import CompleteCheckbox from "./CompleteCheckbox";
-import {AppContext} from "./AppContext";
+import { getTopic, getTopicQuestions, updateUserQuestion, getPastpaper, addQuizAttempt } from "../../services/SQLService";
+import FamiliarityDropdown from "../../FamiliarityDropdown";
+import CompleteCheckbox from "../../CompleteCheckbox";
+import {AppContext} from "../../AppContext";
 import './CSS/global.css'
 import './CSS/TopicQuestions.css'
 

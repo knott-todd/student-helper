@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext, memo } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { getTopic, getTopicObjectives } from "./services/SQLService";
-import {AppContext} from "./AppContext";
+import { getTopic, getTopicObjectives } from "../../services/SQLService";
+import {AppContext} from "../../AppContext";
 import './CSS/global.css'
 import './CSS/Module.css'
 import './CSS/Topic.css'

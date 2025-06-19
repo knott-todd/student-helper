@@ -1,7 +1,7 @@
 import React from "react"
 import { Link, useParams } from "react-router-dom"
 import { useEffect, useState } from "react";
-import { getMarkscheme } from "./services/SQLService";
+import { getMarkscheme } from "../../services/SQLService";
 
 const Markscheme = (props) => {
     const {id} = useParams();
