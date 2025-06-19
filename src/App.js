@@ -32,6 +32,7 @@ import { useState } from 'react';
 import { inject } from '@vercel/analytics';
 import SentenceSimilarity from './SentenceSimilarity';
 import Home from './Home';
+import Quiz from './Quiz';
 library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight )
 
 function App() {
@@ -539,6 +540,8 @@ function App() {
         <Routes>
           <Route exact path = "/" >
             <Route path='/' element={ global.userID ? <Navigate to="/test" /> : <Navigate to="/sign_in" /> } />
+
+            <Route path="quiz/:id" element={<Quiz />} />
 
             <Route path = "test">
               <Route path = "" element={<Test />} />

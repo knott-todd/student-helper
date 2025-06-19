@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
-import { Link, useParams } from "react-router-dom";
-import { getTopic, getTopicQuestions, updateUserQuestion, getPastpaper } from "./services/SQLService";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { getTopic, getTopicQuestions, updateUserQuestion, getPastpaper, addQuizAttempt } from "./services/SQLService";
 import FamiliarityDropdown from "./FamiliarityDropdown";
 import CompleteCheckbox from "./CompleteCheckbox";
 import {AppContext} from "./AppContext";
@@ -13,6 +13,9 @@ const TopicQuestions = () => {
     const [quests, setQuests] = useState([]);
     const [topic, setTopic] = useState({});
     const [paper, setPaper] = useState({});
+    const [quizId, setQuizId] = useState({});
+
+    const navigate = useNavigate();
 
     const global = useContext(AppContext);
 
@@ -74,6 +77,13 @@ const TopicQuestions = () => {
 
     }, [quests]);
 
+    const handleCreateQuiz = async (userID, topicIDs) => {
+        const {quizId,questions} = await addQuizAttempt(userID, topicIDs);
+        
+        setQuizId(quizId);
+        navigate(`/quiz/${quizId}`, {state: {questions, topicIDs}});
+    }
+
     const handleYearCollapse = paperID => {
         const currCollapse = document.getElementById(`collapse${paperID}`);
         const display = currCollapse.style.display;
@@ -108,8 +118,8 @@ const TopicQuestions = () => {
             {/* <h4>Familiarity: {(topic.familiarity * 100).toFixed(2)}%</h4> */}
 
 
-            <button type="button">
-                <Link to={`/quiz/${quiz_id}`}>Take Quiz</Link>
+            <button type="button" onClick={() => handleCreateQuiz(global.userID, [topic.id])} >
+                Take Quiz
             </button>
 
             <h2>
