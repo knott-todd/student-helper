@@ -74,13 +74,12 @@ const TopicQuestions = () => {
         getTopic(id, global.userID).then(result => {
             setTopic(result)
         });
+        
 
     }, [quests]);
 
     const handleCreateQuiz = async (userID, topicIDs) => {
         const {quizId,questions} = await addQuizAttempt(userID, topicIDs);
-        
-        setQuizId(quizId);
         navigate(`/quiz/${quizId}`, {state: {questions, topicIDs}});
     }
 
