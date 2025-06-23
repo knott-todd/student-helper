@@ -6,9 +6,7 @@ const QuizPreview = () => {
 
     // start quiz function
     const startQuiz = () => {
-        // Logic to start the quiz, e.g., navigate to the quiz page
-        console.log("Starting quiz with topics:", topics);
-        // You can use a router or context to navigate to the quiz page
+        // Go to the first question
     };
 
     return (

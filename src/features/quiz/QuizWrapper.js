@@ -13,7 +13,7 @@ const QuizWrapper = () => {
   return (
     <QuizProvider quizId={id} initialTopics={topicIDs} initialQuestions={questions}>
       {/* exit icon button */}
-      <FontAwesomeIcon icon="fa-light fa-xmark" />
+      <FontAwesomeIcon icon="xmark" />
       <QuizPreview />
     </QuizProvider>
   );

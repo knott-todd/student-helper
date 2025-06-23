@@ -18,10 +18,12 @@ export const QuizProvider = ({
     useEffect(() => {
         if (topics.length && questions.length) return; // Data already present, skip fetch
 
-        getQuizData(quizId).then(data => {
-            setTopics(data.topics || []);
-            setQuestions(data.questions || []);
-        });
+        // getQuizData(quizId).then(data => {
+        //     setTopics(data.topics || []);
+        //     setQuestions(data.questions || []);
+        // });
+            setTopics( []);
+            setQuestions([]);
     }, [quizId]);
 
     const setAnswer = (index, answer) => {
