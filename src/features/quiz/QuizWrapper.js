@@ -1,23 +1,33 @@
 import { Outlet, useLocation, useParams } from "react-router-dom";
-import { QuizProvider } from "./QuizContext";
-import QuizPreview from "./QuizPreview";
+import { QuizProvider, useQuizContext } from "./QuizContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import styles from './css/QuizWrapper.module.css';
 
 const QuizWrapper = () => {
   const { id } = useParams();
   const location = useLocation();
 
-  // destructure topics and questions from location.state, fallback to null
   const { topicIDs = null, questions = null } = location.state || {};
 
   return (
     <QuizProvider quizId={id} initialTopics={topicIDs} initialQuestions={questions}>
-      {/* exit icon button */}
-      <FontAwesomeIcon icon="xmark" />
-      <QuizPreview />
+      <QuizLayout />
     </QuizProvider>
   );
 };
 
+const QuizLayout = () => {
+  const { exitQuiz } = useQuizContext();
+
+  return (
+    <div className={styles.quizWrapper}>
+      <button className={styles.exitButton} onClick={exitQuiz}>
+        <FontAwesomeIcon icon="xmark" />
+      </button>
+
+      <Outlet />
+    </div>
+  );
+};
 
 export default QuizWrapper;

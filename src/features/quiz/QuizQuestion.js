@@ -1,59 +1,40 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { QuizQuestionNavigation } from './QuizQuestionNavigation'
+import QuizProgressBar from "./QuizProgressBar";
+import QuestionText from "./components/QuestionText";
+import ReportIcon from "./components/ReportIcon";
+import QuestionOptions from "./components/QuestionOptions";
+import { useCurrentQuestion, useQuizContext } from './QuizContext';
 
 const QuizQuestion = ()=> {
-    // Get question data (text, answer)
-    const questionData = {
-        text: "What is Newton's second law of motion?",
-        options: [
-            "F = ma",
-            "F = m/a",
-            "a^2 + b^2 = c^2",
-            "F = G(m1*m2)/r^2"
-        ],
-        isPinned: false,
-        isLastQuestion: false
-    }
+
+    const question = useCurrentQuestion();
+    const { selectAnswer, currentIndex } = useQuizContext();
+
   return (
     <div className="quiz-question">
-        {/* Progress bar */}
-        <QuizProgressBar />
 
-        {/* Report icon */}
-        <FontAwesomeIcon icon="fa-regular fa-flag" />
+        { (!question) ? <p>Loading...</p> : (
+            <>
 
-        {/* Question text */}
-        <p>question.text</p>
+                <QuizProgressBar />
 
-        {/* Pin icon */}
-        {questionData.isPinned 
-        ? <FontAwesomeIcon icon="fa-solid fa-thumbtack" /> 
-        : <FontAwesomeIcon icon="fa-regular fa-thumbtack" />
-        }
-        
-        {/* Multiple choice buttons */}
-        <div className="quiz-options">
-            {questionData.options.map((option, index) => (
-                <button key={index} className="quiz-option">
-                    {option.text}
-                </button>
-            ))}
+                {/* Report icon */}
+                <ReportIcon />
 
-        </div>
+                <QuestionText questionText={question.question_text} isPinned={question.is_pinned} />
+                
+                {/* Multiple choice buttons */}
+                <QuestionOptions 
+                    mode="quiz"
+                    questionOptions={question.options}
+                    userAnswer={question.user_answer}
+                    onSelect={(index) => selectAnswer(currentIndex, index)}
+                />
 
-        {/* Back */}
-        <button className="quiz-back-button">
-            Back
-        </button>
+                <QuizQuestionNavigation isLastQuestion={question.isLastQuestion} />
 
-        {/* Skip */}
-        <button className="quiz-skip-button">
-            Skip
-        </button>
-
-        {/* Next or Finish button */}
-        <button className="quiz-next-button">
-            {questionData.isLastQuestion ? "Finish" : "Next"}
-        </button>
+            </>
+        )}
     </div>
   );
 }

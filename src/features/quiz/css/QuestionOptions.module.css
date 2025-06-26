@@ -1,0 +1,20 @@
+.optionsContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+
+    margin-top: 3rem;
+
+}
+
+button.correct, button.correct:hover {
+    background-color: var(--green);
+}
+
+button.incorrect, button.incorrect:hover {
+    background-color: var(--red);
+}
+
+button.selected, button.selected:hover {
+    background-color: var(--bg-color-light);
+}

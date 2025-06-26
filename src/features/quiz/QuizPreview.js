@@ -1,13 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import { useQuizContext } from "./QuizContext";
+import styles from './css/QuizPreview.module.css'; 
 
 const QuizPreview = () => {
     // get topics
     const { topics } = useQuizContext();
 
-    // start quiz function
-    const startQuiz = () => {
-        // Go to the first question
-    };
+    const navigate = useNavigate();
 
     return (
         <div className="quiz-preview">
@@ -19,16 +18,16 @@ const QuizPreview = () => {
 
             {/* [list of topics] */}
             <ul>
-                {topics.map((topic, index) => {
+                {topics?.map((topic, index) => (
                     <li key={index}>{topic.name}</li>
-                })}
+                ))}
             </ul>
 
             {/* Motivational blurb */}
-            <p>You've got this — let's go!</p>
+            <p className="body-sm blurb">You've got this — let's go!</p>
 
             {/* start quiz button */}
-            <button type="button" onClick={() => startQuiz()}>
+            <button className="primary-btn" type="button" onClick={() => navigate("question/0")}>
                 Start Quiz
             </button>
         </div>

@@ -23,6 +23,7 @@ import { useContext, useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight, faX, faXmark, faCaretUp, faFlag, faThumbTack } from '@fortawesome/free-solid-svg-icons'
+import { faFlag as faRegularFlag } from '@fortawesome/free-regular-svg-icons';
 import TaskForm from './TaskForm';
 import { saveInteraction } from './services/SQLService';
 import { ToastContainer } from 'react-toastify';
@@ -33,7 +34,12 @@ import { inject } from '@vercel/analytics';
 import SentenceSimilarity from './SentenceSimilarity';
 import Home from './Home';
 import Quiz from './features/quiz/QuizWrapper';
-library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight, faXmark, faCaretUp, faFlag, faThumbTack )
+import QuizPreview from './features/quiz/QuizPreview';
+import QuizQuestion from './features/quiz/QuizQuestion';
+import QuizSummary from './features/quiz/QuizSummary';
+import QuizQuestionReview from './features/quiz/QuizQuestionReview';
+import ReviewComplete from './features/quiz/ReviewComplete';
+library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight, faXmark, faCaretUp, faFlag, faRegularFlag, faThumbTack )
 
 function App() {
   const global = useContext(AppContext);
@@ -541,7 +547,15 @@ function App() {
           <Route exact path = "/" >
             <Route path='/' element={ global.userID ? <Navigate to="/test" /> : <Navigate to="/sign_in" /> } />
 
-            <Route path="quiz/:id" element={<Quiz />} />
+            <Route path="quiz/:id" element={<Quiz />} >
+              <Route index element={<QuizPreview />} />
+              <Route path="question/:qIndex" element={<QuizQuestion />} />
+              <Route path="review" >
+                <Route index element={<QuizSummary />} />
+                <Route path=":qIndex" element={<QuizQuestionReview />} />
+                <Route path='complete' element={<ReviewComplete />} />
+              </Route>
+            </Route>
 
             <Route path = "test">
               <Route path = "" element={<Test />} />
