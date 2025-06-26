@@ -179,8 +179,39 @@ export const QuizProvider = ({
     }, [quizId, navigate]);
 
     const finishQuiz = useCallback(() => {
-        navigate(`/quiz/${quizId}/review`);
+        setIsLoading(true);
+
+        let updatedQuestions;
+        let score;
+
+        // Update quizAttempt first
+        setQuizAttempt(prev => {
+            updatedQuestions = prev.questions.map(q => ({
+                ...q,
+                is_correct: q.user_answer === q.correct_answer,
+            }));
+
+            score = updatedQuestions.reduce(
+                (acc, q) => acc + (q.is_correct ? 1 : 0), 0
+            );
+
+            score = Math.round((score / updatedQuestions.length) * 100);
+
+            return {
+                ...prev,
+                questions: updatedQuestions,
+                score,
+                completed_at: new Date(),
+            };
+        });
+
+        // Defer loading + navigation to after state update settles
+        requestAnimationFrame(() => {
+            setIsLoading(false);
+            navigate(`/quiz/${quizId}/review`);
+        });
     }, [quizId, navigate]);
+
 
     const reviewQuiz = useCallback(() => {
         navigate(`/quiz/${quizId}/review/0`);

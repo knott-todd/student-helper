@@ -29,7 +29,7 @@ const QuestionOptions = ({
           <button
             key={index}
             className={buttonClass}
-            disabled={mode === "review"}
+            disabled={mode === "review" && index !== userAnswer && index !== correctAnswer}
             onClick={() => mode === "quiz" && onSelect?.(index)}
           >
             {option}

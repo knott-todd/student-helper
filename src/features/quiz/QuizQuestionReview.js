@@ -11,7 +11,7 @@ import { QuizQuestionNavigation } from "./QuizQuestionNavigation";
 const QuizQuestionReview = () => {
 
     const question = useCurrentQuestion();
-    
+
     return (
         <div>
             {/* Progress bar */}
@@ -29,7 +29,12 @@ const QuizQuestionReview = () => {
             <p style={{marginTop: "2rem"}}>{question.motivationalBlurb}</p>
             
             {/* Multiple choice buttons */}
-            <QuestionOptions questionOptions={question?.options} userAnswer={question.user_answer} correctAnswer={question.correct_answer} />
+            <QuestionOptions 
+                mode="review"
+                questionOptions={question.options}
+                userAnswer={question.user_answer}
+                correctAnswer={question.correct_answer}
+            />
     
             <QuizQuestionNavigation isReview={true} isLastQuestion={question.isLastQuestion} />
 
