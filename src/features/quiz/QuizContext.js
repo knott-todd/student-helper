@@ -90,7 +90,7 @@ export const QuizProvider = ({ children, quizId, initialTopics = [], initialQues
             meta: {},
             score: null,
             started_at: new Date(),
-            completed_at: new Date(),
+            completed_at: null,
             topics: [
                 { id: 1, name: "Simple Harmonic Motion", delta: null, score: null, totalNumQuestions: 1 },
                 { id: 2, name: "Thermodynamics", delta: null, score: null, totalNumQuestions: 1 },
@@ -98,24 +98,28 @@ export const QuizProvider = ({ children, quizId, initialTopics = [], initialQues
             questions: [
                 {
                     correct_answer: 0,
-                    user_answer: 1,
+                    user_answer: null,
                     is_correct: false,
                     is_pinned: false,
                     topic: 1,
-                    question_text: "Sample Question",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+                    question_text: "What is Newton's law of motion?",
+                    options: ["F = ma", "F = m/a", "Fa = m", "Fm = a"],
                 },
                 {
                     correct_answer: 0,
-                    user_answer: 1,
+                    user_answer: null,
                     is_correct: false,
                     is_pinned: false,
                     topic: 2,
-                    question_text: "Sample Question 2",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+                    question_text: "This is the last question",
+                    options: ["True", "False"],
                 },
             ],
         };
+
+        // Set isFinalQuestion flag for the last question
+        const lastIndex = idealQuizAttempt.questions.length - 1;
+        idealQuizAttempt.questions[lastIndex].isLastQuestion = true;
 
         setQuizAttempt(idealQuizAttempt);
         setTopics(idealQuizAttempt.topics);
@@ -131,13 +135,13 @@ export const QuizProvider = ({ children, quizId, initialTopics = [], initialQues
     }, [quizAttempt]);
 
     // Navigation actions
-    const goTo = (nextIndexOrFn) => {
+    const goTo = (nextIndexOrFn, mode = 'question') => {
         setCurrentIndex(prev => {
             const next = typeof nextIndexOrFn === 'function'
                 ? nextIndexOrFn(prev)
                 : nextIndexOrFn;
 
-            navigate(`/quiz/${quizId}/question/${next}`);
+            navigate(`/quiz/${quizId}/${mode}/${next}`);
             return next;
         });
     };
