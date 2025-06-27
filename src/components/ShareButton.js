@@ -21,7 +21,7 @@ const ShareButton = ({ url, title, text }) => {
 
   return (
     <button onClick={handleShare} className="primary-btn full-width-btn">
-      <span style={{display: "flex", gap: "0.5rem", justifyContent: "center"}}>Share <FontAwesomeIcon icon={faArrowUpFromBracket} /> </span>
+      <span style={{display: "flex", gap: "0.5rem", justifyContent: "center"}}>Share Awesomeness <FontAwesomeIcon icon={faArrowUpFromBracket} /> </span>
     </button>
   );
 };
