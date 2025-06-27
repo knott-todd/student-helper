@@ -21,7 +21,7 @@ const QuizLayout = () => {
 
   return (
     <div className={styles.quizWrapper}>
-      <button className={styles.exitButton} onClick={exitQuiz}>
+      <button className={`${styles.exitButton} tertiary-btn`} onClick={exitQuiz}>
         <FontAwesomeIcon icon="xmark" />
       </button>
 

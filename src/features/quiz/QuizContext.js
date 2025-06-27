@@ -12,6 +12,78 @@ export const useCurrentQuestion = () => {
   return quizAttempt?.questions?.[currentIndex] || null;
 };
 
+const generateReviewBlurb = (score) => {
+    if (score === 100) {
+        return "Flawless victory! Keep shining.";
+    } else if (score >= 90) {
+        return "Awesome work! So close to perfect—let's get that 100%!";
+    } else if (score >= 80) {
+        return "Great job! You really know your stuff.";
+    } else if (score >= 50) {
+        return "Good effort! A little more practice and you'll ace it.";
+    } else {
+        return "Mistakes today = knowledge for tomorrow. You’ve got this!";
+    }
+};
+
+const calculateDelta = (topicScore, numQuestions) => {
+    if (numQuestions === 0) return 0;
+
+    topicScore = Math.round(topicScore / numQuestions * 100);
+
+    if (topicScore >= 90) return 10;
+    if (topicScore >= 80) return 5;
+    if (topicScore >= 50) return 0;
+    if (topicScore >= 30) return -5;
+    else return -10;
+};
+
+const finalizeQuizAttempt = (attempt) => {
+    const updatedQuestions = attempt.questions.map(q => ({
+        ...q,
+        is_correct: q.user_answer === q.correct_answer,
+    }));
+
+    let score = updatedQuestions.reduce(
+        (acc, q) => acc + (q.is_correct ? 1 : 0), 0
+    );
+
+    score = Math.round((score / updatedQuestions.length) * 100);
+
+    const incorrectIndexes = updatedQuestions
+        .map((q, index) => q.is_correct ? null : index)
+        .filter(index => index !== null);
+
+    const reviewBlurb = generateReviewBlurb(score);
+
+    // calculate topics score
+    const updatedTopics = attempt.topics.map(topic => {
+        const topicQuestions = updatedQuestions.filter(q => q.topic === topic.id);
+        const topicScore = topicQuestions.reduce(
+            (acc, q) => acc + (q.is_correct ? 1 : 0), 0
+        );
+        const totalNumQuestions = topicQuestions.length;
+        const delta = calculateDelta(topicScore, totalNumQuestions);
+
+        return {
+            ...topic,
+            score: topicScore,
+            delta,
+            totalNumQuestions: totalNumQuestions
+        };
+    });
+
+    return {
+        ...attempt,
+        questions: updatedQuestions,
+        score,
+        completed_at: new Date(),
+        review_blurb: reviewBlurb,
+        topics: updatedTopics,
+        incorrectIndexes
+    };
+}
+
 export const QuizProvider = ({
     children,
     quizId,
@@ -20,7 +92,6 @@ export const QuizProvider = ({
 }) => {
     const [topics, setTopics] = useState(initialTopics);
     const [questions, setQuestions] = useState(initialQuestions);
-    const [answers, setAnswers] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [quizAttempt, setQuizAttempt] = useState({questions: [], topics: []});
     const [isLoading, setIsLoading] = useState(true);
@@ -43,15 +114,13 @@ export const QuizProvider = ({
         id: 1,
         user: 1,
         meta: {},
-        score: 0,
+        score: null,
         started_at: new Date(),
-        completed_at: null,
+        completed_at: new Date(),
         topics: [
-            {
-                id: 1,
-                name: "Sample Topic",
-                module: 1,
-            }],
+            { id: 1, name: "Simple Harmonic Motion", delta: null, score: null, totalNumQuestions: 1 },
+            { id: 2, name: "Thermodynamics", delta: null, score: null, totalNumQuestions: 1 }
+        ],
         questions: [
             {
                 correct_answer: 0,
@@ -94,12 +163,22 @@ export const QuizProvider = ({
                 user_answer: 1,
                 pastpaper: 1,
                 objective: 1,
-                topic: 1,
+                topic: 2,
                 question_text: "Sample Question 2",
                 options: ["Option 1", "Option 2", "Option 3", "Option 4"],
             }
         ]
     };
+
+    useEffect(() => {
+        if (
+            quizAttempt.completed_at &&
+            typeof quizAttempt.score !== "number"
+        ) {
+            setQuizAttempt(prev => finalizeQuizAttempt(prev));
+        }
+    }, [quizAttempt]);
+
 
     useEffect(() => {
         // if (topics.length && questions.length) return; // Data already present, skip fetch
@@ -120,9 +199,6 @@ export const QuizProvider = ({
         setQuestions(idealQuizAttempt.questions || []);
         setIsLoading(false);
 
-        console.log(quizAttempt);
-        console.log(idealQuizAttempt);
-
     }, [quizId]);
 
     useEffect(() => {
@@ -139,9 +215,16 @@ export const QuizProvider = ({
 
     const nextReviewQuestion = useCallback(() => {
         setCurrentIndex(current => {
-            const next = current + 1;
-            navigate(`/quiz/${quizId}/review/${next}`);
-            return next;
+            const next = quizAttempt.incorrectIndexes.find((val) => val > current);
+
+            if(next) {
+                navigate(`/quiz/${quizId}/review/${next}`);
+                return next;
+
+            } else {
+                navigate(`/quiz/${quizId}/review/complete`);
+                return current;
+            }
         });
     }, [navigate, quizId]);
 
@@ -159,7 +242,10 @@ export const QuizProvider = ({
         if (currentIndex <= 0) return;
         
         setCurrentIndex(current => {
-            const prev = current - 1;
+            const prev = quizAttempt.incorrectIndexes.reverse().find((val) => val < current);
+
+            if (!prev) return current;
+
             navigate(`/quiz/${quizId}/review/${prev}`);
             return prev;
         });
@@ -181,29 +267,8 @@ export const QuizProvider = ({
     const finishQuiz = useCallback(() => {
         setIsLoading(true);
 
-        let updatedQuestions;
-        let score;
-
         // Update quizAttempt first
-        setQuizAttempt(prev => {
-            updatedQuestions = prev.questions.map(q => ({
-                ...q,
-                is_correct: q.user_answer === q.correct_answer,
-            }));
-
-            score = updatedQuestions.reduce(
-                (acc, q) => acc + (q.is_correct ? 1 : 0), 0
-            );
-
-            score = Math.round((score / updatedQuestions.length) * 100);
-
-            return {
-                ...prev,
-                questions: updatedQuestions,
-                score,
-                completed_at: new Date(),
-            };
-        });
+        setQuizAttempt(prev => finalizeQuizAttempt(prev));
 
         // Defer loading + navigation to after state update settles
         requestAnimationFrame(() => {
@@ -214,9 +279,9 @@ export const QuizProvider = ({
 
 
     const reviewQuiz = useCallback(() => {
-        navigate(`/quiz/${quizId}/review/0`);
-        setCurrentIndex(0);
-    }, [quizId, navigate]);
+        navigate(`/quiz/${quizId}/review/${quizAttempt.incorrectIndexes[0]}`);
+        setCurrentIndex(quizAttempt.incorrectIndexes[0]);
+    }, [quizId, navigate, quizAttempt.incorrectIndexes]);
 
     const exitQuiz = useCallback(() => {
         navigate(`/`);
@@ -252,20 +317,37 @@ export const QuizProvider = ({
     const finishQuizReview = useCallback(() => {
         navigate(`/quiz/${quizId}/review/complete`);
     }, [quizId]);
+
+    const toggleQuestionPin = useCallback(() => {
+        setQuizAttempt(current => {
+            const updatedQuestions = current.questions.map((q, index) =>
+            index === currentIndex
+                ? { ...q, is_pinned: !q.is_pinned }
+                : q
+            );
+
+            return {
+                ...current,
+                questions: updatedQuestions,
+            };
+        });
+    }, [currentIndex]);
+
+
         
 
     return (
         <QuizContext.Provider value={{
             quizId, questions, setQuestions,
             topics, setTopics,
-            answers, setAnswers,
             currentIndex, setCurrentIndex, 
             quizAttempt, nextQuestion, prevQuestion, 
             skipQuestion, startQuiz, finishQuiz,
             reviewQuiz, exitQuiz, reviewNextQuestion,
             finishQuizReview, selectAnswer,
             nextReviewQuestion, prevReviewQuestion,
-
+            incorrectIndexes: quizAttempt.incorrectIndexes,
+            toggleQuestionPin
         }}>
             {isLoading ? <p>Loading...</p> : children}
         </QuizContext.Provider>

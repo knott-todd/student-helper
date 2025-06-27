@@ -7,6 +7,10 @@
 
 }
 
+button {
+    border: 1px transparent solid;
+}
+
 button.correct, button.correct:hover {
     background-color: var(--green);
 }
@@ -17,4 +21,5 @@ button.incorrect, button.incorrect:hover {
 
 button.selected, button.selected:hover {
     background-color: var(--bg-color-light);
+    border: 1px var(--text-color-muted) solid;
 }

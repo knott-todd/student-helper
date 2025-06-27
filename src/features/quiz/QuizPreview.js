@@ -19,15 +19,15 @@ const QuizPreview = () => {
             {/* [list of topics] */}
             <ul>
                 {topics?.map((topic, index) => (
-                    <li key={index}>{topic.name}</li>
+                    <li key={index}><p style={{fontSize: "14"}}>{topic.name}</p></li>
                 ))}
             </ul>
 
             {/* Motivational blurb */}
-            <p className="body-sm blurb">You've got this — let's go!</p>
+            <p style={{marginTop: "2rem"}} className="body-sm blurb">You've got this — let's go!</p>
 
             {/* start quiz button */}
-            <button className="primary-btn" type="button" onClick={() => navigate("question/0")}>
+            <button style={{marginTop: "1rem"}} className="primary-btn full-width-btn" type="button" onClick={() => navigate("question/0")}>
                 Start Quiz
             </button>
         </div>

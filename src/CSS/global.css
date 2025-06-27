@@ -625,7 +625,6 @@ textarea {
 
 .primary-btn {
     background-color: var(--text-color);
-    color: var(--bg-color-dark);
     border-radius: 4px;
     padding: 12px 16px;
     font-size: 12px;
@@ -634,6 +633,11 @@ textarea {
     cursor: pointer;
     transition: 0.2s;
     line-height: 12px;
+}
+
+.primary-btn *, .primary-btn {
+    
+    color: var(--bg-color-dark);
 }
 
 .full-width-btn {
@@ -666,8 +670,7 @@ button.secondary-btn {
     background-color: var(--bg-color);
     color: var(--text-color);
     cursor: pointer;
-    border-radius: 4px;
-    border: none;
+    border-radius: 10px;
     padding: 8px 16px;
 }
 

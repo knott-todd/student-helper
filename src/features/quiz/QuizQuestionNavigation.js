@@ -5,13 +5,13 @@ export const QuizQuestionNavigation = ({ isLastQuestion, isReview}) => {
     const { nextQuestion, prevQuestion, 
         skipQuestion, finishQuiz, 
         finishQuizReview, nextReviewQuestion, 
-        prevReviewQuestion, currentIndex } = useQuizContext();
+        prevReviewQuestion, currentIndex, incorrectIndexes } = useQuizContext();
     
     return (
 	<span style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'flex-end', marginTop: '4rem' }}>
 
         {/* Back */}
-        { currentIndex === 0 ? null : (
+        { currentIndex === 0 || (isReview && currentIndex === incorrectIndexes?.[0]) ? null : (
             <button className="quiz-back-button secondary-btn" onClick={() => isReview ? prevReviewQuestion() : prevQuestion()}>
                 Back
             </button>
@@ -25,7 +25,7 @@ export const QuizQuestionNavigation = ({ isLastQuestion, isReview}) => {
         }
 
         {/* Next or Finish button */}
-        { isLastQuestion ? (
+        { isLastQuestion || (isReview && currentIndex === incorrectIndexes?.[incorrectIndexes?.length - 1]) ? (
             <button className="quiz-finish-button primary-btn" onClick={() => isReview ? finishQuizReview() : finishQuiz()}>
                 Finish
             </button>   
