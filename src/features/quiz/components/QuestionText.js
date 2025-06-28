@@ -9,7 +9,7 @@ const QuestionText = ({ questionText, isPinned }) => {
     return (
         <span style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center' }}>
             {/* Question text */}
-            <p>{questionText}</p>
+            <p style={{textAlign: 'justify', fontFamily: 'serif', maxWidth: '50ch'}}>{questionText}</p>
 
             {/* Pin icon */}
             <button style={{width: 24}} className="tertiary-btn" onClick={() => toggleQuestionPin()}>

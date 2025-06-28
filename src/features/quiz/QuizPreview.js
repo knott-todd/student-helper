@@ -4,7 +4,7 @@ import styles from './css/QuizPreview.module.css';
 
 const QuizPreview = () => {
     // get topics
-    const { topics } = useQuizContext();
+    const { topics, questions } = useQuizContext();
 
     const navigate = useNavigate();
 
@@ -12,12 +12,12 @@ const QuizPreview = () => {
         <div className="quiz-preview">
             <h2>Get Ready for Your Quiz</h2>
 
-            <p>10 questions on...</p>
+            <p>{questions.length} questions on...</p>
 
             <div className="line"></div>
 
             {/* [list of topics] */}
-            <ul>
+            <ul style={{listStyleType: "none", paddingLeft: 0}}>
                 {topics?.map((topic, index) => (
                     <li key={index}><p style={{fontSize: "14"}}>{topic.name}</p></li>
                 ))}

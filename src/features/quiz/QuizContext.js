@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { getQuizAttempt, updateQuizAttempt } from './services/SQLService';
 
 const QuizContext = createContext();
 export const useQuizContext = () => useContext(QuizContext);
@@ -64,7 +65,7 @@ const finalizeQuizAttempt = (attempt) => {
     };
 };
 
-export const QuizProvider = ({ children, quizId, initialTopics = [], initialQuestions = [] }) => {
+export const QuizProvider = ({ children, initialTopics = [], initialQuestions = [] }) => {
     const [topics, setTopics] = useState(initialTopics);
     const [questions, setQuestions] = useState(initialQuestions);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -72,7 +73,7 @@ export const QuizProvider = ({ children, quizId, initialTopics = [], initialQues
     const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
-    const { qIndex } = useParams();
+    const { id, qIndex } = useParams();
 
     // Sync currentIndex from URL
     useEffect(() => {
@@ -84,26 +85,28 @@ export const QuizProvider = ({ children, quizId, initialTopics = [], initialQues
 
     // Initial quiz mock
     useEffect(() => {
+        
         const idealQuizAttempt = {
             id: 1,
             user: 1,
             meta: {},
             score: null,
-            started_at: new Date(),
+            started_at: null,
             completed_at: null,
             topics: [
-                { id: 1, name: "Simple Harmonic Motion", delta: null, score: null, totalNumQuestions: 1 },
-                { id: 2, name: "Thermodynamics", delta: null, score: null, totalNumQuestions: 1 },
+                { id: 1, name: "Electrical Circuits", delta: null, score: null, totalNumQuestions: 1 },
+                { id: 2, name: "Electric Fields", delta: null, score: null, totalNumQuestions: 1 },
+                { id: 3, name: "Alternating Currents", delta: null, score: null, totalNumQuestions: 1 },
             ],
             questions: [
                 {
-                    correct_answer: 0,
+                    correct_answer: 2,
                     user_answer: null,
                     is_correct: false,
                     is_pinned: false,
                     topic: 1,
-                    question_text: "What is Newton's law of motion?",
-                    options: ["F = ma", "F = m/a", "Fa = m", "Fm = a"],
+                    question_text: "The 'driving force' for charges through an electrical circuit is provided by the",
+                    options: ["impedance", "inductance", "potential difference", "electrical resistance"],
                 },
                 {
                     correct_answer: 0,
@@ -111,21 +114,48 @@ export const QuizProvider = ({ children, quizId, initialTopics = [], initialQues
                     is_correct: false,
                     is_pinned: false,
                     topic: 2,
-                    question_text: "This is the last question",
-                    options: ["True", "False"],
+                    question_text: "A beta particle passes a point 100 nm away from an alpha particle. \
+                    What is the magnitude of the electrostatic force between the particles at that point?",
+                    options: ["4.6 x 10^(-14) N", "4.6 x 10^(-21) N", "4.6 x 10^(-39) N", "5.7 x 10^(-59) N"],
+                },
+                {
+                    correct_answer: 1,
+                    user_answer: null,
+                    is_correct: false,
+                    is_pinned: false,
+                    topic: 3,
+                    question_text: "A sinusoidal signal has a peak voltage of 5.0 V.\
+                    What is the root mean square value of this signal?",
+                    options: ["2.50 V", "3.54 V", "6.25 V", "7.07 V"],
                 },
             ],
         };
 
-        // Set isFinalQuestion flag for the last question
-        const lastIndex = idealQuizAttempt.questions.length - 1;
-        idealQuizAttempt.questions[lastIndex].isLastQuestion = true;
+        getQuizAttempt(id)
+        .then(result => {
 
-        setQuizAttempt(idealQuizAttempt);
-        setTopics(idealQuizAttempt.topics);
-        setQuestions(idealQuizAttempt.questions);
-        setIsLoading(false);
-    }, [quizId]);
+            // Set isFinalQuestion flag for the last question
+            const lastIndex = idealQuizAttempt.questions.length - 1;
+            idealQuizAttempt.questions[lastIndex].isLastQuestion = true;
+
+
+            setQuizAttempt(result);
+            setTopics(result.topics);
+            setQuestions(result.questions);
+
+            setIsLoading(false);
+
+        })
+        .catch(err =>{
+
+            setQuizAttempt(idealQuizAttempt);
+            setTopics(idealQuizAttempt.topics);
+            setQuestions(idealQuizAttempt.questions);
+
+            setIsLoading(false);
+
+        });
+    }, [id]);
 
     // Finalize score after submission
     useEffect(() => {
@@ -141,13 +171,22 @@ export const QuizProvider = ({ children, quizId, initialTopics = [], initialQues
                 ? nextIndexOrFn(prev)
                 : nextIndexOrFn;
 
-            navigate(`/quiz/${quizId}/${mode}/${next}`);
+            navigate(`/quiz/${id}/${mode}/${next}`);
             return next;
         });
     };
 
-    const startQuiz = useCallback(() => goTo(0), [goTo]);
-    const nextQuestion = useCallback(() => goTo(prev => prev + 1), [goTo]);
+    const startQuiz = useCallback(() => {
+        const started_at = new Date();
+        setQuizAttempt(current => ({...current, started_at}));
+        updateQuizAttempt(id, {started_at})
+        .catch(() => {})//TODO: Handle catch
+        goTo(0);
+    }, [goTo]);
+
+    const nextQuestion = useCallback(() => {
+        goTo(prev => prev + 1);
+    }, [goTo]);
     const prevQuestion = useCallback(() => goTo(prev => prev - 1), [goTo]);
 
     const reviewQuiz = useCallback(() => {
@@ -160,10 +199,10 @@ export const QuizProvider = ({ children, quizId, initialTopics = [], initialQues
             const next = quizAttempt.incorrectIndexes.find(i => i > prevIndex);
             if (next !== undefined) return next;
 
-            navigate(`/quiz/${quizId}/review/complete`);
+            navigate(`/quiz/${id}/review/complete`);
             return prevIndex; // fallback if already at the last one
         }, 'review');
-    }, [quizAttempt.incorrectIndexes, navigate, quizId]);
+    }, [quizAttempt.incorrectIndexes, navigate, id]);
 
 
     const prevReviewQuestion = useCallback(() => {
@@ -180,11 +219,11 @@ export const QuizProvider = ({ children, quizId, initialTopics = [], initialQues
         setQuizAttempt(prev => finalizeQuizAttempt(prev));
         requestAnimationFrame(() => {
             setIsLoading(false);
-            navigate(`/quiz/${quizId}/review`);
+            navigate(`/quiz/${id}/review`);
         });
-    }, [quizId, navigate]);
+    }, [id, navigate]);
 
-    const finishQuizReview = useCallback(() => navigate(`/quiz/${quizId}/review/complete`), [navigate, quizId]);
+    const finishQuizReview = useCallback(() => navigate(`/quiz/${id}/review/complete`), [navigate, id]);
 
     const exitQuiz = useCallback(() => navigate(`/`), [navigate]);
 
@@ -206,7 +245,7 @@ export const QuizProvider = ({ children, quizId, initialTopics = [], initialQues
 
     return (
         <QuizContext.Provider value={{
-            quizId, topics, questions, currentIndex, quizAttempt, isLoading,
+            id, topics, questions, currentIndex, quizAttempt, isLoading,
             startQuiz, nextQuestion, prevQuestion, skipQuestion: nextQuestion, finishQuiz,
             reviewQuiz, exitQuiz, finishQuizReview, nextReviewQuestion, prevReviewQuestion,
             selectAnswer, toggleQuestionPin

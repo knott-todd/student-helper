@@ -39,6 +39,7 @@ import QuizQuestion from './features/quiz/QuizQuestion';
 import QuizSummary from './features/quiz/QuizSummary';
 import QuizQuestionReview from './features/quiz/QuizQuestionReview';
 import ReviewComplete from './features/quiz/ReviewComplete';
+import QuizWrapper from './features/quiz/QuizWrapper';
 library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight, faXmark, faCaretUp, faFlag, faRegularFlag, faThumbTack )
 
 function App() {
@@ -547,7 +548,7 @@ function App() {
           <Route exact path = "/" >
             <Route path='/' element={ global.userID ? <Navigate to="/test" /> : <Navigate to="/sign_in" /> } />
 
-            <Route path="quiz/:id" element={<Quiz />} >
+            <Route path="quiz/:id" element={<QuizWrapper />} >
               <Route index element={<QuizPreview />} />
               <Route path="question/:qIndex" element={<QuizQuestion />} />
               <Route path="review" >

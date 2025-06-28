@@ -7,19 +7,21 @@
 
 }
 
-button {
+.optionsContainer button {
     border: 1px transparent solid;
+
+    height: 64px;
 }
 
-button.correct, button.correct:hover {
+.optionsContainer button.correct, .optionsContainer button.correct:hover {
     background-color: var(--green);
 }
 
-button.incorrect, button.incorrect:hover {
+.optionsContainer button.incorrect, .optionsContainer button.incorrect:hover {
     background-color: var(--red);
 }
 
-button.selected, button.selected:hover {
+.optionsContainer button.selected, .optionsContainer button.selected:hover {
     background-color: var(--bg-color-light);
     border: 1px var(--text-color-muted) solid;
 }

@@ -7,6 +7,9 @@ export const createQuizAttempt = (quizId, userId) =>
 export const getQuizAttempt = (attemptId) =>
   fetchBackend(`quiz_attempt/${attemptId}`, { fallback: null });
 
+export const updateQuizAttempt = (attemptId,updates) => 
+  patchBackend(`quiz_attempt/${attemptId}/`, updates);
+
 export const finalizeQuizAttempt = (attemptId) =>
   patchBackend(`quiz_attempt/${attemptId}/finalize`, {});
 

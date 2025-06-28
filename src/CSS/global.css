@@ -19,6 +19,12 @@
         --background-color: #f7f7f7;
         --content-background-color: #c5c5c57d;
         --primary-text-color: black;
+
+        --bg-color-dark: hsl(0, 0%, 90%);
+        --bg-color: hsl(0, 0%, 95%);
+        --bg-color-light: hsl(0, 0%, 100%);
+        --text-color: hsl(0, 0%, 5%);
+        --text-color-muted: hsl(0, 0%, 30%);
     }
 }
 
@@ -640,15 +646,6 @@ textarea {
     color: var(--bg-color-dark);
 }
 
-.full-width-btn {
-    width: 100%;
-    height: 44px;
-    padding: 8px 16px;
-    border-radius: 10px;
-    margin-top: 8px;
-    
-}
-
 button.primary-btn:hover {
     background-color: var(--text-color);
     color: var(--bg-color-dark);
@@ -670,7 +667,7 @@ button.secondary-btn {
     background-color: var(--bg-color);
     color: var(--text-color);
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 4px;
     padding: 8px 16px;
 }
 
@@ -696,4 +693,13 @@ button.tertiary-btn:hover {
 
 .tertiary-btn svg, .tertiary-btn:hover svg {
     color: inherit;
+}
+
+button.full-width-btn {
+    width: 100%;
+    height: 44px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    margin-top: 8px;
+    
 }

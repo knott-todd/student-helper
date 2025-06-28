@@ -4,13 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from './css/QuizWrapper.module.css';
 
 const QuizWrapper = () => {
-  const { id } = useParams();
   const location = useLocation();
 
-  const { topicIDs = null, questions = null } = location.state || {};
+  const { topicIDs = [], questions = [] } = location.state || {};
 
   return (
-    <QuizProvider quizId={id} initialTopics={topicIDs} initialQuestions={questions}>
+    <QuizProvider initialTopics={topicIDs} initialQuestions={questions}>
       <QuizLayout />
     </QuizProvider>
   );
@@ -24,8 +23,11 @@ const QuizLayout = () => {
       <button className={`${styles.exitButton} tertiary-btn`} onClick={exitQuiz}>
         <FontAwesomeIcon icon="xmark" />
       </button>
+      <div className={styles.content}>
 
-      <Outlet />
+        <Outlet />
+        
+      </div>
     </div>
   );
 };
