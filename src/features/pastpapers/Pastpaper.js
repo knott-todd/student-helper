@@ -1,13 +1,13 @@
 import React, { useContext } from "react"
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react";
-import { addMCQs, getPaperQuestions, getPastpaper } from "./services/SQLService";
+import { addMCQs, getPaperQuestions, getPastpaper } from "../../services/SQLService";
 import { Link } from "react-router-dom";
-import ObjectiveSetter from "./ObjectiveSetter";
-import StructureParser from "./StructureParser";
-import {AppContext} from "./AppContext";
-import MCQUserInterface from "./MCQUserInterface";
-import "./CSS/Pastpaper.css"
+import ObjectiveSetter from "../data_processing/ObjectiveSetter";
+import StructureParser from "../data_processing/StructureParser";
+import {AppContext} from "../../AppContext";
+import MCQUserInterface from "../../MCQUserInterface";
+import "../../CSS/Pastpaper.css";
 
 const Pastpaper = () => {
     const {id} = useParams();

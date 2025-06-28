@@ -1,11 +1,11 @@
 import { useEffect, useState, useContext } from "react";
-import { Link, useParams } from "react-router-dom";
-import { getTopic, getTopicQuestions, updateUserQuestion, getPastpaper } from "./services/SQLService";
-import FamiliarityDropdown from "./FamiliarityDropdown";
-import CompleteCheckbox from "./CompleteCheckbox";
-import {AppContext} from "./AppContext";
-import './CSS/global.css'
-import './CSS/TopicQuestions.css'
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { getTopic, getTopicQuestions, updateUserQuestion, getPastpaper, addQuizAttempt } from "../../services/SQLService";
+import FamiliarityDropdown from "../../FamiliarityDropdown";
+import CompleteCheckbox from "../../CompleteCheckbox";
+import {AppContext} from "../../AppContext";
+import '../../CSS/global.css'
+import '../../CSS/TopicQuestions.css'
 
 const TopicQuestions = () => {
     const {id} = useParams();
@@ -13,6 +13,9 @@ const TopicQuestions = () => {
     const [quests, setQuests] = useState([]);
     const [topic, setTopic] = useState({});
     const [paper, setPaper] = useState({});
+    const [quizId, setQuizId] = useState({});
+
+    const navigate = useNavigate();
 
     const global = useContext(AppContext);
 
@@ -71,8 +74,14 @@ const TopicQuestions = () => {
         getTopic(id, global.userID).then(result => {
             setTopic(result)
         });
+        
 
     }, [quests]);
+
+    const handleCreateQuiz = async (userID, topicIDs) => {
+        const {quizId,questions} = await addQuizAttempt(userID, topicIDs);
+        navigate(`/quiz/${quizId}`, {state: {questions, topicIDs}});
+    }
 
     const handleYearCollapse = paperID => {
         const currCollapse = document.getElementById(`collapse${paperID}`);
@@ -106,6 +115,11 @@ const TopicQuestions = () => {
         <div className="body-div objective-questions">
             {/* <h1 className="page-title">{topic.name}</h1> */}
             {/* <h4>Familiarity: {(topic.familiarity * 100).toFixed(2)}%</h4> */}
+
+
+            <button type="button" onClick={() => handleCreateQuiz(global.userID, [topic.id])} >
+                Take Quiz
+            </button>
 
             <h2>
                 Appears in:

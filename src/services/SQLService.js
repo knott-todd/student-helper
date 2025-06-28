@@ -556,6 +556,18 @@ export async function addQuestion(question) {
     return await response.json();
 }
 
+export async function addQuizAttempt(userId, selectedTopics) {
+    const response = await fetch(`${backendURL}/create_quiz_attempt`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            "Bypass-Tunnel-Reminder": "true"
+        },
+        body: JSON.stringify({userId, selectedTopics})
+    })
+    return await response.json();
+}
+
 export async function addTask(task, userID) {
 
     const deadlineTimeInHours = 15;

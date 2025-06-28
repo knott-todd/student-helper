@@ -1,0 +1,27 @@
+.optionsContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+
+    margin-top: 3rem;
+
+}
+
+.optionsContainer button {
+    border: 1px transparent solid;
+
+    height: 64px;
+}
+
+.optionsContainer button.correct, .optionsContainer button.correct:hover {
+    background-color: var(--green);
+}
+
+.optionsContainer button.incorrect, .optionsContainer button.incorrect:hover {
+    background-color: var(--red);
+}
+
+.optionsContainer button.selected, .optionsContainer button.selected:hover {
+    background-color: var(--bg-color-light);
+    border: 1px var(--text-color-muted) solid;
+}

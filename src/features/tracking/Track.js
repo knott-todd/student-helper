@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState, memo } from "react";
 import { Link } from "react-router-dom";
-import { getModules } from "./services/SQLService";
-import './CSS/global.css'
-import './CSS/Track.css'
-import { AppContext } from "./AppContext";
+import { getModules } from "../../services/SQLService";
+import "../../CSS/global.css";
+import "../../CSS/Track.css";
+import { AppContext } from "../../AppContext";
 import { faFutbolBall } from "@fortawesome/free-solid-svg-icons";
-import Progress from "./Progress";
+import Progress from "../../Progress";
 
 const Track = memo(() => {
     const [modules, setModules] = useState([]);

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { addQuestion, deletePaperQuestions } from "./services/SQLService";
+import { addQuestion, deletePaperQuestions } from "../../services/SQLService";
 
 const StructureParser = props => {
     const [quests, setQuests] = useState([{}]);

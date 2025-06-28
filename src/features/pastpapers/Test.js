@@ -1,11 +1,11 @@
 import { useState, useEffect, useContext } from "react";
-import { getPaperQuestions, getPastpapers, getUserSubject } from "./services/SQLService";
+import { getPaperQuestions, getPastpapers, getUserSubject } from "../../services/SQLService";
 import { Route, Routes, Router, Link } from "react-router-dom";
-import './CSS/global.css';
-import './CSS/Test.css';
-import {AppContext} from "./AppContext";
+import '../../CSS/global.css';
+import '../../CSS/Test.css';
+import {AppContext} from "../../AppContext";
 import Questions from "./Questions";
-import SingleProgress from "./SingleProgress";
+import SingleProgress from "../../SingleProgress";
 
 
 const Test = () => {

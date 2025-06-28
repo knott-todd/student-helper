@@ -1,28 +1,29 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import './CSS/App.css';
-import Pastpaper from './Pastpaper';
-import Test from './Test';
-import Markscheme from './Markscheme';
-import Questions from './Questions';
+import Pastpaper from './features/pastpapers/Pastpaper';
+import Test from './features/pastpapers/Test';
+import Markscheme from './features/pastpapers/Markscheme';
+import Questions from './features/pastpapers/Questions';
 import Navbar from './Navbar';
-import Track from './Track';
-import ObjectiveQuestions from './ObjectiveQuestions';
-import Module from './Module';
+import Track from './features/tracking/Track';
+import ObjectiveQuestions from './features/tracking/ObjectiveQuestions';
+import Module from './features/tracking/Module';
 import Header from './Header';
-import Topic from './Topic';
+import Topic from './features/tracking/Topic';
 import Tasks from './Tasks';
 import './CSS/global.css';
 import {AppContext} from './AppContext';
-import ObjectiveInsert from './ObjectiveInsert';
-import ObjectiveSetter from './ObjectiveSetter';
-import StructureParser from './StructureParser';
-import TopicQuestions from './TopicQuestions';
+import ObjectiveInsert from './features/data_processing/ObjectiveInsert';
+import ObjectiveSetter from './features/data_processing/ObjectiveSetter';
+import StructureParser from './features/data_processing/StructureParser';
+import TopicQuestions from './features/tracking/TopicQuestions';
 import SignIn from './SignIn';
 import Refresh from './Refresh';
 import { useContext, useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import { faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight, faX, faXmark, faCaretUp, faFlag, faThumbTack } from '@fortawesome/free-solid-svg-icons'
+import { faFlag as faRegularFlag } from '@fortawesome/free-regular-svg-icons';
 import TaskForm from './TaskForm';
 import { saveInteraction } from './services/SQLService';
 import { ToastContainer } from 'react-toastify';
@@ -32,7 +33,14 @@ import { useState } from 'react';
 import { inject } from '@vercel/analytics';
 import SentenceSimilarity from './SentenceSimilarity';
 import Home from './Home';
-library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight )
+import Quiz from './features/quiz/QuizWrapper';
+import QuizPreview from './features/quiz/QuizPreview';
+import QuizQuestion from './features/quiz/QuizQuestion';
+import QuizSummary from './features/quiz/QuizSummary';
+import QuizQuestionReview from './features/quiz/QuizQuestionReview';
+import ReviewComplete from './features/quiz/ReviewComplete';
+import QuizWrapper from './features/quiz/QuizWrapper';
+library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight, faXmark, faCaretUp, faFlag, faRegularFlag, faThumbTack )
 
 function App() {
   const global = useContext(AppContext);
@@ -539,6 +547,16 @@ function App() {
         <Routes>
           <Route exact path = "/" >
             <Route path='/' element={ global.userID ? <Navigate to="/test" /> : <Navigate to="/sign_in" /> } />
+
+            <Route path="quiz/:id" element={<QuizWrapper />} >
+              <Route index element={<QuizPreview />} />
+              <Route path="question/:qIndex" element={<QuizQuestion />} />
+              <Route path="review" >
+                <Route index element={<QuizSummary />} />
+                <Route path=":qIndex" element={<QuizQuestionReview />} />
+                <Route path='complete' element={<ReviewComplete />} />
+              </Route>
+            </Route>
 
             <Route path = "test">
               <Route path = "" element={<Test />} />
