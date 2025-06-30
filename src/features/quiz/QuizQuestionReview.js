@@ -12,12 +12,14 @@ const QuizQuestionReview = () => {
 
     const question = useCurrentQuestion();
 
+    const { topics } = useQuizContext();
+
     return (
         <div>
             {/* Progress bar */}
             <QuizProgressBar />
 
-            <p style={{position: "absolute", top: "4rem", left: "1.5rem"}}>Topic: {question?.topics?.[0].name}</p>
+            {/* <p style={{position: "absolute", top: "6rem", left: "2rem"}}>Topic: {topics[question.topic].name}</p> */}
     
             {/* Report icon */}
             <ReportIcon />
