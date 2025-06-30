@@ -3,21 +3,17 @@
     flex: 1;
     flex-direction: column;
     justify-content: start;
-    height: 10rem;
+    height: 4rem;
 }
 
 .questionBox, button.questionBox:hover {
     flex: 0 0 1rem;
-    background-color: var(--text-color-muted);
-    color: var(--text-color-muted);
+    background-color: var(--bg-color-light);
+    color: var(--bg-color-light);
     border-radius: 2px;
     border: solid 1px var(--bg-color-dark);
     padding: 0;
     overflow: hidden;
-}
-
-button.questionBox, button.questionBox * {
-    box-sizing: border-box;
 }
 
 
@@ -27,7 +23,7 @@ button.questionBox, button.questionBox * {
 }
 
 .current.questionContainer {
-    flex: 1.05;
+    flex: 1.2;
 
 }
 
@@ -36,8 +32,8 @@ button.questionBox, button.questionBox * {
 }
 
 .completed {
-    background-color: var(--text-color);
-    color: var(--text-color);
+    background-color: var(--text-color-muted);
+    color: var(--text-color-muted);
 }
 
 .incorrect, button.incorrect:hover {
@@ -58,9 +54,25 @@ button.questionBox, button.questionBox * {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 2px;
+}
+
+.content {
     position: absolute;
     top: 2rem;
-    left: 5rem;
-    width: 80%;
-    gap: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    width: 100%;
+    padding: 0 2rem;
+    padding-left: 5rem;
+    box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+    .content {
+        max-width: 700px;
+        width: 100%;
+        padding-left: 2rem;
+    }
 }

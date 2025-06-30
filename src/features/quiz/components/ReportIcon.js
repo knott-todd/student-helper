@@ -1,12 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFlag as faRegularFlag } from '@fortawesome/free-regular-svg-icons';
+import styles from '../css/ReportIcon.module.css'
 
 const ReportIcon = () => {
     return (
-        <button style={{ position: 'absolute', top: '2rem', right: '1rem' }} className="tertiary-btn quiz-report-button">
-            <FontAwesomeIcon icon={faRegularFlag} />
+        <div style={{position: 'relative', width: '100%', marginTop: '-2rem'}}>
+            <button className={`${styles.reportIcon} tertiary-btn`}>
+                <FontAwesomeIcon icon={faRegularFlag} />
 
-        </button>
+            </button>
+        </div>
     );
 }
 

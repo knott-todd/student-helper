@@ -4,6 +4,7 @@ import styles from '../css/QuizProgressBar.module.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate, useParams } from "react-router-dom";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { div } from "@tensorflow/tfjs";
 
 const QuizProgressBar = () => {
 
@@ -14,8 +15,9 @@ const QuizProgressBar = () => {
     const { id } = useParams();
 
     return (
-        <div className={`${styles.container} `}>
-            {questions.map((question, i) => (
+        <div className={`${styles.content} `}>
+            <div className={`${styles.container} `}>
+                {questions.map((question, i) => (
                 <div className={`${styles.questionContainer} ${currentIndex === i ? styles.current : ''}`}>
                     
                     <button className={`\
@@ -37,6 +39,8 @@ const QuizProgressBar = () => {
                     : ''}
                 </div>
             ))}
+        </div>
+
         </div>
     )
 }

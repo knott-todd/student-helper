@@ -223,6 +223,7 @@ export const QuizProvider = ({ children }) => {
 
     const finishQuiz = useCallback(() => {
 
+        setCurrentIndex(null);
         setIsLoading(true);
         setQuizAttempt(prev => finalizeQuizAttempt(prev));
         requestAnimationFrame(() => {
@@ -246,7 +247,7 @@ export const QuizProvider = ({ children }) => {
             
             setCurrentIndex(null);
             navigate(`/quiz/${id}/review/complete`);
-            
+
         })
     }, [navigate, id]);
 

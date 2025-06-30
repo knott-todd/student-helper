@@ -7,7 +7,7 @@ const QuestionText = ({ questionText, isPinned }) => {
     const { toggleQuestionPin } = useQuizContext();
 
     return (
-        <span style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center' }}>
+        <span style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center', marginTop: '8rem' }}>
             {/* Question text */}
             <p style={{textAlign: 'justify', fontFamily: 'serif', maxWidth: '50ch'}}>{questionText}</p>
 

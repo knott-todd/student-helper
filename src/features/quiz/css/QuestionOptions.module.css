@@ -10,7 +10,7 @@
 .optionsContainer button {
     border: 1px transparent solid;
 
-    height: 64px;
+    height: 8rem;
 }
 
 .optionsContainer button.correct, .optionsContainer button.correct:hover {
