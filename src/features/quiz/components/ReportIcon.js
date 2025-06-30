@@ -4,11 +4,14 @@ import styles from '../css/ReportIcon.module.css'
 
 const ReportIcon = () => {
     return (
-        <div style={{position: 'relative', width: '100%', marginTop: '-2rem'}}>
-            <button className={`${styles.reportIcon} tertiary-btn`}>
-                <FontAwesomeIcon icon={faRegularFlag} />
+        <div className={styles.parent}>
+            <div className={styles.content}>
+                <button className={`${styles.reportIcon} tertiary-btn`}>
+                    <FontAwesomeIcon icon={faRegularFlag} />
 
-            </button>
+                </button>
+
+            </div>
         </div>
     );
 }
