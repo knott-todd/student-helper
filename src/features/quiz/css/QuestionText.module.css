@@ -1,0 +1,25 @@
+.pinned * {
+    color: var(--red);
+}
+
+.unpinned * {
+    color: var(--text-color-muted);
+}
+
+.pin {
+    flex: 0.1;
+    padding: 0.5rem 0;
+    translate: 0;
+}
+
+.unpinned.pin:hover {
+    translate: 0 -4px;
+}
+
+.pinned.pin:hover {
+    translate: 0 -1px;
+}
+
+.pin:active {
+    translate: 0;
+}

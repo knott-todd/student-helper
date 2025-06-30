@@ -73,6 +73,17 @@ export const QuizProvider = ({ children }) => {
     const navigate = useNavigate();
     const { id, qIndex } = useParams();
 
+    const setCurrentQuestion = useCallback((updates) => {
+        setQuizAttempt(curr => ({
+            ...curr,
+            questions: curr.questions.map((question, index) => (
+                index === currentIndex 
+                    ? { ...question, ...updates } 
+                    : question
+            ))
+        }));
+    }, [currentIndex, setQuizAttempt]);
+
     // Sync currentIndex from URL
     useEffect(() => {
         if (qIndex !== undefined) {
@@ -187,20 +198,20 @@ export const QuizProvider = ({ children }) => {
     }, [goTo]);
     const prevQuestion = useCallback(() => goTo(prev => prev - 1), [goTo]);
 
+    const skipQuestion = useCallback(() => {
+        
+        setCurrentQuestion({is_pinned: true});
+
+        goTo(prev => prev + 1);
+    }, [goTo]);
+
     const reviewQuiz = useCallback(() => {
         const first = quizAttempt?.incorrectIndexes?.[0] ?? 0;
         goTo(first, 'review');
     }, [goTo, quizAttempt?.incorrectIndexes]);
 
     const nextReviewQuestion = useCallback(() => {
-        setQuizAttempt(curr => ({
-            ...curr,
-            questions: curr.questions.map((question, index) => (
-                index === currentIndex 
-                    ? { ...question, was_reviewed: true } 
-                    : question
-                ))
-        }))
+        setCurrentQuestion({was_reviewed: true});
 
         goTo(prevIndex => {
             const next = quizAttempt.incorrectIndexes.find(i => i > prevIndex);
@@ -272,9 +283,10 @@ export const QuizProvider = ({ children }) => {
     return (
         <QuizContext.Provider value={{
             id, topics: quizAttempt?.topics, questions: quizAttempt?.questions, currentIndex, quizAttempt, isLoading,
-            startQuiz, nextQuestion, prevQuestion, skipQuestion: nextQuestion, finishQuiz,
+            startQuiz, nextQuestion, prevQuestion, skipQuestion, finishQuiz,
             reviewQuiz, exitQuiz, finishQuizReview, nextReviewQuestion, prevReviewQuestion,
-            selectAnswer, toggleQuestionPin, isReview: quizAttempt?.completed_at !== null
+            selectAnswer, toggleQuestionPin, isReview: quizAttempt?.completed_at !== null,
+            setQuizAttempt
         }}>
             {isLoading ? <p>Loading...</p> : children}
         </QuizContext.Provider>
