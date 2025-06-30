@@ -282,7 +282,8 @@ export const QuizProvider = ({ children }) => {
 
     return (
         <QuizContext.Provider value={{
-            id, topics: quizAttempt?.topics, questions: quizAttempt?.questions, currentIndex, quizAttempt, isLoading,
+            id, topics: quizAttempt?.topics, questions: quizAttempt?.questions, 
+            currentIndex, quizAttempt, isLoading, currQuestion: quizAttempt?.questions[currentIndex],
             startQuiz, nextQuestion, prevQuestion, skipQuestion, finishQuiz,
             reviewQuiz, exitQuiz, finishQuizReview, nextReviewQuestion, prevReviewQuestion,
             selectAnswer, toggleQuestionPin, isReview: quizAttempt?.completed_at !== null,
