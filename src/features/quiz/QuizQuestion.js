@@ -1,9 +1,10 @@
-import { QuizQuestionNavigation } from './QuizQuestionNavigation'
-import QuizProgressBar from "./QuizProgressBar";
 import QuestionText from "./components/QuestionText";
 import ReportIcon from "./components/ReportIcon";
 import QuestionOptions from "./components/QuestionOptions";
 import { useCurrentQuestion, useQuizContext } from './QuizContext';
+import QuizProgressBar from './components/QuizProgressBar';
+import { useEffect } from 'react';
+import QuizQuestionNavigation from "./components/QuizQuestionNavigation";
 
 const QuizQuestion = ()=> {
 

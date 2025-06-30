@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import QuizProgressBar from "./QuizProgressBar";
 import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 import styles from './css/QuizSummary.module.css';
 import { useQuizContext } from "./QuizContext";
 import ShareButton from "../../components/ShareButton";
+import QuizProgressBar from "./components/QuizProgressBar";
 
 const QuizSummary = ({ id }) => {
     const { reviewQuiz, exitQuiz, quizAttempt } = useQuizContext();

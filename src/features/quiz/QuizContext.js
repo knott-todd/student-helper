@@ -65,9 +65,7 @@ const finalizeQuizAttempt = (attempt) => {
     };
 };
 
-export const QuizProvider = ({ children, initialTopics = [], initialQuestions = [] }) => {
-    const [topics, setTopics] = useState(initialTopics);
-    const [questions, setQuestions] = useState(initialQuestions);
+export const QuizProvider = ({ children }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [quizAttempt, setQuizAttempt] = useState({ questions: [], topics: [] });
     const [isLoading, setIsLoading] = useState(true);
@@ -139,18 +137,18 @@ export const QuizProvider = ({ children, initialTopics = [], initialQuestions = 
             idealQuizAttempt.questions[lastIndex].isLastQuestion = true;
 
 
-            setQuizAttempt(result);
-            setTopics(result.topics);
-            setQuestions(result.questions);
+            setQuizAttempt(idealQuizAttempt);
 
             setIsLoading(false);
 
         })
         .catch(err =>{
 
+            // Set isFinalQuestion flag for the last question
+            const lastIndex = idealQuizAttempt.questions.length - 1;
+            idealQuizAttempt.questions[lastIndex].isLastQuestion = true;
+
             setQuizAttempt(idealQuizAttempt);
-            setTopics(idealQuizAttempt.topics);
-            setQuestions(idealQuizAttempt.questions);
 
             setIsLoading(false);
 
@@ -159,7 +157,7 @@ export const QuizProvider = ({ children, initialTopics = [], initialQuestions = 
 
     // Finalize score after submission
     useEffect(() => {
-        if (quizAttempt.completed_at && typeof quizAttempt.score !== 'number') {
+        if (quizAttempt?.completed_at && typeof quizAttempt.score !== 'number') {
             setQuizAttempt(prev => finalizeQuizAttempt(prev));
         }
     }, [quizAttempt]);
@@ -190,11 +188,20 @@ export const QuizProvider = ({ children, initialTopics = [], initialQuestions = 
     const prevQuestion = useCallback(() => goTo(prev => prev - 1), [goTo]);
 
     const reviewQuiz = useCallback(() => {
-        const first = quizAttempt.incorrectIndexes?.[0] ?? 0;
+        const first = quizAttempt?.incorrectIndexes?.[0] ?? 0;
         goTo(first, 'review');
-    }, [goTo, quizAttempt.incorrectIndexes]);
+    }, [goTo, quizAttempt?.incorrectIndexes]);
 
     const nextReviewQuestion = useCallback(() => {
+        setQuizAttempt(curr => ({
+            ...curr,
+            questions: curr.questions.map((question, index) => (
+                index === currentIndex 
+                    ? { ...question, was_reviewed: true } 
+                    : question
+                ))
+        }))
+
         goTo(prevIndex => {
             const next = quizAttempt.incorrectIndexes.find(i => i > prevIndex);
             if (next !== undefined) return next;
@@ -202,7 +209,7 @@ export const QuizProvider = ({ children, initialTopics = [], initialQuestions = 
             navigate(`/quiz/${id}/review/complete`);
             return prevIndex; // fallback if already at the last one
         }, 'review');
-    }, [quizAttempt.incorrectIndexes, navigate, id]);
+    }, [quizAttempt?.incorrectIndexes, navigate, id, currentIndex]);
 
 
     const prevReviewQuestion = useCallback(() => {
@@ -211,10 +218,11 @@ export const QuizProvider = ({ children, initialTopics = [], initialQuestions = 
             const prev = reversed.find(i => i < prevIndex);
             return prev !== undefined ? prev : prevIndex;
         }, 'review');
-    }, [quizAttempt.incorrectIndexes]);
+    }, [quizAttempt?.incorrectIndexes]);
 
 
     const finishQuiz = useCallback(() => {
+
         setIsLoading(true);
         setQuizAttempt(prev => finalizeQuizAttempt(prev));
         requestAnimationFrame(() => {
@@ -223,7 +231,24 @@ export const QuizProvider = ({ children, initialTopics = [], initialQuestions = 
         });
     }, [id, navigate]);
 
-    const finishQuizReview = useCallback(() => navigate(`/quiz/${id}/review/complete`), [navigate, id]);
+    const finishQuizReview = useCallback(() => {
+        
+        setQuizAttempt(curr => ({
+            ...curr,
+            questions: curr.questions.map((question, index) => (
+                index === currentIndex 
+                    ? { ...question, was_reviewed: true } 
+                    : question
+                ))
+        }))
+
+        requestAnimationFrame(() => {
+            
+            setCurrentIndex(null);
+            navigate(`/quiz/${id}/review/complete`);
+            
+        })
+    }, [navigate, id]);
 
     const exitQuiz = useCallback(() => navigate(`/`), [navigate]);
 
@@ -245,10 +270,10 @@ export const QuizProvider = ({ children, initialTopics = [], initialQuestions = 
 
     return (
         <QuizContext.Provider value={{
-            id, topics, questions, currentIndex, quizAttempt, isLoading,
+            id, topics: quizAttempt?.topics, questions: quizAttempt?.questions, currentIndex, quizAttempt, isLoading,
             startQuiz, nextQuestion, prevQuestion, skipQuestion: nextQuestion, finishQuiz,
             reviewQuiz, exitQuiz, finishQuizReview, nextReviewQuestion, prevReviewQuestion,
-            selectAnswer, toggleQuestionPin
+            selectAnswer, toggleQuestionPin, isReview: quizAttempt?.completed_at !== null
         }}>
             {isLoading ? <p>Loading...</p> : children}
         </QuizContext.Provider>

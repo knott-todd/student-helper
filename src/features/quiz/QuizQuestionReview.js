@@ -1,12 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import QuizProgressBar from "./QuizProgressBar";
 import { use } from "react";
 import { useCurrentQuestion, useQuestionByIndex, useQuizContext } from "./QuizContext";
 import { useParams } from "react-router-dom";
 import QuestionText from "./components/QuestionText";
 import ReportIcon from "./components/ReportIcon";
 import QuestionOptions from "./components/QuestionOptions";
-import { QuizQuestionNavigation } from "./QuizQuestionNavigation";
+import QuizProgressBar from "./components/QuizProgressBar";
+import QuizQuestionNavigation from "./components/QuizQuestionNavigation";
 
 const QuizQuestionReview = () => {
 

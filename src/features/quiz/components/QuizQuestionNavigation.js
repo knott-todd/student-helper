@@ -1,6 +1,6 @@
-import { useQuizContext } from "./QuizContext";
+import { useQuizContext } from "../QuizContext";
 
-export const QuizQuestionNavigation = ({ isLastQuestion, isReview}) => {
+const QuizQuestionNavigation = ({ isLastQuestion, isReview}) => {
     
     const { nextQuestion, prevQuestion, 
         skipQuestion, finishQuiz, 
@@ -37,3 +37,5 @@ export const QuizQuestionNavigation = ({ isLastQuestion, isReview}) => {
 
     </span>
 )}
+
+export default QuizQuestionNavigation;

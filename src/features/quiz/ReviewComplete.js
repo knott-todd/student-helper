@@ -1,7 +1,6 @@
-import { div } from "@tensorflow/tfjs"
-import QuizProgressBar from "./QuizProgressBar";
 import { useQuizContext } from "./QuizContext";
 import ShareButton from "../../components/ShareButton";
+import QuizProgressBar from "./components/QuizProgressBar";
 
 const ReviewComplete = () => {
 
