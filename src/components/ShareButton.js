@@ -1,8 +1,12 @@
 import { faArrowUpFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const ShareButton = ({ url, title, text }) => {
+const ShareButton = ({ url, title, text, onClick = () => {}}) => {
+
   const handleShare = async () => {
+
+    onClick();
+
     if (navigator.share) {
       try {
         await navigator.share({

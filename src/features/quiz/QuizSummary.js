@@ -6,7 +6,7 @@ import ShareButton from "../../components/ShareButton";
 import QuizProgressBar from "./components/QuizProgressBar";
 
 const QuizSummary = ({ id }) => {
-    const { reviewQuiz, exitQuiz, quizAttempt } = useQuizContext();
+    const { reviewQuiz, exitQuiz, quizAttempt, setWasShared } = useQuizContext();
 
     return (
         <div className="quiz-summary">
@@ -37,7 +37,10 @@ const QuizSummary = ({ id }) => {
             {quizAttempt.score === 100
             ? (
                 <div style={{marginTop: "2rem"}}>
-                    <ShareButton text={`I scored ${quizAttempt.score}% on The Student Helper!`} url="https://student-helper-zeta.vercel.app" />
+                    <ShareButton 
+                    title={`I scored ${quizAttempt.score}% on The Student Helper!`} 
+                    url="https://student-helper-zeta.vercel.app"
+                    onClick={() => setWasShared(true)} />
                     <button type="button" className="secondary-btn full-width-btn" onClick={() => exitQuiz()} >
                         Home
                     </button>

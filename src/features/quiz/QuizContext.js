@@ -73,6 +73,8 @@ export const QuizProvider = ({ children }) => {
     const navigate = useNavigate();
     const { id, qIndex } = useParams();
 
+    useEffect(() => console.log(quizAttempt), [quizAttempt])
+
     const setCurrentQuestion = useCallback((updates) => {
         setQuizAttempt(curr => ({
             ...curr,
@@ -83,6 +85,13 @@ export const QuizProvider = ({ children }) => {
             ))
         }));
     }, [currentIndex, setQuizAttempt]);
+
+    const setWasShared = useCallback((wasShared) => {
+        setQuizAttempt(curr => ({
+            ...curr,
+            was_shared: wasShared
+        }))
+    }, [setQuizAttempt]);
 
     // Sync currentIndex from URL
     useEffect(() => {
@@ -102,6 +111,7 @@ export const QuizProvider = ({ children }) => {
             score: null,
             started_at: null,
             completed_at: null,
+            was_shared: false,
             topics: [
                 { id: 1, name: "Electrical Circuits", delta: null, score: null, totalNumQuestions: 1 },
                 { id: 2, name: "Electric Fields", delta: null, score: null, totalNumQuestions: 1 },
@@ -113,6 +123,7 @@ export const QuizProvider = ({ children }) => {
                     user_answer: null,
                     is_correct: false,
                     is_pinned: false,
+                    was_reviewed: false,
                     topic: 1,
                     question_text: "The 'driving force' for charges through an electrical circuit is provided by the",
                     options: ["impedance", "inductance", "potential difference", "electrical resistance"],
@@ -122,6 +133,7 @@ export const QuizProvider = ({ children }) => {
                     user_answer: null,
                     is_correct: false,
                     is_pinned: false,
+                    was_reviewed: false,
                     topic: 2,
                     question_text: "A beta particle passes a point 100 nm away from an alpha particle. \
                     What is the magnitude of the electrostatic force between the particles at that point?",
@@ -132,6 +144,7 @@ export const QuizProvider = ({ children }) => {
                     user_answer: null,
                     is_correct: false,
                     is_pinned: false,
+                    was_reveiwed: false,
                     topic: 3,
                     question_text: "A sinusoidal signal has a peak voltage of 5.0 V.\
                     What is the root mean square value of this signal?",
@@ -287,7 +300,7 @@ export const QuizProvider = ({ children }) => {
             startQuiz, nextQuestion, prevQuestion, skipQuestion, finishQuiz,
             reviewQuiz, exitQuiz, finishQuizReview, nextReviewQuestion, prevReviewQuestion,
             selectAnswer, toggleQuestionPin, isReview: quizAttempt?.completed_at !== null,
-            setQuizAttempt
+            setQuizAttempt, setWasShared
         }}>
             {isLoading ? <p>Loading...</p> : children}
         </QuizContext.Provider>

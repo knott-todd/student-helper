@@ -27,11 +27,11 @@ const QuizQuestionNavigation = ({ isLastQuestion, isReview}) => {
 
         {/* Next or Finish button */}
         { isLastQuestion || (isReview && currentIndex === incorrectIndexes?.[incorrectIndexes?.length - 1]) ? (
-            <button disabled={currQuestion.user_answer === null} className="quiz-finish-button primary-btn" onClick={() => isReview ? finishQuizReview() : finishQuiz()}>
+            <button disabled={currQuestion.user_answer === null && !isReview} className="quiz-finish-button primary-btn" onClick={() => isReview ? finishQuizReview() : finishQuiz()}>
                 Finish
             </button>   
         ) : (
-            <button disabled={currQuestion.user_answer === null} className="quiz-next-button primary-btn" onClick={() => isReview ? nextReviewQuestion() : nextQuestion()}>
+            <button disabled={currQuestion.user_answer === null && !isReview} className="quiz-next-button primary-btn" onClick={() => isReview ? nextReviewQuestion() : nextQuestion()}>
                 Next
             </button>
         )}
