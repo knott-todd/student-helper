@@ -1,9 +1,8 @@
 import { useEffect, useState, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import {AppContext} from "./AppContext";
-import './CSS/Navbar.css'
-import './CSS/global.css'
-import {TfiWrite} from 'react-icons/tfi';
+import {AppContext} from "../AppContext";
+import '../CSS/Navbar.css'
+import '../CSS/global.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Navbar = () => {

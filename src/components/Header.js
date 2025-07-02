@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react"
-import {AppContext} from "./AppContext";
-import { getSubjects, getUserExam, getUserSubjects } from "./services/SQLService";
-import './CSS/Header.css'
+import {AppContext} from "../AppContext";
+import { getSubjects, getUserExam, getUserSubjects } from "../services/SQLService";
+import '../CSS/Header.css'
 import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Progress from "./Progress";
-import SingleProgress from "./SingleProgress";
+import Progress from "../Progress";
+import SingleProgress from "../SingleProgress";
 
 const Header = () => {
     const [subs, setSubs] = useState([{}]);

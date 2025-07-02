@@ -4,11 +4,11 @@ import Pastpaper from './features/pastpapers/Pastpaper';
 import Test from './features/pastpapers/Test';
 import Markscheme from './features/pastpapers/Markscheme';
 import Questions from './features/pastpapers/Questions';
-import Navbar from './Navbar';
+import Navbar from './components/Navbar';
 import Track from './features/tracking/Track';
 import ObjectiveQuestions from './features/tracking/ObjectiveQuestions';
 import Module from './features/tracking/Module';
-import Header from './Header';
+import Header from './components/Header';
 import Topic from './features/tracking/Topic';
 import Tasks from './Tasks';
 import './CSS/global.css';
@@ -40,6 +40,9 @@ import QuizSummary from './features/quiz/QuizSummary';
 import QuizQuestionReview from './features/quiz/QuizQuestionReview';
 import ReviewComplete from './features/quiz/ReviewComplete';
 import QuizWrapper from './features/quiz/QuizWrapper';
+import LandingPage from './LandingPage';
+import MainLayout from './MainLayout';
+import BareLayout from './BareLayout';
 library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight, faXmark, faCaretUp, faFlag, faRegularFlag, faThumbTack )
 
 function App() {
@@ -541,11 +544,8 @@ function App() {
       <canvas id="dots" />
 
       <Router>
-        <Header >
-          <script src="https://kit.fontawesome.com/ed9cf2ed95.js" crossorigin="anonymous"></script>
-        </Header>
         <Routes>
-          <Route exact path = "/" >
+          <Route element={<MainLayout /> } >
             <Route path='/' element={ global.userID ? <Navigate to="/test" /> : <Navigate to="/sign_in" /> } />
 
             <Route path="quiz/:id" element={<QuizWrapper />} >
@@ -591,9 +591,12 @@ function App() {
 
             
           </Route>
-        </Routes>
 
-        <Navbar />
+          <Route element={<BareLayout />}>
+            <Route path='landing' element={<LandingPage />} />
+          </Route>
+          
+        </Routes>
       </Router>
 
       <ToastContainer
