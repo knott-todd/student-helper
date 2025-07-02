@@ -703,3 +703,29 @@ button.full-width-btn {
     margin-top: 8px;
     
 }
+
+.display-xl-bold {
+    font-size: 128;
+    font-weight: 900;
+    line-height: 90%;
+}
+
+.body-sm {
+    font-size: 12;
+}
+
+.body-lg {
+    font-size: 16;
+}
+
+.mt-sm {
+    margin-top: 0.5rem;
+}
+
+.mt-md {
+    margin-top: 1rem;
+}
+
+.mt-lg {
+    margin-top: 8rem;
+}
