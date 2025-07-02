@@ -27,9 +27,6 @@
 
 }
 
-.current.completed {
-    /* border-color: var(--text-color); */
-}
 
 .completed {
     background-color: var(--text-color-muted);

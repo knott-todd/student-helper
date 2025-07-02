@@ -1,0 +1,30 @@
+.landingView {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    padding: 8rem 0;
+    background-color: var(--bg-color-dark);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8rem 4rem;
+    background-color: var(--bg-color-dark);
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 0.5rem;
+}

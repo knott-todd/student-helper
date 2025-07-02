@@ -1,20 +1,22 @@
 import PrimaryButton from "./components/PrimaryButton"
+import styles from './CSS/LandingPage.module.css'
 
 const LandingPage = () => {
     return (
         <>
 
         {/* Header */}
-        <div className="header">
-            <div className="logo">
+        <div className={`${styles.header}`}>
+            <div className={`${styles.logo}`}>
                 {/* Logo */}
+                <img alt="The Student Helper Logo" src="../public/logo512.png" />
                 {/* Logo text */}
                 <p>The Student Helper</p>
             </div>
             {/* Nav */}
         </div>
 
-        <div className="landingView">
+        <div className={`${styles.landingView}`}>
 
             {/* Fear less tag line display bold xl */}
             <h1 className="display-xl-bold">FEAR LESS</h1>
