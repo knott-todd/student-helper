@@ -1,8 +1,8 @@
 import { fetchBackend, putBackend, patchBackend, deleteBackend, postBackend } from '../../../services/api.js'; // adjust path as needed
 
 // Quiz Attempt
-export const createQuizAttempt = (quizId, userId) =>
-  postBackend(`quiz_attempt`, { quiz_id: quizId, user_id: userId });
+export const createQuizAttempt = (userId) =>
+  postBackend(`quiz_attempt`, { user_id: userId });
 
 export const getQuizAttempt = (attemptId) =>
   fetchBackend(`quiz_attempt/${attemptId}`, { fallback: null });

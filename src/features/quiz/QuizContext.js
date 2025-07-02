@@ -258,14 +258,7 @@ export const QuizProvider = ({ children }) => {
 
     const finishQuizReview = useCallback(() => {
         
-        setQuizAttempt(curr => ({
-            ...curr,
-            questions: curr.questions.map((question, index) => (
-                index === currentIndex 
-                    ? { ...question, was_reviewed: true } 
-                    : question
-                ))
-        }))
+        setCurrentQuestion({was_reveiwed: true})
 
         requestAnimationFrame(() => {
             
