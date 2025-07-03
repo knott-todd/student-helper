@@ -1,0 +1,23 @@
+.primaryBtn {
+    background-color: hsl(166, 62%, 40%);
+    border-radius: 10px;
+    padding: 1rem;
+    min-width: 300px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1.3px;
+    cursor: pointer;
+}
+
+.primaryBtn *, .primaryBtn {
+    
+    color: var(--text-color);
+    box-shadow: 0px 2px 2px hsla(0, 0%, 0%, 0.07),
+    0px 4px 4px hsla(0, 0%, 0%, 0.15);
+}
+
+button.primaryBtn:hover {
+    background-color: hsl(166, 96%, 33%);
+    color: var(--text-color);
+
+}
