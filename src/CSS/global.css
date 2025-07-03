@@ -11,6 +11,19 @@
     --faded-opacity: 0.5;
     --toastify-color-info: var(--accent) !important;
     --toastify-text-color-info: var(--primary-text-color) !important;
+
+    
+    --lt-bg-color-dark: hsl(0, 0%, 90%);
+    --lt-bg-color: hsl(0, 0%, 95%);
+    --lt-bg-color-light: hsl(0, 0%, 100%);
+    --lt-text-color: hsl(0, 0%, 5%);
+    --lt-text-color-muted: hsl(0, 0%, 30%);
+
+    --dk-bg-color-light: hsl(0, 0%, 10%);
+    --dk-bg-color: hsl(0, 0%, 5%);
+    --dk-bg-color-dark: hsl(0, 0%, 0%);
+    --dk-text-color: hsl(0, 0%, 95%);
+    --dk-text-color-muted: hsl(0, 0%, 70%);
 }
 
 @media (prefers-color-scheme: light) {
@@ -685,7 +698,10 @@ button.full-width-btn {
 }
 
 button.adaptive-width-btn {
+    min-width: 300px;
     width: 100%;
+    border-radius: 10px;
+    padding: 1rem;
 }
 
 

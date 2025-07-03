@@ -1,9 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PrimaryButton from "./components/PrimaryButton"
 import styles from './CSS/LandingPage.module.css'
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
 
 const LandingPage = () => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     return (
         <>
 
@@ -16,11 +19,50 @@ const LandingPage = () => {
                 <p>The Student Helper</p>
             </div>
             {/* Nav */}
-            <div style={{padding: '0 1.5rem'}}>
-                <FontAwesomeIcon icon={faBars} />
+            <div className={`${styles.navWrapper} ${styles.desktopOnly}`}>
+
+                <nav className={`${styles.nav} body-sm`}>
+                    <ul>
+                        <li><a className="body-sm" href="/practice">Practice</a></li>
+                        <li><a className="body-sm" href="/join">Join Us</a></li>
+                        <li><a className="body-sm" href="/contact">Contact</a></li>
+                        <li><a className="body-sm" href="/login">Log In</a></li>
+                    </ul>
+                </nav>
+
+                <PrimaryButton>Sign Up</PrimaryButton>
 
             </div>
+            <FontAwesomeIcon 
+                className={`${styles.mobileOnly} ${styles.hamburger}`} 
+                icon={faBars} 
+                onClick={() => setIsMenuOpen(!isMenuOpen)} 
+            />
         </div>
+
+        {/* Full-screen nav menu for mobile */}
+        {isMenuOpen && (
+            <div className={styles.fullscreenMenu}>
+                <FontAwesomeIcon
+                    icon={faTimes}
+                    className={styles.closeIcon}
+                    onClick={() => setIsMenuOpen(false)}
+                />
+                <nav className="body-lg">
+                    <ul>
+                        <li><a href="/practice" onClick={() => setIsMenuOpen(false)}>Practice</a></li>
+                        <li><a href="/join" onClick={() => setIsMenuOpen(false)}>Join Us</a></li>
+                        <li><a href="/contact" onClick={() => setIsMenuOpen(false)}>Contact</a></li>
+                        <li><a href="/login" onClick={() => setIsMenuOpen(false)}>Log In</a></li>
+                        <li>
+                            <PrimaryButton onClick={() => setIsMenuOpen(false)}>
+                                Sign Up
+                            </PrimaryButton>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        )}
 
         
         <div className={`${styles.heroImageContainer} ${styles.mobileOnly}`}>
@@ -39,7 +81,9 @@ const LandingPage = () => {
                 {/* <p style={{maxWidth: 500}} className="body-lg mt-md">Practice that mirrors the real exam, tracks your syllabus mastery, and keeps you motivated.</p> */}
 
                 {/* CTA button mt-64 */}
-                <PrimaryButton widthAdaptive className="mt-lg" text="GET STARTED FOR FREE" onClick={() => {}} />
+                <PrimaryButton widthAdaptive className="mt-lg" onClick={() => {}} >
+                    GET STARTED FOR FREE
+                </PrimaryButton>
 
                 {/* Other users body sm mt-16 */}
                 <p className="body-sm mt-md">Trusted by 1,100+ students across the Caribbean to build exam confidence.</p>
