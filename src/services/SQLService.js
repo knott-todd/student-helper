@@ -1,5 +1,7 @@
-const backendURL = 'https://student-helper-backend.vercel.app';
-// const backendURL = 'http://localhost:3080'
+import { fetchBackend } from "../utils/apiUtils";
+
+// const backendURL = 'https://student-helper-backend.vercel.app';
+const backendURL = 'http://localhost:3080'
 
 const onesignalURL = 'https://onesignal.com/api/v1/notifications';
 const onesignalAppID = '99b7a99a-31e5-4656-86d7-ab456591292b';
@@ -307,6 +309,8 @@ export async function getModules (subID, examID, userID) {
         });
         return await response.json();
     } catch(error) {
+
+
         return [];
     }
 }
@@ -678,4 +682,17 @@ export async function saveInteraction (userID) {
     //   todaysUsers.date = new Date()
     // 
     // todaysUsers.users.push(userID)
+}
+
+
+export function getAllModules () {
+    return fetchBackend('modules');
+}
+
+export function getAllTopics () {
+    return fetchBackend('topics');
+}
+
+export function getUnits () {
+    return fetchBackend('units');
 }

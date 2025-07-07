@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import {AppContext} from "./AppContext";
 import OneSignal from 'react-onesignal';
 import { setUser, getUserID, getSubjects, getUserSubjects, setUserSub, getExamSubjects, getExams, getUserExam, setUserExam, setSubExam } from "./services/SQLService";
+import SubjectSelector from "./components/SubjectSelector";
+import ExamDropdown from "./components/ExamDropdown";
 
 const SignIn = () => {
 
@@ -156,7 +158,29 @@ const SignIn = () => {
                 <button disabled={!fnameVal || !lnameVal} onClick={e => handleSetUser(e)}>Submit</button>
             </form>
             
-            {global.userID ? (
+
+            {global.userID && (
+                
+                <form style={{ display: "block", paddingTop: "40px" }}>
+                <label>Select Default Exam</label>
+                <ExamDropdown
+                    exams={exams}
+                    selectedExam={global.currExam}
+                    onChange={onUserExamChange}
+                />
+                </form>
+            )}
+
+            {global.currExam && (
+            <SubjectSelector
+                subs={subs}
+                exams={exams}
+                onSubjectChange={onUserSubChange}
+                onSubExamChange={onSubExamChange}
+            />
+            )}
+            
+            {/* {global.userID ? (
                 <form style={{display: "block", paddingTop: "40px"}}>
                     <label>
                         Select Default Exam 
@@ -192,7 +216,7 @@ const SignIn = () => {
                         ))}
                     </div>
                 </form>
-            ) : "")}
+            ) : "")} */}
             
         </div>
     )

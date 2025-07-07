@@ -1,4 +1,4 @@
-import { fetchBackend, putBackend, patchBackend, deleteBackend, postBackend } from '../../../services/api.js'; // adjust path as needed
+import { fetchBackend, putBackend, patchBackend, deleteBackend, postBackend } from '../../../utils/apiUtils.js'; // adjust path as needed
 
 // Quiz Attempt
 export const createQuizAttempt = (userId) =>

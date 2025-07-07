@@ -43,6 +43,7 @@ import QuizWrapper from './features/quiz/QuizWrapper';
 import LandingPage from './LandingPage';
 import MainLayout from './MainLayout';
 import BareLayout from './BareLayout';
+import QuizBuilder from './features/quiz/QuizBuilder';
 library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight, faXmark, faCaretUp, faFlag, faRegularFlag, faThumbTack )
 
 function App() {
@@ -548,13 +549,16 @@ function App() {
           <Route element={<MainLayout /> } >
             <Route path='/' element={ global.userID ? <Navigate to="/test" /> : <Navigate to="/sign_in" /> } />
 
-            <Route path="quiz/:id" element={<QuizWrapper />} >
-              <Route index element={<QuizPreview />} />
-              <Route path="question/:qIndex" element={<QuizQuestion />} />
-              <Route path="review" >
-                <Route index element={<QuizSummary />} />
-                <Route path=":qIndex" element={<QuizQuestionReview />} />
-                <Route path='complete' element={<ReviewComplete />} />
+            <Route path='quiz'>
+              <Route index element={<QuizBuilder />} />
+              <Route path=":id" element={<QuizWrapper />} >
+                <Route index element={<QuizPreview />} />
+                <Route path="question/:qIndex" element={<QuizQuestion />} />
+                <Route path="review" >
+                  <Route index element={<QuizSummary />} />
+                  <Route path=":qIndex" element={<QuizQuestionReview />} />
+                  <Route path='complete' element={<ReviewComplete />} />
+                </Route>
               </Route>
             </Route>
 
