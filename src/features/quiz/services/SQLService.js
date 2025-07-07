@@ -1,56 +1,69 @@
-import { fetchBackend, putBackend, patchBackend, deleteBackend, postBackend } from '../../../utils/apiUtils.js'; // adjust path as needed
+import {
+  postBackend,
+  patchBackend
+} from '../../../utils/apiUtils.js';
 
-// Quiz Attempt
-export const createQuizAttempt = (userId) =>
-  postBackend(`quiz_attempt`, { user_id: userId });
+// Create a new quiz
+export const createQuizAttempt = ({ userID, topicIDs, numQuestions }) =>
+  postBackend(`quiz/create`, { userID, topicIDs, numQuestions });
 
-export const getQuizAttempt = (attemptId) =>
-  fetchBackend(`quiz_attempt/${attemptId}`, { fallback: null });
+// Start a quiz
+export const startQuizAttempt = (attemptID) =>
+  patchBackend(`quiz/${attemptID}/start`, {});
 
-export const updateQuizAttempt = (attemptId,updates) => 
-  patchBackend(`quiz_attempt/${attemptId}/`, updates);
+// Submit answer
+export const submitAnswer = (attemptID, questionID, answer) =>
+  patchBackend(`quiz/${attemptID}/answer`, { questionID, answer });
 
-export const finalizeQuizAttempt = (attemptId) =>
-  patchBackend(`quiz_attempt/${attemptId}/finalize`, {});
+// Pin/unpin a question
+export const setQuestionPinned = (attemptID, questionID, isPinned) =>
+  patchBackend(`quiz/${attemptID}/pin`, { questionID, isPinned });
 
-// Questions
-export const getQuizQuestions = (quizId) =>
-  fetchBackend(`quiz/${quizId}/questions`);
+// Submit full quiz
+export const submitQuizAttempt = (attemptID, data) =>
+  postBackend(`quiz/${attemptID}/submit`, data);
 
-export const updateUserAnswer = (attemptId, questionId, userAnswer) =>
-  patchBackend(`quiz_attempt/${attemptId}/question/${questionId}`, {
-    user_answer: userAnswer,
-  });
+// Mark question reviewed
+export const markQuestionReviewed = (attemptID, questionID) =>
+  patchBackend(`quiz/${attemptID}/review-question`, { questionID });
 
-export const pinQuestion = (attemptId, questionId, isPinned) =>
-  patchBackend(`quiz_attempt/${attemptId}/question/${questionId}/pin`, {
-    is_pinned: isPinned,
-  });
+// Mark quiz reviewed
+export const markQuizReviewed = (attemptID) =>
+  patchBackend(`quiz/${attemptID}/review-complete`, {});
 
-// Navigation & Metadata
-export const updateFamiliarity = (attemptId, questionId, level) =>
-  patchBackend(`quiz_attempt/${attemptId}/question/${questionId}/familiarity`, {
-    level,
-  });
+// Mark quiz shared
+export const shareQuizAttempt = (attemptID) =>
+  patchBackend(`quiz/${attemptID}/share`, {});
 
-export const updateTimeSpent = (attemptId, questionId, timeSpent) =>
-  patchBackend(`quiz_attempt/${attemptId}/question/${questionId}/time`, {
-    time_spent: timeSpent,
-  });
+// TODO: Add these
+// export const getQuizAttempt = (attemptId) =>
+//   fetchBackend(`quiz_attempt/${attemptId}`, { fallback: null });
 
-export const markQuestionSkipped = (attemptId, questionId) =>
-  patchBackend(`quiz_attempt/${attemptId}/question/${questionId}/skip`, {
-    was_skipped: true,
-  });
 
-export const markQuestionReviewed = (attemptId, questionId) =>
-  patchBackend(`quiz_attempt/${attemptId}/question/${questionId}/reviewed`, {
-    is_reviewed: true,
-  });
 
-// Quiz Topics / Summary
-export const getQuizTopics = (quizId) =>
-  fetchBackend(`quiz/${quizId}/topics`);
+// // Questions
+// export const getQuizQuestions = (quizId) =>
+//   fetchBackend(`quiz/${quizId}/questions`);
 
-export const getQuizScoreSummary = (attemptId) =>
-  fetchBackend(`quiz_attempt/${attemptId}/summary`, { fallback: null });
+// // Navigation & Metadata
+// export const updateFamiliarity = (attemptId, questionId, level) =>
+//   patchBackend(`quiz_attempt/${attemptId}/question/${questionId}/familiarity`, {
+//     level,
+//   });
+
+// export const updateTimeSpent = (attemptId, questionId, timeSpent) =>
+//   patchBackend(`quiz_attempt/${attemptId}/question/${questionId}/time`, {
+//     time_spent: timeSpent,
+//   });
+
+// export const markQuestionSkipped = (attemptId, questionId) =>
+//   patchBackend(`quiz_attempt/${attemptId}/question/${questionId}/skip`, {
+//     was_skipped: true,
+//   });
+
+// // Quiz Topics / Summary
+// export const getQuizTopics = (quizId) =>
+//   fetchBackend(`quiz/${quizId}/topics`);
+
+// export const getQuizScoreSummary = (attemptId) =>
+//   fetchBackend(`quiz_attempt/${attemptId}/summary`, { fallback: null });
