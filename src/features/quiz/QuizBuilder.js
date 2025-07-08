@@ -4,6 +4,7 @@ import ExamDropdown from "../../components/ExamDropdown";
 import MultiSelect from "../../components/MultiSelect";
 import PrimaryButton from "../../components/PrimaryButton";
 import { useSyllabusData } from "../../hooks/useSyllabusData";
+import { createQuizAttempt, getCats } from "./services/SQLService";
 
 const QuizBuilder = () => {
     // Requires data:
@@ -12,10 +13,10 @@ const QuizBuilder = () => {
     const { data, isLoading, error } = useSyllabusData();
 
     // Track selected exam, module, topic, # of questions (form)
-    const [selectedExamID, setSelectedExamID] = useState('');
-    const [selectedSubjectID, setSelectedSubjectID] = useState('');
-    const [selectedUnitID, setSelectedUnitID] = useState('');
-    const [selectedModuleID, setSelectedModuleID] = useState('');
+    const [selectedExamID, setSelectedExamID] = useState(null);
+    const [selectedSubjectID, setSelectedSubjectID] = useState(null);
+    const [selectedUnitID, setSelectedUnitID] = useState(null);
+    const [selectedModuleID, setSelectedModuleID] = useState(null);
     const [selectedTopicIDs, setSelectedTopicIDs] = useState([]);
     const [numQuestions, setNumQuestions] = useState(10);
 
@@ -26,6 +27,8 @@ const QuizBuilder = () => {
         console.log("Modules:", data.modules);
         console.log("Topics:", data.topics);
         console.log("Units:", data.units);
+
+
 
     }, [data]);
 
@@ -40,13 +43,26 @@ const QuizBuilder = () => {
     }, [selectedExamID, selectedSubjectID, data]);
 
     // On submit, send data to backend to generate quiz
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+
+        if (selectedTopicIDs.length === 0) {
+            alert("Please select at least one topic.");
+            return;
+        }
+
         
+        try {
+            console.log(selectedTopicIDs);
+            console.log(numQuestions);
+            await createQuizAttempt({
+                userID: 1,
+                topicIDs: selectedTopicIDs,
+                numQuestions: numQuestions
+            });
+        } catch (err) {
+            console.error(err);
+        }
     }
-
-    useEffect(() => {
-
-    }, [selectedTopicIDs]);
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error loading syllabus data: {error.message}</p>;
@@ -113,7 +129,10 @@ const QuizBuilder = () => {
         />
 
         {/* Submit button */}
-        <PrimaryButton onClick={handleSubmit}>
+        <PrimaryButton 
+            onClick={handleSubmit}
+            disabled={selectedTopicIDs.length === 0 || isLoading}
+        >
             Submit
         </PrimaryButton>
         

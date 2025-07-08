@@ -1,6 +1,7 @@
 import {
   postBackend,
-  patchBackend
+  patchBackend,
+  fetchBackend
 } from '../../../utils/apiUtils.js';
 
 // Create a new quiz
@@ -36,10 +37,8 @@ export const shareQuizAttempt = (attemptID) =>
   patchBackend(`quiz/${attemptID}/share`, {});
 
 // TODO: Add these
-// export const getQuizAttempt = (attemptId) =>
-//   fetchBackend(`quiz_attempt/${attemptId}`, { fallback: null });
-
-
+export const getQuizAttempt = (attemptId) =>
+  fetchBackend(`quiz/${attemptId}`, { fallback: null });
 
 // // Questions
 // export const getQuizQuestions = (quizId) =>
@@ -47,17 +46,17 @@ export const shareQuizAttempt = (attemptID) =>
 
 // // Navigation & Metadata
 // export const updateFamiliarity = (attemptId, questionId, level) =>
-//   patchBackend(`quiz_attempt/${attemptId}/question/${questionId}/familiarity`, {
+//   patchBackend(`quiz/${attemptId}/question/${questionId}/familiarity`, {
 //     level,
 //   });
 
 // export const updateTimeSpent = (attemptId, questionId, timeSpent) =>
-//   patchBackend(`quiz_attempt/${attemptId}/question/${questionId}/time`, {
+//   patchBackend(`quiz/${attemptId}/question/${questionId}/time`, {
 //     time_spent: timeSpent,
 //   });
 
 // export const markQuestionSkipped = (attemptId, questionId) =>
-//   patchBackend(`quiz_attempt/${attemptId}/question/${questionId}/skip`, {
+//   patchBackend(`quiz/${attemptId}/question/${questionId}/skip`, {
 //     was_skipped: true,
 //   });
 
@@ -66,4 +65,7 @@ export const shareQuizAttempt = (attemptID) =>
 //   fetchBackend(`quiz/${quizId}/topics`);
 
 // export const getQuizScoreSummary = (attemptId) =>
-//   fetchBackend(`quiz_attempt/${attemptId}/summary`, { fallback: null });
+//   fetchBackend(`quiz/${attemptId}/summary`, { fallback: null });
+
+export const updateQuizAttempt = (attemptId, data) =>
+  patchBackend(`quiz/${attemptId}`, data);

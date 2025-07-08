@@ -18,8 +18,15 @@ export async function fetchBackend(endpoint, {
             body: body ? JSON.stringify(body) : null
         });
 
-        if (!response.ok) throw new Error(`Request failed: ${endpoint}`);
-        return await response.json();
+        const isJson = response.headers.get('content-type')?.includes('application/json');
+        const data = isJson ? await response.json() : null;
+
+        if (!response.ok) {
+            const errorMessage = data?.error || `Request failed: ${endpoint}`;
+            throw new Error(errorMessage);
+        }
+
+        return data;
     } catch (error) {
         console.error(error);
         return fallback;
