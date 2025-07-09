@@ -21,8 +21,8 @@ export const setQuestionPinned = (attemptID, questionID, isPinned) =>
   patchBackend(`quiz/${attemptID}/pin`, { questionID, isPinned });
 
 // Submit full quiz
-export const submitQuizAttempt = (attemptID, data) =>
-  postBackend(`quiz/${attemptID}/submit`, data);
+export const submitQuizAttempt = (attemptID) =>
+  postBackend(`quiz/${attemptID}/submit`);
 
 // Mark question reviewed
 export const markQuestionReviewed = (attemptID, questionID) =>
@@ -55,10 +55,10 @@ export const getQuizAttempt = (attemptId) =>
 //     time_spent: timeSpent,
 //   });
 
-// export const markQuestionSkipped = (attemptId, questionId) =>
-//   patchBackend(`quiz/${attemptId}/question/${questionId}/skip`, {
-//     was_skipped: true,
-//   });
+export const markQuestionSkipped = (attemptId, questionID) =>
+  patchBackend(`quiz/${attemptId}/question/skip`, {
+    questionID
+  });
 
 // // Quiz Topics / Summary
 // export const getQuizTopics = (quizId) =>

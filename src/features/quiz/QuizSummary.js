@@ -6,7 +6,7 @@ import ShareButton from "../../components/ShareButton";
 import QuizProgressBar from "./components/QuizProgressBar";
 
 const QuizSummary = ({ id }) => {
-    const { reviewQuiz, exitQuiz, quizAttempt, setWasShared } = useQuizContext();
+    const { reviewQuiz, exitQuiz, quizAttempt, setWasShared, isLoading } = useQuizContext();
 
     return (
         <div className="quiz-summary">
@@ -16,7 +16,7 @@ const QuizSummary = ({ id }) => {
             <p>{quizAttempt.review_blurb}</p>
 
             <h4 style={{marginTop: 64}}>Your Progress</h4>
-            {quizAttempt.topics.map((topic, index) => (
+            {quizAttempt.topics !== undefined && quizAttempt.topics.map((topic, index) => (
                 <div className={styles.topicsContainer} style={{display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "start", marginTop: 8}} key={index}>
                     <span style={{display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, fontSize: 16}} className="topic-progress">
 
@@ -30,7 +30,7 @@ const QuizSummary = ({ id }) => {
                         
                     </span>
 
-                    <p className={styles.muted} style={{marginLeft: 16}}>└─ {topic.score}/{topic.totalNumQuestions} correct</p>
+                    <p className={styles.muted} style={{marginLeft: 16}}>└─ {topic.score}/{topic.num_questions} correct</p>
                 </div>
             ))}
 

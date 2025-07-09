@@ -1,18 +1,21 @@
+import { useEffect } from "react";
 import { useQuizContext } from "../QuizContext";
 
-const QuizQuestionNavigation = ({ isLastQuestion, isReview}) => {
+const QuizQuestionNavigation = ({ isReview}) => {
     
     const { nextQuestion, prevQuestion, 
         skipQuestion, finishQuiz, 
         finishQuizReview, nextReviewQuestion, 
         prevReviewQuestion, currentIndex, 
-        incorrectIndexes, currQuestion } = useQuizContext();
+        incorrectIndexes, currQuestion, questions } = useQuizContext();
+
+    const isLastQuestion = currentIndex === questions.length - 1;
     
     return (
 	<span style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'flex-end', marginTop: '4rem' }}>
 
         {/* Back */}
-        { currentIndex === 0 || (isReview && currentIndex === incorrectIndexes?.[0]) ? null : (
+        { currentIndex === 0 || (isReview && parseInt(currentIndex) === incorrectIndexes?.[0]) ? null : (
             <button className="quiz-back-button secondary-btn" onClick={() => isReview ? prevReviewQuestion() : prevQuestion()}>
                 Back
             </button>
@@ -26,7 +29,7 @@ const QuizQuestionNavigation = ({ isLastQuestion, isReview}) => {
         }
 
         {/* Next or Finish button */}
-        { isLastQuestion || (isReview && currentIndex === incorrectIndexes?.[incorrectIndexes?.length - 1]) ? (
+        { isLastQuestion || (isReview && parseInt(currentIndex) === incorrectIndexes?.[incorrectIndexes?.length - 1]) ? (
             <button disabled={currQuestion.user_answer === null && !isReview} className="quiz-finish-button primary-btn" onClick={() => isReview ? finishQuizReview() : finishQuiz()}>
                 Finish
             </button>   

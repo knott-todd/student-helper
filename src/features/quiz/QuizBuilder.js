@@ -5,6 +5,8 @@ import MultiSelect from "../../components/MultiSelect";
 import PrimaryButton from "../../components/PrimaryButton";
 import { useSyllabusData } from "../../hooks/useSyllabusData";
 import { createQuizAttempt, getCats } from "./services/SQLService";
+import { useQuizContext } from "./QuizContext";
+import { useNavigate } from "react-router-dom";
 
 const QuizBuilder = () => {
     // Requires data:
@@ -19,6 +21,9 @@ const QuizBuilder = () => {
     const [selectedModuleID, setSelectedModuleID] = useState(null);
     const [selectedTopicIDs, setSelectedTopicIDs] = useState([]);
     const [numQuestions, setNumQuestions] = useState(10);
+    
+    const { setQuizAttempt } = useQuizContext();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (isLoading || error || !data) return;
@@ -54,11 +59,14 @@ const QuizBuilder = () => {
         try {
             console.log(selectedTopicIDs);
             console.log(numQuestions);
-            await createQuizAttempt({
+            const quiz = await createQuizAttempt({
                 userID: 1,
                 topicIDs: selectedTopicIDs,
                 numQuestions: numQuestions
             });
+
+            setQuizAttempt({...quiz, id: quiz.quizAttemptID});
+            navigate(`/quiz/${quiz.quizAttemptID}`);
         } catch (err) {
             console.error(err);
         }

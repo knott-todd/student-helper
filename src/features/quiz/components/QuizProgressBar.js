@@ -17,7 +17,7 @@ const QuizProgressBar = () => {
     return (
         <div className={`${styles.content} `}>
             <div className={`${styles.container} `}>
-                {questions.map((question, i) => (
+                {questions && questions.map((question, i) => (
                 <div className={`${styles.questionContainer} ${currentIndex === i ? styles.current : ''}`}>
                     
                     <button className={`\

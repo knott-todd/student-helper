@@ -549,9 +549,9 @@ function App() {
           <Route element={<MainLayout /> } >
             <Route path='/' element={ global.userID ? <Navigate to="/test" /> : <Navigate to="/sign_in" /> } />
 
-            <Route path='quiz'>
+            <Route path='quiz' element={<QuizWrapper />}>
               <Route index element={<QuizBuilder />} />
-              <Route path=":id" element={<QuizWrapper />} >
+              <Route path=":id" >
                 <Route index element={<QuizPreview />} />
                 <Route path="question/:qIndex" element={<QuizQuestion />} />
                 <Route path="review" >

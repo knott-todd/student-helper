@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getQuizAttempt, updateQuizAttempt } from './services/SQLService';
+import { getQuizAttempt, markQuestionSkipped, setQuestionPinned, startQuizAttempt, submitAnswer, submitQuizAttempt, updateQuizAttempt } from './services/SQLService';
 
 const QuizContext = createContext();
 export const useQuizContext = () => useContext(QuizContext);
@@ -28,39 +28,41 @@ const calculateDelta = (topicScore, numQuestions) => {
     return -10;
 };
 
-const finalizeQuizAttempt = (attempt) => {
-    const updatedQuestions = attempt.questions.map(q => ({
-        ...q,
-        is_correct: q.user_answer === q.correct_answer,
-    }));
+const finalizeQuizAttempt = async (attempt) => {
+    // const updatedQuestions = attempt.questions.map(q => ({
+    //     ...q,
+    //     is_correct: q.user_answer === parseInt(q.correct_answer),
+    // }));
 
-    const scoreRaw = updatedQuestions.filter(q => q.is_correct).length;
-    const score = Math.round((scoreRaw / updatedQuestions.length) * 100);
+    // const scoreRaw = updatedQuestions.filter(q => q.is_correct).length;
+    // const score = Math.round((scoreRaw / updatedQuestions.length) * 100);
 
-    const incorrectIndexes = updatedQuestions
-        .map((q, i) => (!q.is_correct ? i : null))
-        .filter(i => i !== null);
+    // const incorrectIndexes = updatedQuestions
+    //     .map((q, i) => (!q.is_correct ? i : null))
+    //     .filter(i => i !== null);
 
-    const updatedTopics = attempt.topics.map(topic => {
-        const topicQuestions = updatedQuestions.filter(q => q.topic === topic.id);
-        const topicScore = topicQuestions.filter(q => q.is_correct).length;
-        const delta = calculateDelta(topicScore, topicQuestions.length);
+    // const updatedTopics = attempt.topics.map(topic => {
+    //     const topicQuestions = updatedQuestions.filter(q => q.topic === topic.id);
+    //     const topicScore = topicQuestions.filter(q => q.is_correct).length;
+    //     const delta = calculateDelta(topicScore, topicQuestions.length);
 
-        return {
-            ...topic,
-            score: topicScore,
-            delta,
-            totalNumQuestions: topicQuestions.length,
-        };
-    });
+    //     return {
+    //         ...topic,
+    //         score: topicScore,
+    //         delta,
+    //     };
+    // });
+
+    const { score, questions, completed_at, topics, incorrectIndexes } = await submitQuizAttempt(attempt.id);
+    const scorePercent = Math.round((score / questions.length) * 100);
 
     return {
         ...attempt,
-        score,
-        questions: updatedQuestions,
-        completed_at: new Date(),
-        review_blurb: generateReviewBlurb(score),
-        topics: updatedTopics,
+        score: scorePercent,
+        questions,
+        completed_at,
+        review_blurb: generateReviewBlurb(scorePercent),
+        topics,
         incorrectIndexes,
     };
 };
@@ -76,6 +78,7 @@ export const QuizProvider = ({ children }) => {
     useEffect(() => console.log(quizAttempt), [quizAttempt])
 
     const setCurrentQuestion = useCallback((updates) => {
+        console.log(currentIndex)
         setQuizAttempt(curr => ({
             ...curr,
             questions: curr.questions.map((question, index) => (
@@ -95,6 +98,7 @@ export const QuizProvider = ({ children }) => {
 
     // Sync currentIndex from URL
     useEffect(() => {
+        console.log("qIndex:", qIndex);
         if (qIndex !== undefined) {
             const parsed = parseInt(qIndex, 10);
             if (!isNaN(parsed)) setCurrentIndex(parsed);
@@ -156,17 +160,21 @@ export const QuizProvider = ({ children }) => {
         getQuizAttempt(id)
         .then(result => {
 
+            console.log("Quiz attempt data:", result);
+
             // Set isFinalQuestion flag for the last question
-            const lastIndex = idealQuizAttempt.questions.length - 1;
-            idealQuizAttempt.questions[lastIndex].isLastQuestion = true;
+            const lastIndex = result.questions.length - 1;
+            result.questions[lastIndex].isLastQuestion = true;
 
 
-            setQuizAttempt(idealQuizAttempt);
+            setQuizAttempt(result);
 
             setIsLoading(false);
 
         })
         .catch(err =>{
+
+            console.log("quiz err:", err)
 
             // Set isFinalQuestion flag for the last question
             const lastIndex = idealQuizAttempt.questions.length - 1;
@@ -182,7 +190,7 @@ export const QuizProvider = ({ children }) => {
     // Finalize score after submission
     useEffect(() => {
         if (quizAttempt?.completed_at && typeof quizAttempt.score !== 'number') {
-            setQuizAttempt(prev => finalizeQuizAttempt(prev));
+            finalizeQuizAttempt(quizAttempt).then(setQuizAttempt);
         }
     }, [quizAttempt]);
 
@@ -201,9 +209,14 @@ export const QuizProvider = ({ children }) => {
     const startQuiz = useCallback(() => {
         const started_at = new Date();
         setQuizAttempt(current => ({...current, started_at}));
-        updateQuizAttempt(id, {started_at})
-        .catch(() => {})//TODO: Handle catch
-        goTo(0);
+        startQuizAttempt(id)
+            .then(() => {
+                goTo(0);
+            })
+            .catch(err => {
+                console.error("Failed to start quiz:", err);
+            }
+        );
     }, [goTo]);
 
     const nextQuestion = useCallback(() => {
@@ -214,8 +227,14 @@ export const QuizProvider = ({ children }) => {
     const skipQuestion = useCallback(() => {
         
         setCurrentQuestion({is_pinned: true});
-
-        goTo(prev => prev + 1);
+        markQuestionSkipped(id, quizAttempt.questions[currentIndex].id)
+            .then(() => {
+                goTo(prev => prev + 1);
+            })
+            .catch(err => {
+                console.error("Failed to skip question:", err);
+            }
+        );
     }, [goTo]);
 
     const reviewQuiz = useCallback(() => {
@@ -249,12 +268,12 @@ export const QuizProvider = ({ children }) => {
 
         setCurrentIndex(null);
         setIsLoading(true);
-        setQuizAttempt(prev => finalizeQuizAttempt(prev));
-        requestAnimationFrame(() => {
+        finalizeQuizAttempt(quizAttempt).then(finalizedAttempt => {
+            setQuizAttempt(finalizedAttempt);
             setIsLoading(false);
             navigate(`/quiz/${id}/review`);
         });
-    }, [id, navigate]);
+    }, [id, navigate, quizAttempt]);
 
     const finishQuizReview = useCallback(() => {
         
@@ -277,25 +296,29 @@ export const QuizProvider = ({ children }) => {
                 : q);
             return { ...prev, questions };
         });
-    }, []);
+        submitAnswer(id, quizAttempt.questions[questionIndex].id, answerIndex);
+    }, [id, quizAttempt.questions]);
 
     const toggleQuestionPin = useCallback(() => {
         setQuizAttempt(prev => {
             const questions = prev.questions.map((q, i) => i === currentIndex ? { ...q, is_pinned: !q.is_pinned } : q);
             return { ...prev, questions };
         });
+        setQuestionPinned(id, quizAttempt.questions[currentIndex].id, true);
     }, [currentIndex]);
 
     return (
         <QuizContext.Provider value={{
             id, topics: quizAttempt?.topics, questions: quizAttempt?.questions, 
-            currentIndex, quizAttempt, isLoading, currQuestion: quizAttempt?.questions[currentIndex],
+            currentIndex, quizAttempt, isLoading, currQuestion: quizAttempt?.questions?.[currentIndex],
             startQuiz, nextQuestion, prevQuestion, skipQuestion, finishQuiz,
             reviewQuiz, exitQuiz, finishQuizReview, nextReviewQuestion, prevReviewQuestion,
             selectAnswer, toggleQuestionPin, isReview: quizAttempt?.completed_at !== null,
-            setQuizAttempt, setWasShared
+            setWasShared, incorrectIndexes: quizAttempt?.incorrectIndexes || [],
         }}>
-            {isLoading ? <p>Loading...</p> : children}
+            {!isLoading && quizAttempt.questions && quizAttempt.topics 
+            ? children
+            : <p>Loading...</p> }
         </QuizContext.Provider>
     );
 };
