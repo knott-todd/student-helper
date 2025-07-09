@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getQuizAttempt, markQuestionSkipped, setQuestionPinned, startQuizAttempt, submitAnswer, submitQuizAttempt, updateQuizAttempt } from './services/SQLService';
+import { getQuizAttempt, markQuestionReviewed, markQuestionSkipped, markQuizReviewed, markQuizShared, setQuestionPinned, startQuizAttempt, submitAnswer, submitQuizAttempt, updateQuizAttempt } from './services/SQLService';
 
 const QuizContext = createContext();
 export const useQuizContext = () => useContext(QuizContext);
@@ -94,6 +94,7 @@ export const QuizProvider = ({ children }) => {
             ...curr,
             was_shared: wasShared
         }))
+        markQuizShared(id);
     }, [setQuizAttempt]);
 
     // Sync currentIndex from URL
@@ -207,6 +208,7 @@ export const QuizProvider = ({ children }) => {
     };
 
     const startQuiz = useCallback(() => {
+        console.log("KNkn")
         const started_at = new Date();
         setQuizAttempt(current => ({...current, started_at}));
         startQuizAttempt(id)
@@ -250,7 +252,8 @@ export const QuizProvider = ({ children }) => {
             if (next !== undefined) return next;
 
             navigate(`/quiz/${id}/review/complete`);
-            return prevIndex; // fallback if already at the last one
+            markQuestionReviewed(id, quizAttempt.questions[prevIndex].id);
+            return prevIndex;
         }, 'review');
     }, [quizAttempt?.incorrectIndexes, navigate, id, currentIndex]);
 
@@ -283,6 +286,7 @@ export const QuizProvider = ({ children }) => {
             
             setCurrentIndex(null);
             navigate(`/quiz/${id}/review/complete`);
+            markQuizReviewed(id);
 
         })
     }, [navigate, id]);

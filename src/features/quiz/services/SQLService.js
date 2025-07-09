@@ -33,7 +33,7 @@ export const markQuizReviewed = (attemptID) =>
   patchBackend(`quiz/${attemptID}/review-complete`, {});
 
 // Mark quiz shared
-export const shareQuizAttempt = (attemptID) =>
+export const markQuizShared = (attemptID) =>
   patchBackend(`quiz/${attemptID}/share`, {});
 
 // TODO: Add these

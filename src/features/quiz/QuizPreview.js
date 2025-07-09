@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useQuizContext } from "./QuizContext";
 import styles from './css/QuizPreview.module.css'; 
+import PrimaryButton from "../../components/PrimaryButton";
 
 const QuizPreview = () => {
     // get topics
-    const { topics, questions } = useQuizContext();
+    const { topics, questions, startQuiz } = useQuizContext();
 
     const navigate = useNavigate();
 
@@ -27,9 +28,9 @@ const QuizPreview = () => {
             <p style={{marginTop: "2rem"}} className="body-sm blurb">You've got this — let's go!</p>
 
             {/* start quiz button */}
-            <button style={{marginTop: "1rem"}} className="primary-btn full-width-btn" type="button" onClick={() => navigate("question/0")}>
+            <PrimaryButton style={{marginTop: "1rem"}} widthAdaptive onClick={startQuiz}>
                 Start Quiz
-            </button>
+            </PrimaryButton>
         </div>
     );
 }

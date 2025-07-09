@@ -4,6 +4,7 @@ import styles from './css/QuizSummary.module.css';
 import { useQuizContext } from "./QuizContext";
 import ShareButton from "../../components/ShareButton";
 import QuizProgressBar from "./components/QuizProgressBar";
+import PrimaryButton from "../../components/PrimaryButton";
 
 const QuizSummary = ({ id }) => {
     const { reviewQuiz, exitQuiz, quizAttempt, setWasShared, isLoading } = useQuizContext();
@@ -49,9 +50,14 @@ const QuizSummary = ({ id }) => {
                 <>
 
                     {/* Review mistakes button */}
-                    <button onClick={() => reviewQuiz()} style={{marginTop: 64}} type="button" className="full-width-btn primary-btn review-mistakes-button">
+                    <PrimaryButton
+                        onClick={() => reviewQuiz()} 
+                        style={{marginTop: 64}}
+                        widthAdaptive
+                        className="review-mistakes-button"
+                    >
                         Review Mistakes
-                    </button>
+                    </PrimaryButton>
 
                     {/* Leave now button */}
                     <button onClick={() => exitQuiz()} type="button" className="full-width-btn secondary-btn leave-now-button">

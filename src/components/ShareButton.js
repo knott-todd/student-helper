@@ -1,5 +1,6 @@
 import { faArrowUpFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import PrimaryButton from "./PrimaryButton";
 
 const ShareButton = ({ url, title, text, onClick = () => {}}) => {
 
@@ -24,9 +25,9 @@ const ShareButton = ({ url, title, text, onClick = () => {}}) => {
   };
 
   return (
-    <button onClick={handleShare} className="primary-btn full-width-btn">
+    <PrimaryButton widthAdaptive onClick={handleShare}>
       <span style={{display: "flex", gap: "0.5rem", justifyContent: "center"}}>Share Awesomeness <FontAwesomeIcon icon={faArrowUpFromBracket} /> </span>
-    </button>
+    </PrimaryButton>
   );
 };
 

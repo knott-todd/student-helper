@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useQuizContext } from "../QuizContext";
+import PrimaryButton from "../../../components/PrimaryButton";
 
 const QuizQuestionNavigation = ({ isReview}) => {
     
@@ -30,13 +31,19 @@ const QuizQuestionNavigation = ({ isReview}) => {
 
         {/* Next or Finish button */}
         { isLastQuestion || (isReview && parseInt(currentIndex) === incorrectIndexes?.[incorrectIndexes?.length - 1]) ? (
-            <button disabled={currQuestion.user_answer === null && !isReview} className="quiz-finish-button primary-btn" onClick={() => isReview ? finishQuizReview() : finishQuiz()}>
+            <PrimaryButton 
+                disabled={currQuestion.user_answer === null && !isReview} 
+                onClick={() => isReview ? finishQuizReview() : finishQuiz()}
+            >
                 Finish
-            </button>   
+            </PrimaryButton>
         ) : (
-            <button disabled={currQuestion.user_answer === null && !isReview} className="quiz-next-button primary-btn" onClick={() => isReview ? nextReviewQuestion() : nextQuestion()}>
+            <PrimaryButton 
+                disabled={currQuestion.user_answer === null && !isReview} 
+                onClick={() => isReview ? nextReviewQuestion() : nextQuestion()}
+            >
                 Next
-            </button>
+            </PrimaryButton>
         )}
 
     </span>

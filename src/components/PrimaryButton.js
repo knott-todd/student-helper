@@ -1,9 +1,9 @@
 import styles from '../CSS/PrimaryButton.module.css'
 
-const PrimaryButton = ({children, onClick, className, widthAdaptive=false}) => {
+const PrimaryButton = ({children, onClick, className, widthAdaptive=false, style}) => {
 
     return (
-        <button className={`${styles.primaryBtn} ${className} ${widthAdaptive ? 'adaptive-width-btn' : ''}`} onClick={onClick}>
+        <button style={style} className={`${styles.primaryBtn} ${className} ${widthAdaptive ? 'adaptive-width-btn' : ''}`} onClick={onClick}>
             {children ? children : 'BUTTON'}
         </button>
     )
