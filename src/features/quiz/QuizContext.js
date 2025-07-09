@@ -318,7 +318,7 @@ export const QuizProvider = ({ children }) => {
             startQuiz, nextQuestion, prevQuestion, skipQuestion, finishQuiz,
             reviewQuiz, exitQuiz, finishQuizReview, nextReviewQuestion, prevReviewQuestion,
             selectAnswer, toggleQuestionPin, isReview: quizAttempt?.completed_at !== null,
-            setWasShared, incorrectIndexes: quizAttempt?.incorrectIndexes || [],
+            setWasShared, incorrectIndexes: quizAttempt?.incorrectIndexes || [], setQuizAttempt
         }}>
             {!isLoading && quizAttempt.questions && quizAttempt.topics 
             ? children
