@@ -3,9 +3,12 @@ import PrimaryButton from "./components/PrimaryButton"
 import styles from './CSS/LandingPage.module.css'
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const navigate = useNavigate();
 
     return (
         <>
@@ -81,7 +84,7 @@ const LandingPage = () => {
                 {/* <p style={{maxWidth: 500}} className="body-lg mt-md">Practice that mirrors the real exam, tracks your syllabus mastery, and keeps you motivated.</p> */}
 
                 {/* CTA button mt-64 */}
-                <PrimaryButton widthAdaptive className="mt-lg" onClick={() => {}} >
+                <PrimaryButton widthAdaptive className="mt-lg" onClick={() => navigate('/quiz')} >
                     GET STARTED FOR FREE
                 </PrimaryButton>
 
