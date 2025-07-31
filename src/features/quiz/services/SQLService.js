@@ -21,8 +21,8 @@ export const setQuestionPinned = (attemptID, questionID, isPinned) =>
   patchBackend(`quiz/${attemptID}/pin`, { questionID, isPinned });
 
 // Submit full quiz
-export const submitQuizAttempt = (attemptID) =>
-  postBackend(`quiz/${attemptID}/submit`);
+export const submitQuizAttempt = (attemptID, userID) =>
+  postBackend(`quiz/${attemptID}/submit`, {userID});
 
 // Mark question reviewed
 export const markQuestionReviewed = (attemptID, questionID) =>

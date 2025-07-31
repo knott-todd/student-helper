@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { div } from "@tensorflow/tfjs";
 
-const QuizProgressBar = () => {
+const QuizProgressBar = ({mode}) => {
 
     const { questions, isReview, currentIndex } = useQuizContext();
 
@@ -23,8 +23,8 @@ const QuizProgressBar = () => {
                     <button className={`\
                     ${styles.questionBox} \
                     ${question.user_answer !== null ? styles.completed : ''} \
-                    ${isReview && question.is_correct ? styles.correct : ''} \
-                    ${isReview && !question.is_correct ? styles.incorrect : ''}\
+                    ${mode === "review" && question.is_correct ? styles.correct : ''} \
+                    ${mode === "review" && !question.is_correct ? styles.incorrect : ''}\
                     ${currentIndex === i ? styles.current : ''} \
                     ${question.was_reviewed ? styles.reviewed : ''}`}
                     

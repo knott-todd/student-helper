@@ -17,7 +17,9 @@ const QuizQuestionReview = () => {
     return (
         <div>
             {/* Progress bar */}
-            <QuizProgressBar />
+            <QuizProgressBar 
+                mode="review"
+            />
 
             {/* <p style={{position: "absolute", top: "6rem", left: "2rem"}}>Topic: {topics[question.topic].name}</p> */}
     
@@ -35,7 +37,7 @@ const QuizQuestionReview = () => {
                 mode="review"
                 questionOptions={question.options}
                 userAnswer={question.user_answer}
-                correctAnswer={question.correct_answer}
+                correctAnswer={parseInt(question.correct_answer)}
             />
     
             <QuizQuestionNavigation isReview={true} isLastQuestion={question.isLastQuestion} />

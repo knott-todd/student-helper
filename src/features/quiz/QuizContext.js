@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getQuizAttempt, markQuestionReviewed, markQuestionSkipped, markQuizReviewed, markQuizShared, setQuestionPinned, startQuizAttempt, submitAnswer, submitQuizAttempt, updateQuizAttempt } from './services/SQLService';
+import AppContext from '../../AppContext';
 
 const QuizContext = createContext();
 export const useQuizContext = () => useContext(QuizContext);
@@ -28,7 +29,7 @@ const calculateDelta = (topicScore, numQuestions) => {
     return -10;
 };
 
-const finalizeQuizAttempt = async (attempt) => {
+const finalizeQuizAttempt = async (attempt, userID) => {
     // const updatedQuestions = attempt.questions.map(q => ({
     //     ...q,
     //     is_correct: q.user_answer === parseInt(q.correct_answer),
@@ -53,7 +54,7 @@ const finalizeQuizAttempt = async (attempt) => {
     //     };
     // });
 
-    const { score, questions, completed_at, topics, incorrectIndexes } = await submitQuizAttempt(attempt.id);
+    const { score, questions, completed_at, topics, incorrectIndexes } = await submitQuizAttempt(attempt.id, userID);
     const scorePercent = Math.round((score / questions.length) * 100);
 
     return {
@@ -74,6 +75,10 @@ export const QuizProvider = ({ children }) => {
 
     const navigate = useNavigate();
     const { id, qIndex } = useParams();
+    // const { userID } = useAuthContext() || 1;
+    const userID = 1; // TODO: add auth logic
+
+    useEffect(() => console.log(global), [global])
 
     useEffect(() => console.log(quizAttempt), [quizAttempt])
 
@@ -191,7 +196,7 @@ export const QuizProvider = ({ children }) => {
     // Finalize score after submission
     useEffect(() => {
         if (quizAttempt?.completed_at && typeof quizAttempt.score !== 'number') {
-            finalizeQuizAttempt(quizAttempt).then(setQuizAttempt);
+            finalizeQuizAttempt(quizAttempt, userID).then(setQuizAttempt);
         }
     }, [quizAttempt]);
 
@@ -271,7 +276,7 @@ export const QuizProvider = ({ children }) => {
 
         setCurrentIndex(null);
         setIsLoading(true);
-        finalizeQuizAttempt(quizAttempt).then(finalizedAttempt => {
+        finalizeQuizAttempt(quizAttempt, userID).then(finalizedAttempt => {
             setQuizAttempt(finalizedAttempt);
             setIsLoading(false);
             navigate(`/quiz/${id}/review`);
