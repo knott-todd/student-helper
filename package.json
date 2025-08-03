@@ -114,5 +114,8 @@
   "overrides": {
     "semver": "7.5.4",
     "nth-check": "^2.0.1"
+  },
+  "prettier": {
+    "plugins": ["prettier-plugin-tailwindcss"]
   }
 }
