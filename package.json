@@ -57,7 +57,7 @@
     "zlib": "^1.0.5"
   },
   "scripts": {
-    "start": "concurrently --names REACT TAILWIND --prefix-colors blue cyan \"cross-env BROWSER=none react-scripts start\" \"npx @tailwindcss/cli -i ./src/CSS/tailwind-input.css -o ./src/CSS/tailwind-output.css --watch\"",
+    "start": "concurrently --names REACT,TAILWIND --prefix-colors blue,cyan \"cross-env BROWSER=none react-scripts start\" \"npx @tailwindcss/cli -i ./src/CSS/tailwind-input.css -o ./src/CSS/tailwind-output.css --watch\"",
     "build": "npm run build:types && npm run build:react",
     "build:types": "tsc -p tsconfig.json && tsc -p tsconfig.sw.json",
     "build:react": "react-scripts build",
