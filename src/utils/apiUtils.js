@@ -1,3 +1,4 @@
+// @ts-nocheck
 const backendURL = 'https://student-helper-backend.vercel.app';
 // const backendURL = 'http://localhost:3080'
 

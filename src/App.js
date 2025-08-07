@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import './CSS/App.css';
 import Pastpaper from './features/pastpapers/Pastpaper';
