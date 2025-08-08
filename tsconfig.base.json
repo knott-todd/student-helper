@@ -4,6 +4,7 @@
     "module": "esnext",
     "allowJs": true,
     "checkJs": true,
+    "preserveSymlinks": true,
     "outDir": "./dist",
     "rootDir": "./src",  
     "strict": true,
