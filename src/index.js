@@ -1,13 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './CSS/index.css';
-import App from './App';
+import App from './App.js';
 import reportWebVitals from './reportWebVitals';
 import AppContext from './AppContext';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider } from './CSS/theme-provider';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const rootElement = document.getElementById('root');
+if (!rootElement) {
+  throw new Error("Root element with id 'root' not found");
+}
+const root = ReactDOM.createRoot(rootElement);
 
 const queryClient = new QueryClient();
 
@@ -16,7 +21,10 @@ root.render(
   // <BrowserRouter>
     <AppContext>
       <QueryClientProvider client={queryClient}>
-        <App />
+        <ThemeProvider>
+
+          <App />
+        </ThemeProvider>
       </QueryClientProvider>
     </AppContext>
   // </BrowserRouter>

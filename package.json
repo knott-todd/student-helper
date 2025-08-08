@@ -8,6 +8,8 @@
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-slot": "^1.2.3",
     "@react-oauth/google": "^0.12.2",
     "@tanstack/react-query": "^5.81.5",
     "@tensorflow-models/universal-sentence-encoder": "^1.3.3",
@@ -57,10 +59,10 @@
     "zlib": "^1.0.5"
   },
   "scripts": {
-    "start": "concurrently --names REACT,TAILWIND --prefix-colors blue,cyan \"cross-env BROWSER=none react-scripts start\" \"npx @tailwindcss/cli -i ./src/CSS/tailwind-input.css -o ./src/CSS/tailwind-output.css --watch\"",
+    "start": "concurrently --names REACT,TAILWIND --prefix-colors blue,cyan \"cross-env BROWSER=none craco start\" \"npx @tailwindcss/cli -i ./src/CSS/tailwind-input.css -o ./public/tailwind-output.css --watch\"",
     "build": "npm run build:types && npm run build:react",
     "build:types": "tsc -p tsconfig.json && tsc -p tsconfig.sw.json",
-    "build:react": "react-scripts build",
+    "build:react": "craco build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "serve": "concurrently --names REACT,LOCALTUNNEL --prefix-colors blue,white \"serve -s build\" \"lt --port 3000 --local-host localhost --subdomain studenthelper -o\""
@@ -87,6 +89,7 @@
   "devDependencies": {
     "@babel/parser": "^7.28.0",
     "@babel/types": "^7.28.2",
+    "@craco/craco": "^7.1.0",
     "@tailwindcss/cli": "^4.1.11",
     "@types/babel__core": "^7.20.5",
     "@types/babel__generator": "^7.27.0",
@@ -116,6 +119,8 @@
     "nth-check": "^2.0.1"
   },
   "prettier": {
-    "plugins": ["prettier-plugin-tailwindcss"]
+    "plugins": [
+      "prettier-plugin-tailwindcss"
+    ]
   }
 }
