@@ -1,30 +1,48 @@
-import { GalleryVerticalEnd } from "lucide-react"
+import {useAuthState} from 'react-firebase-hooks/auth';
+import {auth} from '../../firebase';
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils.js'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import React from "react"
+import { sendSignInLinkToEmail } from 'firebase/auth';
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+
+  const [user, isLoading, error] = useAuthState(auth);
+
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const form = e.target as HTMLFormElement;
+    const email = (form.elements.namedItem('email') as HTMLInputElement)?.value;
+
+    sendSignInLinkToEmail(auth, email, {
+      url: 'http://localhost:3000/sign_in',
+      handleCodeInApp: true,
+
+    }).then(() => {
+      // Email sent.
+      // Save the email locally to complete the sign-in later
+      localStorage.setItem('email', email);
+      alert('Check your email for the login link!');
+    }).catch((error) => {
+      // Some error occurred, you can inspect the error object
+      console.error('Error sending email:', error);
+      alert('Failed to send login link. Please try again.');
+    })
+  }
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <form>
+      <form onSubmit={handleLogin}>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col items-center gap-2">
-            <a
-              href="#"
-              className="flex flex-col items-center gap-2 font-medium"
-            >
-              <div className="flex size-8 items-center justify-center rounded-md">
-                <GalleryVerticalEnd className="size-6" />
-              </div>
-              <span className="sr-only">Acme Inc.</span>
-            </a>
-            <h1 className="text-xl font-bold">Welcome to Acme Inc.</h1>
+            <h1 className="text-xl font-bold">Welcome to The Student Helper</h1>
             <div className="text-center text-sm">
               Don&apos;t have an account?{" "}
               <a href="#" className="underline underline-offset-4">
