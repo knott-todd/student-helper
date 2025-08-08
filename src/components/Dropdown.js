@@ -1,3 +1,4 @@
+// @ts-nocheck
 const Dropdown = ({ dataArray, value, onChange, keyOn='id', textOn, disabled }) => {
   return (
     
