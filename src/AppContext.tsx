@@ -1,47 +1,92 @@
 import { getBuildVersion, getPaperQuestions, getPastpapers } from "./services/SQLService";
 
-const { createContext, useState, useEffect } = require("react");
+import React, { createContext, useState, useEffect } from "react";
 
-export const AppContext = createContext(null);
+export interface AppContextType {
+    clearCache: () => void;
+    currSub: any;
+    setCurrSub: (sub: any) => void;
+    currUnit: any;
+    setCurrUnit: (unit: any) => void;
+    userID: any;
+    setUserID: (id: any) => void;
+    setRandomAccent: () => void;
+    userSubs: any[];
+    setUserSubs: (subs: any[]) => void;
+    isLightMode: boolean;
+    setIsLightMode: (mode: boolean) => void;
+    currExam: any;
+    setCurrExam: (exam: any) => void;
+    pageTitle: string;
+    setPageTitle: (title: string) => void;
+    user: any;
+    setUser: (user: any) => void;
+    progressValue: any;
+    setProgressValue: (val: any) => void;
+    singleProgressValue: any;
+    setSingleProgressValue: (val: any) => void;
+    examSubs: any[];
+    setExamSubs: (subs: any[]) => void;
+    accent: string;
+    setAccent: (accent: string) => void;
+    paperType: number;
+    setPaperType: (type: number) => void;
+}
 
-export default ({children}) => {
-    const [currSub, setCurrSub] = useState(JSON.parse(localStorage.getItem("sub")));
-    const [currUnit, setCurrUnit] = useState();
-    const [currExam, setCurrExam] = useState();
-    const [userID, setUserID] = useState(JSON.parse(localStorage.getItem("userID")));
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
-    const [userSubs, setUserSubs] = useState([]);
-    const [isLightMode, setIsLightMode] = useState();
-    const [pageTitle, setPageTitle] = useState();
-    const [progressValue, setProgressVal] = useState();
-    const [singleProgressValue, setSingleProgressVal] = useState();
-    const [accent, setAccent] = useState('brown');
-    const [examSubs, setExamSubs] = useState([]);
-    const [paperType, setPaperType] = useState(2);
+export const AppContext = createContext<AppContextType>({} as AppContextType);
 
-    const setProgressValue = val => {
-        setSingleProgressVal();
+
+type AppContextProviderProps = {
+    children: React.ReactNode;
+};
+
+const getLocalStorage = <T,>(key: string, fallback: T): T => {
+    const item = localStorage.getItem(key);
+    try {
+        return item ? JSON.parse(item) : fallback;
+    } catch {
+        return fallback;
+    }
+};
+
+const AppContextProvider: React.FC<AppContextProviderProps> = ({ children }) => {
+    const [currSub, setCurrSub] = useState<any>(getLocalStorage<any>("sub", null));
+    const [currUnit, setCurrUnit] = useState<any>();
+    const [currExam, setCurrExam] = useState<any>();
+    const [userID, setUserID] = useState<any>(getLocalStorage<any>("userID", null));
+    const [user, setUser] = useState<any>(getLocalStorage<any>("user", null));
+    const [userSubs, setUserSubs] = useState<any[]>([]);
+    const [isLightMode, setIsLightMode] = useState<boolean>(true);
+    const [pageTitle, setPageTitle] = useState<string>("");
+    const [progressValue, setProgressVal] = useState<any>();
+    const [singleProgressValue, setSingleProgressVal] = useState<any>();
+    const [accent, setAccent] = useState<string>('brown');
+    const [examSubs, setExamSubs] = useState<any[]>([]);
+    const [paperType, setPaperType] = useState<number>(2);
+
+    const setProgressValue = (val: any) => {
+        setSingleProgressVal(undefined);
         setProgressVal(val);
-    }
+    };
 
-    const setSingleProgressValue = val => {
-        setProgressVal();
+    const setSingleProgressValue = (val: any) => {
+        setProgressVal(undefined);
         setSingleProgressVal(val);
-    }
+    };
 
-    const cacheVariables = {
+    const cacheVariables: Record<string, any> = {
         sub: currSub,
         userID,
         user
-    }
+    };
 
-    const cacheSetCommands = {
+    const cacheSetCommands: Record<string, any> = {
         setCurrSub: "",
         setUserID: "",
         setUser: "",
         setCurrExam: "",
         setUserSubs: "[]"
-    }
+    };
 
     const clearCache = () => {
         Object.keys(cacheSetCommands).forEach(key => {
@@ -109,13 +154,14 @@ export default ({children}) => {
     // ]
 
     const setRandomAccent = () => {
-        let _accent;
-        if(isLightMode){
-            _accent = lightmodeAccentColors[Math.floor(Math.random() * lightmodeAccentColors.length)];
-        } else{
-            _accent = darkmodeAccentColors[Math.floor(Math.random() * darkmodeAccentColors.length)];
+        let _accent: [number, string, string];
+        if (isLightMode) {
+            _accent = lightmodeAccentColors[Math.floor(Math.random() * lightmodeAccentColors.length)] as [number, string, string];
+        } else {
+            _accent = darkmodeAccentColors[Math.floor(Math.random() * darkmodeAccentColors.length)] as [number, string, string];
         }
-        setAccent(_accent);
+        // Set accent as a string for context, e.g. hsl string
+        setAccent(`hsl(${_accent[0]}, ${_accent[1]}, ${_accent[2]})`);
         document.documentElement.style.setProperty(
             '--accent-l',
             `${_accent[2]}`
@@ -127,9 +173,8 @@ export default ({children}) => {
         document.documentElement.style.setProperty(
             '--accent',
             `hsl(${_accent[0]}, ${_accent[1]}, var(--accent-l))`
-            // `#${_accent}`
         );
-    }
+    };
 
     const global = {
         clearCache,
@@ -167,15 +212,13 @@ export default ({children}) => {
     }, [])
 
     useEffect(() => {
-        for (const item in cacheVariables) {
-
-            if(cacheVariables[item]) {
-                console.log(`${item}`, JSON.stringify(cacheVariables[item]))
-                localStorage.setItem(`${item}`, JSON.stringify(cacheVariables[item]))
+        Object.keys(cacheVariables).forEach((item) => {
+            if (cacheVariables[item]) {
+                console.log(`${item}`, JSON.stringify(cacheVariables[item]));
+                localStorage.setItem(`${item}`, JSON.stringify(cacheVariables[item]));
             }
-
-        }
-    }, [cacheVariables])
+        });
+    }, [cacheVariables]);
 
     useEffect(() => {
         if(currSub && currExam && userID && currSub.id){
@@ -213,5 +256,7 @@ export default ({children}) => {
         <AppContext.Provider value={global}>
             {children}
         </AppContext.Provider>
-    )
-}
+    );
+};
+
+export { AppContextProvider as default };

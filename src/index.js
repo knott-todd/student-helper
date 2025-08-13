@@ -7,6 +7,7 @@ import AppContext from './AppContext';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from './CSS/theme-provider';
+import { UserProvider } from './features/auth/UserContext';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -20,12 +21,15 @@ root.render(
   // <React.StrictMode>
   // <BrowserRouter>
     <AppContext>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider>
+      <UserProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider>
 
-          <App />
-        </ThemeProvider>
-      </QueryClientProvider>
+            <App />
+          </ThemeProvider>
+        </QueryClientProvider>
+        
+      </UserProvider>
     </AppContext>
   // </BrowserRouter>
   // </React.StrictMode>
