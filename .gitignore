@@ -24,4 +24,4 @@ yarn-error.log*
 
 .vercel
 
-/public/tailwind-output.css
+public/tailwind-output.css
