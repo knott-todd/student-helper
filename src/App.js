@@ -532,14 +532,6 @@ function App() {
     inject();
   }, []);
 
-  useEffect(() => {
-    if(global.userID) {
-      
-      saveInteraction(global.userID)
-
-    }
-  }, [global.userID])
-
   return (
     <div className="App">
 
