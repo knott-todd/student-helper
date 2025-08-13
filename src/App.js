@@ -46,10 +46,12 @@ import MainLayout from './MainLayout';
 import BareLayout from './BareLayout';
 import QuizBuilder from './features/quiz/QuizBuilder';
 import LogIn from './features/auth/LogIn';
+import { useUser } from './features/auth/UserContext';
 library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight, faXmark, faCaretUp, faFlag, faRegularFlag, faThumbTack )
 
 function App() {
   const global = useContext(AppContext);
+  const { user, loading, error } = useUser();
 
   const [mousePos, setMousePos] = useState({});
   const [columns, setColumns] = useState();
@@ -541,7 +543,7 @@ function App() {
       <Router>
         <Routes>
           <Route element={<MainLayout /> } >
-            <Route path='/' element={ global.userID ? <Navigate to="/test" /> : <Navigate to="/sign_in" /> } />
+            <Route path='/' element={ !loading && user.user_id ? <Navigate to="/test" /> : <Navigate to="/sign_in" /> } />
 
             <Route path='quiz' element={<QuizWrapper />}>
               <Route index element={<QuizBuilder />} />
