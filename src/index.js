@@ -20,17 +20,17 @@ const queryClient = new QueryClient();
 root.render(
   // <React.StrictMode>
   // <BrowserRouter>
-    <AppContext>
-      <UserProvider>
-        <QueryClientProvider client={queryClient}>
-          <ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <AppContext>
+        <UserProvider>
+            <ThemeProvider>
 
-            <App />
-          </ThemeProvider>
-        </QueryClientProvider>
-        
-      </UserProvider>
-    </AppContext>
+              <App />
+            </ThemeProvider>
+          
+        </UserProvider>
+      </AppContext>
+    </QueryClientProvider>
   // </BrowserRouter>
   // </React.StrictMode>
 );

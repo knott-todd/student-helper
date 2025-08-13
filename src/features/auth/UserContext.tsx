@@ -17,25 +17,33 @@ interface UserContextValue {
 const UserContext = createContext<UserContextValue | undefined>(undefined);
 
 async function fetchOrCreateUser(): Promise<User> {
-  // 1. Try localStorage first
-  const stored = localStorage.getItem("app_user");
-  if (stored) {
-    return JSON.parse(stored) as User;
-  }
-
-  // 2. If not found, create guest
-  const res = await fetch("/api/create-guest", { method: "POST" });
-  if (!res.ok) throw new Error("Failed to create guest");
-
-  const data = await res.json();
-  const newUser: User = {
-    user_id: data.user_id,
-    session_token: data.session_token,
+  const placeholderUser: User = {
+    user_id: "guest",
+    session_token: "guest-token",
     isGuest: true,
   };
 
-  localStorage.setItem("app_user", JSON.stringify(newUser));
-  return newUser;
+  return placeholderUser;
+
+  // // 1. Try localStorage first
+  // const stored = localStorage.getItem("app_user");
+  // if (stored) {
+  //   return JSON.parse(stored) as User;
+  // }
+
+  // // 2. If not found, create guest
+  // const res = await fetch("/api/create-guest", { method: "POST" });
+  // if (!res.ok) throw new Error("Failed to create guest");
+
+  // const data = await res.json();
+  // const newUser: User = {
+  //   user_id: data.user_id,
+  //   session_token: data.session_token,
+  //   isGuest: true,
+  // };
+
+  // localStorage.setItem("app_user", JSON.stringify(newUser));
+  // return newUser;
 }
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
