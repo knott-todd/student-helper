@@ -47,6 +47,7 @@ import BareLayout from './BareLayout';
 import QuizBuilder from './features/quiz/QuizBuilder';
 import LogIn from './features/auth/LogIn';
 import { useUser } from './features/auth/UserContext';
+import SignUp from './features/auth/SignUp';
 library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight, faXmark, faCaretUp, faFlag, faRegularFlag, faThumbTack )
 
 function App() {
@@ -583,14 +584,16 @@ function App() {
             <Route path='/set_objectives' element={<ObjectiveSetter />} />
             <Route path='/parse_structure' element={<StructureParser />} />
 
-            <Route path="/sign_in" element={<LogIn />} />
-
             <Route path="/sentence_similarity" element={<SentenceSimilarity />} />
 
             <Route path="/home" element={<Home />} />
 
             
           </Route>
+
+          
+          <Route path="/sign_in" element={<LogIn />} />
+          <Route path="/sign_up" element={<SignUp />} />
 
           <Route element={<BareLayout />}>
             <Route path='landing' element={<LandingPage />} />
