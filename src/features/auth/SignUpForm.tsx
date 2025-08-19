@@ -20,6 +20,13 @@ export function SignUpForm({
 
     const form = e.target as HTMLFormElement;
     const email = (form.elements.namedItem('email') as HTMLInputElement)?.value;
+    const password = (form.elements.namedItem('password') as HTMLInputElement)?.value;
+    const confirmPassword = (form.elements.namedItem('confirm-password') as HTMLInputElement)?.value;
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
 
     sendSignInLinkToEmail(auth, email, {
       url: 'http://localhost:3000/sign_in',
