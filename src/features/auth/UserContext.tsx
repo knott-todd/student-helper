@@ -1,9 +1,10 @@
 import React, { createContext, useContext } from "react";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { authClient } from "@/lib/auth-client";
 
 export interface User {
   user_id: string;       // or UUID
-  session_token: string;
+  session_token?: string;
   isGuest: boolean;
 }
 
@@ -17,6 +18,23 @@ interface UserContextValue {
 const UserContext = createContext<UserContextValue | undefined>(undefined);
 
 async function fetchOrCreateUser(): Promise<User> {
+
+  
+  // First check if Better Auth has a session
+  const { data, error } = await authClient.getSession();
+
+  if (error) {
+    throw error;
+  }
+
+  if (data?.user) {
+
+    return {
+      user_id: data.user.id,
+      isGuest: false,
+    };
+  }
+
   const placeholderUser: User = {
     user_id: "guest",
     session_token: "guest-token",

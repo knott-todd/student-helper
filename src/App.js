@@ -543,8 +543,10 @@ function App() {
 
       <Router>
         <Routes>
-          <Route element={<MainLayout /> } >
-            <Route path='/' element={ !loading && user.user_id ? <Navigate to="/test" /> : <Navigate to="/sign_in" /> } />
+          { loading 
+          ? "loading..."
+          : <Route element={<MainLayout /> } >
+            <Route path='/' element={ user?.user_id ? <Navigate to="/test" /> : <Navigate to="/sign_in" /> } />
 
             <Route path='quiz' element={<QuizWrapper />}>
               <Route index element={<QuizBuilder />} />
@@ -589,7 +591,8 @@ function App() {
             <Route path="/home" element={<Home />} />
 
             
-          </Route>
+          </Route>}
+          
 
           
           <Route path="/sign_in" element={<LogIn />} />
