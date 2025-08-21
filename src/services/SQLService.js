@@ -1,7 +1,7 @@
 import { fetchBackend } from "../utils/apiUtils";
 
 // const backendURL = 'https://student-helper-backend.vercel.app';
-const backendURL = 'http://localhost:3080'
+const backendURL = process.env.REACT_APP_BACKEND_URL;
 
 const onesignalURL = 'https://onesignal.com/api/v1/notifications';
 const onesignalAppID = '99b7a99a-31e5-4656-86d7-ab456591292b';

@@ -3,8 +3,7 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { authClient } from "@/lib/auth-client";
 
 export interface User {
-  user_id: string;       // or UUID
-  session_token?: string;
+  user_id: string;
   isGuest: boolean;
 }
 
@@ -32,36 +31,28 @@ async function fetchOrCreateUser(): Promise<User> {
     return {
       user_id: data.user.id,
       isGuest: false,
-    };
+    } as User;
   }
 
-  const placeholderUser: User = {
-    user_id: "guest",
-    session_token: "guest-token",
+  // Guest user logic
+  // 1. Try localStorage first
+  const stored = localStorage.getItem("guest_user");
+  if (stored) {
+    return JSON.parse(stored) as User;
+  }
+
+  // 2. If not found, create guest
+  const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user/create_guest`, { method: "POST" });
+  if (!res.ok) throw new Error("Failed to create guest");
+
+  const guest = await res.json();
+  const newUser: User = {
+    user_id: guest.id,
     isGuest: true,
   };
 
-  return placeholderUser;
-
-  // // 1. Try localStorage first
-  // const stored = localStorage.getItem("app_user");
-  // if (stored) {
-  //   return JSON.parse(stored) as User;
-  // }
-
-  // // 2. If not found, create guest
-  // const res = await fetch("/api/create-guest", { method: "POST" });
-  // if (!res.ok) throw new Error("Failed to create guest");
-
-  // const data = await res.json();
-  // const newUser: User = {
-  //   user_id: data.user_id,
-  //   session_token: data.session_token,
-  //   isGuest: true,
-  // };
-
-  // localStorage.setItem("app_user", JSON.stringify(newUser));
-  // return newUser;
+  localStorage.setItem("guest_user", JSON.stringify(newUser));
+  return newUser;
 }
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
