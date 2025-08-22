@@ -221,17 +221,6 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({ children }) => 
     }, [cacheVariables]);
 
     useEffect(() => {
-        if(currSub && currExam && userID && currSub.id){
-            getPastpapers(currSub.id, currExam, userID)
-            .then(async result => {        
-                for(const paper of result){
-                    await getPaperQuestions(paper.id, userID)
-                }
-            })
-        }
-    }, [currSub, currExam, userID])
-
-    useEffect(() => {
         // getBuildVersion()
         //     .then(result => {
 

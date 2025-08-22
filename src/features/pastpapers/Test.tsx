@@ -83,7 +83,7 @@ const Test: React.FC = () => {
     return (
         papersLoading ? <div>Loading papers...</div> :
         loading ? <div>Loading user data...</div> :
-        !currSub || !currExam ? <div className="no-content-text">Please select your subjects and exam on the <a href="/profile">Profile</a> page to view past papers.</div> :
+        !currSub || !currExam ? <div className="no-content-text">Please select your subjects and exam on the <a className="underline" href="/profile">Profile</a> page to view past papers.</div> :
         <div className="Test">
             <div className="body-div">
                 <div className="test-top">
@@ -125,9 +125,7 @@ const Test: React.FC = () => {
                                         <div className="head-badge-wrapper" style={{ display: "block" }}>
                                             <h2 className="paper-year-head" style={{ display: "inline-block", verticalAlign: "top", margin: 0 }}>{paper.year}</h2>
                                             <div className="badges-wrapper">
-                                                {Array(badges.find(badge => (paper[badge.semiCondition || ""] || paper[badge.enabledCondition || ""])) || {}).map(() => (
-                                                    <p className={`badge topic-badge ${paper.areTopicsLinked ? "badge-enabled" : (paper.areAnyTopicsLinked ? "badge-semi" : "badge-disabled")}`}>T</p>
-                                                ))}
+                                                <p className={`badge topic-badge ${paper.areTopicsLinked ? "badge-enabled" : (paper.areAnyTopicsLinked ? "badge-semi" : "badge-disabled")}`}>T</p>
                                             </div>
                                         </div>
 
