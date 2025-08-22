@@ -37,7 +37,7 @@ const Navbar = () => {
                     {user?.user_id === '150' ? <NavLink to="/insert_objective" currSection={currSection} onChange={setCurrSection} text="Insert" icon="folder-plus" /> : ""}
                 </div>
                 <div style={{display: "inline-block"}}>
-                    <NavLink to="/sign_in" currSection={currSection} onChange={setCurrSection} text={user?.user_id ? "Profile" : "Sign In"} icon="user" />
+                    <NavLink to={"/profile"} currSection={currSection} onChange={setCurrSection} text={"Profile"} icon="user" />
                 </div>
                 
             </nav>

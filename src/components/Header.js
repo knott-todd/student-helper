@@ -6,12 +6,16 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Progress from "../Progress";
 import SingleProgress from "../SingleProgress";
+import { useUser } from "@/features/auth/UserContext";
+import { load } from "@tensorflow-models/universal-sentence-encoder";
 
 const Header = () => {
     const [subs, setSubs] = useState([{}]);
     const [scrollTop, setScrollTop] = useState(0);
 
     const units = [1, 2];
+
+    const { user, loading } = useUser();
 
     const global = useContext(AppContext);
 
@@ -22,8 +26,9 @@ const Header = () => {
     }, [])
 
     useEffect(() => {
-        if(global.userID){
-            getUserSubjects(global.userID)
+        if(loading) return;
+        if(user?.user_id){
+            getUserSubjects(user?.user_id)
                 .then(result => {
                     setSubs(result);
 
@@ -41,14 +46,14 @@ const Header = () => {
                     //     navigate('/track')
                 })
                 
-            getUserExam(global.userID)
+            getUserExam(user?.user_id)
                 .then(result => {
                     
                     global.setCurrExam(result[0].default_exam);
 
                 })
         }
-    }, [global.userID]);
+    }, [user, loading, global.currSub, global.currExam]);
 
     useEffect(() => {
         if(global.userSubs) {

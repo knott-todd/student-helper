@@ -5,19 +5,22 @@ import OneSignal from 'react-onesignal';
 import { setUser, getUserID, getSubjects, getUserSubjects, setUserSub, getExamSubjects, getExams, getUserExam, setUserExam, setSubExam } from "./services/SQLService";
 import SubjectSelector from "./components/SubjectSelector";
 import ExamDropdown from "./components/ExamDropdown";
+import React from "react";
+import { useUser } from "./features/auth/UserContext";
 
-const SignIn = () => {
+const Profile = () => {
 
     const [fnameVal, setFnameVal] = useState("");
     const [lnameVal, setLnameVal] = useState("");
     const [exams, setExams] = useState([]);
-    const [subs, setSubs] = useState([]);
+    const [subs, setSubs] = useState<Subject[]>([]);
+
+    const { user, loading } = useUser();
     
     const global = useContext(AppContext);
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(typeof global.userID, global.userID)
         getExams()
             .then(result => {
                 setExams(result)
@@ -25,24 +28,58 @@ const SignIn = () => {
     }, [])
 
     useEffect(() => {
-        global.setPageTitle(global.userID ? "Profile" : "Sign In");
+        global.setPageTitle("Profile");
     }, [])
 
+    interface User {
+        id: string;
+        [key: string]: any;
+    }
+
+    interface Exam {
+        id: number;
+        short_name?: string;
+        [key: string]: any;
+    }
+
+    interface Subject {
+        id: number;
+        name?: string;
+        isUserSub?: boolean;
+        exam?: string | number;
+        [key: string]: any;
+    }
+
+    interface SQLService {
+        setUser: (fname: string, lname: string) => Promise<any>;
+        getUserID: (fname: string, lname: string) => Promise<User[]>;
+        getSubjects: () => Promise<Subject[]>;
+        getUserSubjects: (userID: number) => Promise<Subject[]>;
+        setUserSub: (subject: Subject, userID: number) => Promise<any>;
+        getExamSubjects: (examID: number) => Promise<Subject[]>;
+        getExams: () => Promise<Exam[]>;
+        getUserExam: (userID: number) => Promise<{ default_exam: number }[]>;
+        setUserExam: (examID: number, userID: number) => Promise<any>;
+        setSubExam: (examID: number, subID: number, userID: number) => Promise<any>;
+    }
+
     useEffect(() => {
+        if(loading) return;
+        if(!user?.user_id) return;
         if(global.currExam) {
             getExamSubjects(global.currExam)
                 .then(result => {
 
                     global.setExamSubs(result)
                     
-                    getUserSubjects(global.userID)
+                    getUserSubjects(user?.user_id)
                         .then(res2 => {
                             
                             for (const sub of result) {
                                 
-                                sub.isUserSub = (typeof res2.find(sub2 => sub2.id === sub.id) !== 'undefined');
+                                sub.isUserSub = (typeof res2.find((sub2: Subject) => sub2.id === sub.id) !== 'undefined');
 
-                                if (sub.isUserSub) sub.exam = res2.find(sub2 => sub2.id === sub.id).exam
+                                if (sub.isUserSub) sub.exam = res2.find((sub2: Subject) => sub2.id === sub.id).exam
 
                             }
 
@@ -50,9 +87,9 @@ const SignIn = () => {
                         })
                 })
         }
-    }, [global.currExam])
+    }, [global.currExam, user, loading])
 
-    const handleSetUser = (e) => {
+    const handleSetUser = (e: React.FormEvent<HTMLButtonElement>) => {
 
         e.preventDefault();
 
@@ -62,14 +99,14 @@ const SignIn = () => {
         setUser(fnameVal, lnameVal)
             .then(() => {
                 getUserID(fnameVal, lnameVal)
-                    .then(result => {
+                    .then((result: User[]) => {
                         global.setUserID(result[0].id);
                         global.setUser(result[0]);
 
                         OneSignal.setExternalUserId(result[0].id);
 
                         getUserExam(result[0].id)
-                            .then(result => {
+                            .then((result: { default_exam: number }[]) => {
                                 
                                 global.setCurrExam(result[0].default_exam);
 
@@ -81,7 +118,7 @@ const SignIn = () => {
                             })
                     })
             })
-            .catch(err => console.log(err))
+            .catch((err: any) => console.log(err))
             
 
         setFnameVal("");
@@ -96,16 +133,17 @@ const SignIn = () => {
 
     }
 
-    const onUserSubChange = (e, subject) => {
-        const tempSubs = [...subs];
-        tempSubs.find(sub => sub.id === subject.id).isUserSub = e.target.checked;
-        setSubs(tempSubs);
+    const onUserSubChange = (e: React.ChangeEvent<HTMLInputElement>, subject: Subject) => {
+        
+        setSubs(subs.map(sub =>
+            sub.id === subject.id ? { ...sub, isUserSub: e.target.checked } : sub
+        ));
 
         subject.isUserSub = e.target.checked;
-        setUserSub(subject, global.userID)
+        setUserSub(subject, user?.user_id)
         .then(() => {
 
-            getUserSubjects(global.userID)
+            getUserSubjects(user?.user_id)
             .then(res => {
                 
                 global.setUserSubs(res);
@@ -115,31 +153,29 @@ const SignIn = () => {
         })
     }
 
-    const onUserExamChange = e => {
+    const onUserExamChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         global.setCurrExam(parseInt(e.target.value))
 
         if(e.target.value) {
-            setUserExam(e.target.value, global.userID);
+            setUserExam(e.target.value, user?.user_id);
         }
     }
 
-    const onSubExamChange = (e, subID) => {
+    const onSubExamChange = (e: React.ChangeEvent<HTMLSelectElement>, subID: number) => {
 
         if(e.target.value) {
-            setSubExam(e.target.value, subID, global.userID)
+            setSubExam(e.target.value, subID, user?.user_id)
             .then(() => {
-                getUserSubjects(global.userID)
+                getUserSubjects(user?.user_id)
                 .then(res => {
                     global.setUserSubs(res);
                     console.log(res)
                 })    
             })
 
-            let tempSubs = [...subs];
-
-            tempSubs.find(sub => sub.id === subID).exam = e.target.value;
-
-            setSubs(tempSubs);
+            setSubs(subs.map(sub =>
+                sub.id === subID ? { ...sub, exam: e.target.value } : sub
+            ));
 
         }
 
@@ -159,7 +195,7 @@ const SignIn = () => {
             </form>
             
 
-            {global.userID && (
+            {user?.user_id && (
                 
                 <form style={{ display: "block", paddingTop: "40px" }}>
                 <label>Select Default Exam</label>
@@ -222,4 +258,4 @@ const SignIn = () => {
     )
 }
 
-export default SignIn
+export default Profile

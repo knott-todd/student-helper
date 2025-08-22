@@ -18,7 +18,7 @@ import ObjectiveInsert from './features/data_processing/ObjectiveInsert';
 import ObjectiveSetter from './features/data_processing/ObjectiveSetter';
 import StructureParser from './features/data_processing/StructureParser';
 import TopicQuestions from './features/tracking/TopicQuestions';
-import SignIn from './SignIn';
+import Profile from './Profile';
 import Refresh from './Refresh';
 import { useContext, useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
@@ -589,6 +589,8 @@ function App() {
             <Route path="/sentence_similarity" element={<SentenceSimilarity />} />
 
             <Route path="/home" element={<Home />} />
+
+            <Route path="/profile" element={<Profile />} />
 
             
           </Route>}
