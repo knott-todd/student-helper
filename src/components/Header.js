@@ -8,6 +8,7 @@ import Progress from "../Progress";
 import SingleProgress from "../SingleProgress";
 import { useUser } from "@/features/auth/UserContext";
 import { load } from "@tensorflow-models/universal-sentence-encoder";
+import React from "react";
 
 const Header = () => {
     const [subs, setSubs] = useState([{}]);
@@ -89,7 +90,7 @@ const Header = () => {
     }
 
     return (
-        <div className={`header tooltip ${scrollTop === 0 ? "top" : ""}`} style={{visibility: (global.userID ? "visible" : "hidden")}} onScroll={e => setScrollTop(e.currentTarget.scrollTop)}>
+        <div className={`header tooltip ${scrollTop === 0 ? "top" : ""}`} onScroll={e => setScrollTop(e.currentTarget.scrollTop)}>
             <div className="header-content">
                 
                 <h1 key={global.pageTitle ? global.pageTitle : ""} className="page-title">{(global.pageTitle ? global.pageTitle : "")}</h1>
@@ -108,8 +109,8 @@ const Header = () => {
                         ))} 
                     </select> */}
                 </form>
-
             </div>
+
             <Progress className={global.progressValue >= 1 ? "familiarity-complete": ""} value={global.progressValue} height="4px" width={(window.location.pathname.includes("/track") ? "100%" : "0")} position="absolute" />
             <SingleProgress height="4px" width={(window.location.pathname.includes("/tasks") ? "100%" : "0")} position="absolute" value={global.singleProgressValue} />
                 

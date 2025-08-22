@@ -6,6 +6,7 @@ import '../../CSS/Test.css';
 import { AppContext } from "../../AppContext";
 import SingleProgress from "../../SingleProgress";
 import { useUser } from "../auth/UserContext";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Define paper type based on your backend shape
 interface Topic {
@@ -33,33 +34,32 @@ interface Badge {
 }
 
 const Test: React.FC = () => {
-    const [papers, setPapers] = useState<Paper[]>([]);
 
     const { currSub, currExam, paperType, setPaperType, setPageTitle } = useContext(AppContext);
 
     const { user, loading } = useUser();
 
+    const queryClient = useQueryClient();
+
     useEffect(() => {
         setPageTitle("Test");
     }, [setPageTitle]);
 
-    // Load papers when the selected subject changes
+    const { data: papers = [], isLoading: papersLoading, error: papersError } = useQuery<Paper[] | Error>({
+        queryKey: ['papers', currSub?.id, currExam, user?.user_id],
+        queryFn: async () => {
+            console.log("FETCHIGN PAPERS");
+            const papers =  await getPastpapers(currSub!.id, currExam!, user!.user_id);
+            console.log("PAPERS: ", papers);
+            return papers;
+        },
+        enabled: !!currSub && !!currExam && !!user?.user_id && !loading,
+        initialData: () => queryClient.getQueryData(['papers', currSub?.id, currExam, user?.user_id]),
+    });
+
     useEffect(() => {
-        // TODO: Check if the papers are already cached
-        // TODO: Display cached papers if available
-        // If not, fetch from the database
-
-        if (loading) return; // Wait until user data is ready
-        if (!user?.user_id) return; // Require a logged-in user
-        if (!currSub?.id || !currExam) return; // Require selection
-
-        const examId = currSub.exam || currExam;
-
-        getPastpapers(currSub.id, examId, user.user_id)
-            .then((result: Paper[]) => setPapers(result))
-            .catch(console.error);
-
-    }, [currSub, currExam, user, loading]);
+        console.log(papers);
+    }, [papers]);
 
     const badges: Badge[] = [
         {
@@ -79,7 +79,11 @@ const Test: React.FC = () => {
         }
     ];
 
+
     return (
+        papersLoading ? <div>Loading papers...</div> :
+        loading ? <div>Loading user data...</div> :
+        !currSub || !currExam ? <div className="no-content-text">Please select your subjects and exam on the <a href="/profile">Profile</a> page to view past papers.</div> :
         <div className="Test">
             <div className="body-div">
                 <div className="test-top">
@@ -107,46 +111,50 @@ const Test: React.FC = () => {
                     </label>
                 </div>
 
-                {papers.filter(paper => paper.num === paperType.toString()).length > 0 ? (
-                    <div className="pastpapers list-container">
-                        {papers
-                            .filter(paper => paper.num === paperType.toString())
-                            .sort((a, b) => Number(b.year.match(/\d{4}/)?.[0] || 0) - Number(a.year.match(/\d{4}/)?.[0] || 0))
-                            .sort((a, b) => Number(b.areTopicsLinked) - Number(a.areTopicsLinked))
-                            .sort((a, b) => Number(b.areAnyTopicsLinked) - Number(a.areAnyTopicsLinked))
-                            .sort((a, b) => Number(a.is_complete) - Number(b.is_complete))
-                            .map(paper => (
-                                <Link to={`pastpaper/${paper.id}`} className={`list-link test-paper ${paper.is_complete ? "complete" : ""}`} key={paper.id}>
-                                    <div className="head-badge-wrapper" style={{ display: "block" }}>
-                                        <h2 className="paper-year-head" style={{ display: "inline-block", verticalAlign: "top", margin: 0 }}>{paper.year}</h2>
-                                        <div className="badges-wrapper">
-                                            {Array(badges.find(badge => (paper[badge.semiCondition || ""] || paper[badge.enabledCondition || ""])) || {}).map(() => (
-                                                <p className={`badge topic-badge ${paper.areTopicsLinked ? "badge-enabled" : (paper.areAnyTopicsLinked ? "badge-semi" : "badge-disabled")}`}>T</p>
-                                            ))}
+                {Array.isArray(papers) ? (
+                    papers.filter(paper => paper.num === paperType.toString()).length > 0 ? (
+                        <div className="pastpapers list-container">
+                            {papers
+                                .filter(paper => paper.num === paperType.toString())
+                                .sort((a, b) => Number(b.year.match(/\d{4}/)?.[0] || 0) - Number(a.year.match(/\d{4}/)?.[0] || 0))
+                                .sort((a, b) => Number(b.areTopicsLinked) - Number(a.areTopicsLinked))
+                                .sort((a, b) => Number(b.areAnyTopicsLinked) - Number(a.areAnyTopicsLinked))
+                                .sort((a, b) => Number(a.is_complete) - Number(b.is_complete))
+                                .map(paper => (
+                                    <Link to={`pastpaper/${paper.id}`} className={`list-link test-paper ${paper.is_complete ? "complete" : ""}`} key={paper.id}>
+                                        <div className="head-badge-wrapper" style={{ display: "block" }}>
+                                            <h2 className="paper-year-head" style={{ display: "inline-block", verticalAlign: "top", margin: 0 }}>{paper.year}</h2>
+                                            <div className="badges-wrapper">
+                                                {Array(badges.find(badge => (paper[badge.semiCondition || ""] || paper[badge.enabledCondition || ""])) || {}).map(() => (
+                                                    <p className={`badge topic-badge ${paper.areTopicsLinked ? "badge-enabled" : (paper.areAnyTopicsLinked ? "badge-semi" : "badge-disabled")}`}>T</p>
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <SingleProgress value={paper.completeAmount || 0} />
+                                        <SingleProgress value={paper.completeAmount || 0} />
 
-                                    <div className="whats-inside">
-                                        <p style={{ fontWeight: "bold", margin: 0 }}>What's inside:</p>
-                                        <div className="topic-preview-wrapper">
-                                            {paper.topics.map((topic, i) => (
-                                                <p
-                                                    key={i}
-                                                    className="paper-topic-preview"
-                                                    style={{ paddingBottom: (i === paper.topics.length - 1 ? "20px" : "0px") }}
-                                                >
-                                                    {topic.name}
-                                                </p>
-                                            ))}
+                                        <div className="whats-inside">
+                                            <p style={{ fontWeight: "bold", margin: 0 }}>What's inside:</p>
+                                            <div className="topic-preview-wrapper">
+                                                {paper.topics.map((topic, i) => (
+                                                    <p
+                                                        key={i}
+                                                        className="paper-topic-preview"
+                                                        style={{ paddingBottom: (i === paper.topics.length - 1 ? "20px" : "0px") }}
+                                                    >
+                                                        {topic.name}
+                                                    </p>
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
-                                </Link>
-                            ))}
-                    </div>
+                                    </Link>
+                                ))}
+                        </div>
+                    ) : (
+                        currSub ? (<p className="no-content-text">Sorry! We don't have any {currSub.name} P{paperType}'s yet.</p>) : ""
+                    )
                 ) : (
-                    currSub ? (<p className="no-content-text">Sorry! We don't have any {currSub.name} P{paperType}'s yet.</p>) : ""
+                    <p className="no-content-text">Failed to load papers.</p>
                 )}
             </div>
         </div>

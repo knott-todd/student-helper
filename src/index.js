@@ -5,7 +5,9 @@ import App from './App.js';
 import reportWebVitals from './reportWebVitals';
 import AppContext from './AppContext';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { ThemeProvider } from './CSS/theme-provider';
 import { UserProvider } from './features/auth/UserContext';
 
@@ -15,12 +17,25 @@ if (!rootElement) {
 }
 const root = ReactDOM.createRoot(rootElement);
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      refetchInterval: 1000 * 60 * 60 * 24, // 24 hours
+    },
+  },
+});
+
+const persister = createAsyncStoragePersister({
+  storage: window.localStorage,
+});
 
 root.render(
   // <React.StrictMode>
   // <BrowserRouter>
-    <QueryClientProvider client={queryClient}>
+    <PersistQueryClientProvider
+      client={queryClient}
+      persistOptions={{ persister }}>
       <AppContext>
         <UserProvider>
             <ThemeProvider>
@@ -30,7 +45,7 @@ root.render(
           
         </UserProvider>
       </AppContext>
-    </QueryClientProvider>
+    </PersistQueryClientProvider>
   // </BrowserRouter>
   // </React.StrictMode>
 );
