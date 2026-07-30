@@ -546,7 +546,7 @@ function App() {
           { loading 
           ? "loading..."
           : <Route element={<MainLayout /> } >
-            <Route path='/' element={ user?.user_id ? <Navigate to="/test" /> : <Navigate to="/sign_in" /> } />
+            <Route path='/' element={ <Navigate to="/test" />} />
 
             <Route path='quiz' element={<QuizWrapper />}>
               <Route index element={<QuizBuilder />} />

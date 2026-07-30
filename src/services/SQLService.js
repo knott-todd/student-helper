@@ -19,9 +19,12 @@ export async function getPastpapers (subID, examID, userID) {
                 "Bypass-Tunnel-Reminder": "true"
             }
         });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status} message: ${response.statusText}`);
+        }
         return await response.json();
     } catch(error) {
-        return [];
+        throw error;
     }
 }
 
