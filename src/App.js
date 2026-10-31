@@ -28,7 +28,6 @@ import TaskForm from './TaskForm';
 import { ENABLE_ADMIN } from './config';
 import { ToastContainer } from 'react-toastify';
 import OneSignal from 'react-onesignal';
-import { eventWrapper } from '@testing-library/user-event/dist/utils';
 import { useState } from 'react';
 import { inject } from '@vercel/analytics';
 import SentenceSimilarity from './SentenceSimilarity';
