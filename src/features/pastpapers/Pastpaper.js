@@ -1,11 +1,12 @@
 import React, { useContext } from "react"
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react";
-import { addMCQs, getPaperQuestions, getPastpaper } from "../../services/SQLService";
+import { getPaperQuestions, getPastpaper } from "../../services/SQLService";
 import { Link } from "react-router-dom";
 import ObjectiveSetter from "../data_processing/ObjectiveSetter";
 import StructureParser from "../data_processing/StructureParser";
 import {AppContext} from "../../AppContext";
+import { ENABLE_ADMIN } from "../../config";
 import MCQUserInterface from "../../MCQUserInterface";
 import "../../CSS/Pastpaper.css";
 
@@ -43,24 +44,12 @@ const Pastpaper = () => {
 
             getPaperQuestions(id, global.userID)
             .then(result => {
+                // Seeding Paper 1 MCQs (POST /add_mcqs) used to run here on any
+                // student's page view; it is an admin content task now.
                 if(typeof result[0] !== 'undefined'){
                     
                     setQuests(result)
     
-                } else if(paper.num === "1") {
-
-                    addMCQs(paper.id, (global.currExam === 2 ? 60 : 45))
-                        .then(() => {
-                            getPaperQuestions(id, global.userID)
-                            .then(res2 => {
-                                if(typeof res2[0] !== 'undefined'){
-                    
-                                    setQuests(res2)
-                    
-                                }
-                            })
-                        })
-
                 }
             })
 
@@ -76,7 +65,7 @@ const Pastpaper = () => {
 
                 <div className="editor-wrapper">
 
-                    {global.userID === 150 ? (
+                    {ENABLE_ADMIN && global.userID === 150 ? (
                         <>
                             Edit Topics
                             <input type="checkbox" onChange={e => {setIsEditTopics(e.target.checked)}}/>

@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {AppContext} from "./AppContext";
+import { ENABLE_ADMIN } from "./config";
 import './CSS/Navbar.css'
 import './CSS/global.css'
 import {TfiWrite} from 'react-icons/tfi';
@@ -32,7 +33,7 @@ const Navbar = () => {
                     <NavLink to='/tasks' currSection={currSection} onChange={setCurrSection} icon="list-check" />
                     <NavLink to="/test" currSection={currSection} onChange={setCurrSection} icon="file-pen" />
                     <NavLink to="/track" currSection={currSection} onChange={setCurrSection} icon="bars-progress" />
-                    {global.userID === 150 ? <NavLink to="/insert_objective" currSection={currSection} onChange={setCurrSection} text="Insert" icon="folder-plus" /> : ""}
+                    {ENABLE_ADMIN && global.userID === 150 ? <NavLink to="/insert_objective" currSection={currSection} onChange={setCurrSection} text="Insert" icon="folder-plus" /> : ""}
                 </div>
                 <div style={{display: "inline-block"}}>
                     <NavLink to="/sign_in" currSection={currSection} onChange={setCurrSection} text={global.userID ? "Profile" : "Sign In"} icon="user" />

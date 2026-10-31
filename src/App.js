@@ -25,7 +25,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight, faX, faXmark, faCaretUp, faFlag, faThumbTack } from '@fortawesome/free-solid-svg-icons'
 import { faFlag as faRegularFlag } from '@fortawesome/free-regular-svg-icons';
 import TaskForm from './TaskForm';
-import { saveInteraction } from './services/SQLService';
+import { ENABLE_ADMIN } from './config';
 import { ToastContainer } from 'react-toastify';
 import OneSignal from 'react-onesignal';
 import { eventWrapper } from '@testing-library/user-event/dist/utils';
@@ -532,14 +532,6 @@ function App() {
     inject();
   }, []);
 
-  useEffect(() => {
-    if(global.userID) {
-      
-      saveInteraction(global.userID)
-
-    }
-  }, [global.userID])
-
   return (
     <div className="App">
 
@@ -585,15 +577,20 @@ function App() {
               <Route path = "task_form" element={<TaskForm />} />
             </Route>
 
-            <Route path='/insert_objective' element={<ObjectiveInsert />} />
-            <Route path='/set_objectives' element={<ObjectiveSetter />} />
-            <Route path='/parse_structure' element={<StructureParser />} />
-
             <Route path="/sign_in" element={<SignIn />} />
 
-            <Route path="/sentence_similarity" element={<SentenceSimilarity />} />
-
-            <Route path="/home" element={<Home />} />
+            {/* Admin/content tools and dev pages: hidden from production builds
+                (see ENABLE_ADMIN in src/config.js). Not access control; the
+                backend must guard the admin write endpoints. */}
+            {ENABLE_ADMIN && (
+              <>
+                <Route path='/insert_objective' element={<ObjectiveInsert />} />
+                <Route path='/set_objectives' element={<ObjectiveSetter />} />
+                <Route path='/parse_structure' element={<StructureParser />} />
+                <Route path="/sentence_similarity" element={<SentenceSimilarity />} />
+                <Route path="/home" element={<Home />} />
+              </>
+            )}
 
             
           </Route>

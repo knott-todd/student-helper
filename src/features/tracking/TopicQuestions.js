@@ -4,6 +4,7 @@ import { getTopic, getTopicQuestions, updateUserQuestion, getPastpaper, addQuizA
 import FamiliarityDropdown from "../../FamiliarityDropdown";
 import CompleteCheckbox from "../../CompleteCheckbox";
 import {AppContext} from "../../AppContext";
+import { ENABLE_QUIZ } from "../../config";
 import '../../CSS/global.css'
 import '../../CSS/TopicQuestions.css'
 
@@ -117,9 +118,12 @@ const TopicQuestions = () => {
             {/* <h4>Familiarity: {(topic.familiarity * 100).toFixed(2)}%</h4> */}
 
 
-            <button type="button" onClick={() => handleCreateQuiz(global.userID, [topic.id])} >
-                Take Quiz
-            </button>
+            {/* Quiz is out of scope for launch; see ENABLE_QUIZ in src/config.js. */}
+            {ENABLE_QUIZ && (
+                <button type="button" onClick={() => handleCreateQuiz(global.userID, [topic.id])} >
+                    Take Quiz
+                </button>
+            )}
 
             <h2>
                 Appears in:
