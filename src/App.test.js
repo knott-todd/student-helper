@@ -39,15 +39,28 @@ const respond = (status, body) =>
 
 // Routes fetch by "METHOD /path". Anything not listed answers 200 []
 // (the legacy getters' "nothing here" shape).
+// GET /user_exam has no user id in it any more, so the mock answers it for
+// whoever /me or /auth/google last returned (the session user).
 const mockBackend = (routes) => {
+  let sessionUser = null;
+  const remember = (response) =>
+    Promise.resolve(response).then(async (res) => {
+      try {
+        const body = await res.json();
+        if (body && body.user) sessionUser = body.user;
+      } catch (error) {
+        // No JSON body.
+      }
+      return res;
+    });
   global.fetch = jest.fn((url, opts = {}) => {
     const key = `${opts.method || 'GET'} ${url}`;
     if (key in routes) {
       const route = routes[key];
-      return typeof route === 'function' ? route(url, opts) : respond(...route);
+      const response = typeof route === 'function' ? route(url, opts) : respond(...route);
+      return /^(GET \/api\/me|POST \/api\/auth\/google)$/.test(key) ? remember(response) : response;
     }
-    const userExam = url.match(/^\/api\/user_exam\/(\d+)$/);
-    if (userExam) return respond(200, [{ default_exam: userExam[1] === '7' ? 1 : null }]);
+    if (key === 'GET /api/user_exam') return respond(200, [{ default_exam: sessionUser ? sessionUser.default_exam : null }]);
     return respond(200, []);
   });
 };
@@ -109,9 +122,11 @@ test('a valid session from /me is restored and routed to /test; legacy identity 
   await waitFor(() => expect(window.location.pathname).toBe('/test'));
   expect(localStorage.getItem('userID')).toBeNull();
   expect(localStorage.getItem('user')).toBeNull();
-  // Legacy endpoints still take the userID; it now comes from the session.
-  await waitFor(() => expect(calls('GET /api/user_subjects/7')).not.toHaveLength(0));
-  expect(global.fetch.mock.calls.some(([url]) => /\/150(\/|$)/.test(url))).toBe(false);
+  // The backend takes the user from the session: no call carries a user id.
+  await waitFor(() => expect(calls('GET /api/user_subjects')).not.toHaveLength(0));
+  expect(calls('GET /api/user_subjects')[0][1]).toMatchObject({ credentials: 'include' });
+  const sent = global.fetch.mock.calls.map(([url, opts = {}]) => `${url} ${opts.body || ''}`);
+  expect(sent.some((s) => /\/(150|7)(\/|\s|$)|user_?id/i.test(s))).toBe(false);
 });
 
 test('a restored session keeps a deep link', async () => {
