@@ -28,3 +28,8 @@ test('flags can re-enable admin and quiz in production', () => {
   expect(config.ENABLE_ADMIN).toBe(true);
   expect(config.ENABLE_QUIZ).toBe(true);
 });
+
+test('Google client ID has a public default and can be overridden', () => {
+  expect(loadConfig({ REACT_APP_GOOGLE_CLIENT_ID: '' }).GOOGLE_CLIENT_ID).toMatch(/\.apps\.googleusercontent\.com$/);
+  expect(loadConfig({ REACT_APP_GOOGLE_CLIENT_ID: 'other.apps.googleusercontent.com' }).GOOGLE_CLIENT_ID).toBe('other.apps.googleusercontent.com');
+});
