@@ -1,5 +1,6 @@
-const backendURL = 'https://student-helper-backend.vercel.app';
-// const backendURL = 'http://localhost:3080'
+import { API_URL } from '../config';
+
+const backendURL = API_URL;
 
 export async function fetchBackend(endpoint, {
     method = 'GET',
