@@ -519,6 +519,12 @@ function App() {
   // }, [])
 
   useEffect(() => {
+    // The OneSignal app ID is public. The SDK only handles the browser
+    // subscription; the REST API key is server-side only.
+    // TODO(reminders): backend "OneSignal server-side" PR (backend audit §6,
+    // PR6) creates/cancels task reminders; until it ships, no reminders are
+    // scheduled. That PR also needs OneSignal.login(userId) (SDK v16) here or
+    // in SignIn.js instead of setExternalUserId.
     OneSignal.init({
       appId: "99b7a99a-31e5-4656-86d7-ab456591292b"
     });
