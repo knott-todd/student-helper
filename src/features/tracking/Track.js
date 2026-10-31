@@ -16,7 +16,7 @@ const Track = memo(() => {
 
         if (global.currSub && global.currSub.id && global.currExam) {
 
-            getModules(global.currSub.id, global.currExam, global.userID).then(result => {
+            getModules(global.currSub.id, global.currExam).then(result => {
                 result.avgFam = result.reduce((sum, next) => sum + next.avgFam, 0) / result.length;
                 setModules(result)
                 

@@ -22,7 +22,7 @@ const Test = () => {
         
         if(global.currSub && global.currSub.id && global.currExam) {
 
-            getPastpapers(global.currSub.id, (global.currSub.exam ? global.currSub.exam : global.currExam), global.userID)
+            getPastpapers(global.currSub.id, (global.currSub.exam ? global.currSub.exam : global.currExam))
             .then(result => {
                 console.log(result[0])
 

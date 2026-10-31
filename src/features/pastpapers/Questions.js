@@ -16,7 +16,7 @@ const Questions = () => {
 
     useEffect(() => {
 
-        getPaperQuestions(id, global.userID).then(result => {
+        getPaperQuestions(id).then(result => {
             setQuests(result);
 
         })
@@ -95,7 +95,7 @@ const Questions = () => {
         // tempQuests[tempQuests.findIndex(quest => quest.id === id)] = tempQuest;
 
         // setQuests(tempQuests);
-        // updateUserQuestion(tempQuests.find(quest => quest.id === id), global.userID)
+        // updateUserQuestion(tempQuests.find(quest => quest.id === id))
         // .then(result => {
         //     console.log("Question updated: ", result)
         // })
@@ -110,7 +110,7 @@ const Questions = () => {
         tempQuests[tempQuests.findIndex(quest => quest.id === id)] = tempQuest;
 
         setQuests(tempQuests);
-        updateUserQuestion(tempQuests.find(quest => quest.id === id), global.userID);
+        updateUserQuestion(tempQuests.find(quest => quest.id === id));
     }
 
     const onParentCheckboxChange = (e, id) => {
@@ -124,7 +124,7 @@ const Questions = () => {
             tempQuests.filter(quest => quest.num === id.num && quest.sub_letter === id.letter && quest.sub_sub_roman === id.roman && quest.sub_sub_sub_letter === id.subLetter).forEach(quest => {
                 quest.is_complete = newValue;
 
-                updateUserQuestion(quest, global.userID)
+                updateUserQuestion(quest)
             })
 
             setQuests(tempQuests);
@@ -134,7 +134,7 @@ const Questions = () => {
             tempQuests.filter(quest => quest.num === id.num && quest.sub_letter === id.letter && quest.sub_sub_roman === id.roman).forEach(quest => {
                 quest.is_complete = newValue;
 
-                updateUserQuestion(quest, global.userID)
+                updateUserQuestion(quest)
             })
 
             setQuests(tempQuests);
@@ -144,7 +144,7 @@ const Questions = () => {
             tempQuests.filter(quest => quest.num === id.num && quest.sub_letter === id.letter).forEach(quest => {
                 quest.is_complete = newValue;
 
-                updateUserQuestion(quest, global.userID)
+                updateUserQuestion(quest)
             })
 
             setQuests(tempQuests);
@@ -154,7 +154,7 @@ const Questions = () => {
             tempQuests.filter(quest => quest.num === id.num).forEach(quest => {
                 quest.is_complete = newValue;
 
-                updateUserQuestion(quest, global.userID)
+                updateUserQuestion(quest)
             })
 
             setQuests(tempQuests);

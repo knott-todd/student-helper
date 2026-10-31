@@ -57,7 +57,7 @@ const SignIn = () => {
 
                     global.setExamSubs(result)
                     
-                    getUserSubjects(global.userID)
+                    getUserSubjects()
                         .then(res2 => {
                             
                             for (const sub of result) {
@@ -120,10 +120,10 @@ const SignIn = () => {
         setSubs(tempSubs);
 
         subject.isUserSub = e.target.checked;
-        setUserSub(subject, global.userID)
+        setUserSub(subject)
         .then(() => {
 
-            getUserSubjects(global.userID)
+            getUserSubjects()
             .then(res => {
                 
                 global.setUserSubs(res);
@@ -137,16 +137,16 @@ const SignIn = () => {
         global.setCurrExam(parseInt(e.target.value))
 
         if(e.target.value) {
-            setUserExam(e.target.value, global.userID);
+            setUserExam(e.target.value);
         }
     }
 
     const onSubExamChange = (e, subID) => {
 
         if(e.target.value) {
-            setSubExam(e.target.value, subID, global.userID)
+            setSubExam(e.target.value, subID)
             .then(() => {
-                getUserSubjects(global.userID)
+                getUserSubjects()
                 .then(res => {
                     global.setUserSubs(res);
                     console.log(res)

@@ -28,7 +28,7 @@ const TopicQuestions = () => {
         tempQuests[tempQuests.findIndex(quest => quest.id === id)] = tempQuest;
 
         setQuests(tempQuests);
-        updateUserQuestion(tempQuests.find(quest => quest.id === id), global.userID);
+        updateUserQuestion(tempQuests.find(quest => quest.id === id));
     }
 
     const onCheckboxChange = (e, id) => {
@@ -49,18 +49,17 @@ const TopicQuestions = () => {
         tempQuests[tempQuests.findIndex(quest => quest.id === id)] = tempQuest;
 
         setQuests(tempQuests);
-        updateUserQuestion(tempQuests.find(quest => quest.id === id), global.userID);
+        updateUserQuestion(tempQuests.find(quest => quest.id === id));
     }
     
     useEffect(() => {
-        getTopicQuestions(id, global.userID).then(result => {
+        getTopicQuestions(id).then(result => {
             console.log("He")
-            console.log(id, global.userID, result)
-            setQuests(result);
+                        setQuests(result);
             
         });
 
-        getTopic(id, global.userID).then(result => {
+        getTopic(id).then(result => {
             setTopic(result)
             global.setProgressValue(result.familiarity);
         });
@@ -72,15 +71,15 @@ const TopicQuestions = () => {
 
     useEffect(() => {
         
-        getTopic(id, global.userID).then(result => {
+        getTopic(id).then(result => {
             setTopic(result)
         });
         
 
     }, [quests]);
 
-    const handleCreateQuiz = async (userID, topicIDs) => {
-        const {quizId,questions} = await addQuizAttempt(userID, topicIDs);
+    const handleCreateQuiz = async topicIDs => {
+        const {quizId,questions} = await addQuizAttempt(topicIDs);
         navigate(`/quiz/${quizId}`, {state: {questions, topicIDs}});
     }
 
@@ -120,7 +119,7 @@ const TopicQuestions = () => {
 
             {/* Quiz is out of scope for launch; see ENABLE_QUIZ in src/config.js. */}
             {ENABLE_QUIZ && (
-                <button type="button" onClick={() => handleCreateQuiz(global.userID, [topic.id])} >
+                <button type="button" onClick={() => handleCreateQuiz([topic.id])} >
                     Take Quiz
                 </button>
             )}

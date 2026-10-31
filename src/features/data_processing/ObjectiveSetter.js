@@ -71,7 +71,7 @@ const ObjectiveSetter = (props) => {
 
     useEffect(() => {
 
-        getPaperQuestions(props.paperID, global.userID).then(result => {
+        getPaperQuestions(props.paperID).then(result => {
             if(typeof result[0] !== 'undefined'){
                 // setQuests(result);
                 setQuests(result.sort((a, b) => {

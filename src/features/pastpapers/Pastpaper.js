@@ -42,7 +42,7 @@ const Pastpaper = () => {
 
         if(paper.id) {
 
-            getPaperQuestions(id, global.userID)
+            getPaperQuestions(id)
             .then(result => {
                 // Seeding Paper 1 MCQs (POST /add_mcqs) used to run here on any
                 // student's page view; it is an admin content task now.

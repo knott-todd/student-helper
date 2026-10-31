@@ -32,7 +32,7 @@ const FamiliarityDropdown = props => {
             console.log(tempQuests[tempQuests.findIndex(quest => quest.id === props.question.id)])
     
             props.questions.setQuests(tempQuests);
-            updateUserQuestion(tempQuests.find(quest => quest.id === props.question.id), global.userID)
+            updateUserQuestion(tempQuests.find(quest => quest.id === props.question.id))
             .then(result => {
                 console.log("Question updated: ", result)
             })

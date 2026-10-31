@@ -39,7 +39,7 @@ const Module = () => {
             setModule(result);
         })
 
-        getTopics(id, global.userID).then(result => {
+        getTopics(id).then(result => {
             result.avgFam = result.reduce((sum, next) => sum + (next.topicFam >= 1 ? 1 : next.topicFam), 0) / result.length;
             setTopics(result);
             global.setProgressValue(result.avgFam);

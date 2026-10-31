@@ -38,7 +38,7 @@ const Tasks = () => {
             console.log(global)
 
         if(global.userID){
-            getUserTasks(global.userID)
+            getUserTasks()
                 .then(result => {
                     console.log("tasks: ", result)
                     setTasks(result);

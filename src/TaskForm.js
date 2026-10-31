@@ -34,7 +34,7 @@ const TaskForm = () => {
         }
         
         if(global.userID){
-            getUserSubjects(global.userID)
+            getUserSubjects()
                 .then(result => {
                     setSubs(result);
                 })
@@ -48,8 +48,7 @@ const TaskForm = () => {
             updateTask(id, taskText, subject, deadline)
                 .then(res => navigate("/tasks"))
         } else {
-            console.log("Adding...", {taskText, subject, deadline}, global.userID)
-            addTask({taskText, subject, deadline}, global.userID)
+            addTask({taskText, subject, deadline})
                 .then(res => navigate("/tasks"))
         }
     }

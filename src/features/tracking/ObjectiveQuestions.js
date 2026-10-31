@@ -39,19 +39,19 @@ const ObjectiveQuestions = () => {
     }
     
     useEffect(() => {
-        getObjectiveQuestions(id, global.userID).then(result => {
+        getObjectiveQuestions(id).then(result => {
             console.log(result)
             setQuests(result);
         });
 
-        getObjective(id, global.userID).then(result => {
+        getObjective(id).then(result => {
             setObjective(result)
         });
     }, []);
 
     useEffect(() => {
         
-        getObjective(id, global.userID).then(result => {
+        getObjective(id).then(result => {
             setObjective(result)
         });
 

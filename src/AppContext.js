@@ -22,9 +22,9 @@ export default ({children}) => {
     const [currSub, setCurrSub] = useState(readStoredSub);
     const [currUnit, setCurrUnit] = useState();
     const [currExam, setCurrExam] = useState();
-    // Signed-in user from POST /auth/google or GET /me. userID is derived so
-    // existing callers that pass it to the backend keep working (until the
-    // backend derives it from the session).
+    // Signed-in user from POST /auth/google or GET /me. The backend takes the
+    // user from the session cookie, so userID is never sent to it; it is only a
+    // "signed in" flag for effects and display (and OneSignal's external id).
     const [user, setUser] = useState(null);
     const userID = user ? user.id : null;
     // "loading" until GET /me answers, then "signedIn" | "signedOut" |
@@ -228,10 +228,10 @@ export default ({children}) => {
 
     useEffect(() => {
         if(currSub && currExam && userID && currSub.id){
-            getPastpapers(currSub.id, currExam, userID)
+            getPastpapers(currSub.id, currExam)
             .then(async result => {        
                 for(const paper of result){
-                    await getPaperQuestions(paper.id, userID)
+                    await getPaperQuestions(paper.id)
                 }
             })
         }
