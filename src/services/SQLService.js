@@ -537,38 +537,8 @@ export async function addTask(task, userID) {
     return await response.json();
 }
 
-export async function setUser(fname, lname) {
-    const response = await fetch(`${backendURL}/set_user`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            "Bypass-Tunnel-Reminder": "true"
-        },
-        body: JSON.stringify({fname, lname})
-    })
-    return response;
-
-    // try {
-    //     const response = await fetch(`${backendURL}/getuserID/${fname}/${lname}`);
-    //     // userID = await response.json()[0].id;
-    //     return await response.json();
-    // } catch(error) {
-    //     return [];
-    // }
-}
-
-export async function getUserID (fname, lname) {
-    try {
-        const response = await fetch(`${backendURL}/get_userID/${fname}/${lname}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
+// setUser (PUT /set_user) and getUserID (GET /get_userID/:fname/:lname)
+// were removed with name-only sign-in; see services/auth.js.
 
 export async function saveInteraction (userID) {
     try {
