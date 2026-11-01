@@ -242,15 +242,21 @@ test.each([
   expect(window.location.pathname).toBe('/track');
 });
 
-test('when /me is unreachable the landing page still shows, and sign-in shows the sign-in error', async () => {
+test('when /me is unreachable the landing page still shows; the button shows the outage screen, not Google', async () => {
+  let meFails = true;
   mockBackend({
-    'GET /api/me': () => Promise.reject(new TypeError('Failed to fetch')),
-    'POST /api/auth/google': () => Promise.reject(new TypeError('Failed to fetch')),
+    'GET /api/me': () => (meFails ? Promise.reject(new TypeError('Failed to fetch')) : respond(401, { error: 'no session' })),
   });
   renderApp('/');
 
   fireEvent.click(await googleButton());
-  expect(await screen.findByRole('alert')).toHaveTextContent(SIGN_IN_ERROR);
+  expect(await screen.findByRole('alert')).toHaveTextContent(/student helper can't reach the server right now/i);
+  expect(openGoogleSignIn).not.toHaveBeenCalled();
+  expect(calls('POST /api/auth/google')).toHaveLength(0);
+
+  meFails = false;
+  fireEvent.click(screen.getByRole('button', { name: /try again/i }));
+  expect(await googleButton()).toBeInTheDocument();
   expect(window.location.pathname).toBe('/');
 });
 

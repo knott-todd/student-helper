@@ -5,6 +5,7 @@ import { AppContext } from "./AppContext";
 import { POST_SIGN_IN_PATH } from "./config";
 import { signInWithGoogle } from "./services/auth";
 import { openGoogleSignIn, GoogleSignInCancelled } from "./services/googlePopup";
+import ServerUnreachable from "./components/ServerUnreachable";
 import './CSS/Landing.css';
 
 // Page copy is Olusanya's, verbatim. Do not edit or add to it here.
@@ -31,12 +32,19 @@ const linkPushToUser = userID => {
 // Front door for signed-out visitors (App routes signed-in students past it).
 const Landing = () => {
     const [error, setError] = useState("");
+    const [showOutage, setShowOutage] = useState(false);
     const global = useContext(AppContext);
     const navigate = useNavigate();
 
     // Must stay synchronous up to openGoogleSignIn so the popup isn't blocked.
     const handleGetStarted = () => {
         setError("");
+        // Server known to be down (GET /me failed): don't send the student to
+        // Google for a sign-in that can't finish; show the outage screen.
+        if (global.authStatus === "unreachable") {
+            setShowOutage(true);
+            return;
+        }
         openGoogleSignIn()
             .then(signInWithGoogle)
             .then(user => {
@@ -51,6 +59,9 @@ const Landing = () => {
                 setError(SIGN_IN_ERROR_MESSAGE);
             });
     }
+
+    // Retry re-runs GET /me; App remounts this page once it answers.
+    if (showOutage) return <ServerUnreachable onRetry={global.restoreSession} />;
 
     return (
         <div className="landing">

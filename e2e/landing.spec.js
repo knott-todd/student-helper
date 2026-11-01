@@ -207,13 +207,18 @@ test.describe('Signing up', () => {
 
     test.describe('server already down when the page opens', () => {
       test.use({ backend: { down: true } });
-      test('landing still shows; picking an account shows the error', async ({ page, mocks }) => {
+      test('landing still shows; the button shows the outage screen, not Google', async ({ page, mocks }) => {
         await page.goto('/');
         await expect(headline(page)).toBeVisible();
-        await pickAccount(await openGoogle(page), 'keisha');
+        let popups = 0;
+        page.context().on('page', () => popups++);
+        await cta(page).click();
 
-        await expect(page.getByRole('alert')).toHaveText(SIGN_IN_ERROR);
-        await expect(cta(page)).toBeEnabled();
+        await expect(page.getByRole('alert')).toContainText("Student Helper can't reach the server right now.");
+        await expect(page.getByRole('button', { name: 'Try again' })).toBeEnabled();
+        await page.waitForTimeout(300);
+        expect(popups).toBe(0);
+        expect(mocks.authCalls).toHaveLength(0);
         await shot(page, '09b-server-down-from-start');
       });
     });
