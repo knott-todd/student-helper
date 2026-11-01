@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <title>Student Helper</title>
+  </head>
+  <body>
+    <!--
+      Google's sign-in popup returns here (see src/services/googlePopup.js).
+      Relay the URL fragment (id_token or error, plus state) to the page that
+      opened the popup, on this origin only, then close. The fragment never
+      reaches a server. Intentionally shows no text.
+    -->
+    <script>
+      (function () {
+        var fragment = window.location.hash || '';
+        var message = { type: 'sh:google-callback', fragment: fragment };
+        // Drop the token from this window's address bar and history.
+        try { history.replaceState(null, '', window.location.pathname); } catch (e) {}
+        try {
+          if (typeof BroadcastChannel === 'function') {
+            var channel = new BroadcastChannel('sh-google-sign-in');
+            channel.postMessage(message);
+            channel.close();
+          }
+        } catch (e) {}
+        try {
+          if (window.opener) window.opener.postMessage(message, window.location.origin);
+        } catch (e) {}
+        window.close();
+      })();
+    </script>
+  </body>
+</html>

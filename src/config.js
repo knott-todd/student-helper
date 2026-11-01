@@ -24,3 +24,12 @@ export const GOOGLE_CLIENT_ID =
 // production unless REACT_APP_ENABLE_QUIZ=true.
 export const ENABLE_QUIZ =
   process.env.NODE_ENV !== 'production' || process.env.REACT_APP_ENABLE_QUIZ === 'true';
+
+// Where a signed-in student lands: after signing in from the landing page, and
+// when opening the site's main address while signed in. ONE place to change it
+// (Tasks is planned for deprecation).
+export const POST_SIGN_IN_PATH = '/tasks';
+
+// Address students write to for account deletion, shown on /privacy.
+// Must be set before go-live (Olusanya supplies it; not hard-coded here).
+export const PRIVACY_CONTACT_EMAIL = process.env.REACT_APP_PRIVACY_CONTACT_EMAIL || '';
