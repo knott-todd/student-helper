@@ -250,3 +250,27 @@ test('app load never calls OneSignal REST, save_interaction or the removed name 
   expect(urls.every((url) => url.startsWith('/api/'))).toBe(true);
   expect(urls.some((url) => /onesignal\.com|save_interaction|set_user$|get_userID/.test(url))).toBe(false);
 });
+
+test('a 401 from any API call (session expired) signs out and routes to /sign_in', async () => {
+  mockBackend({
+    'GET /api/me': [200, { user: returningUser }],
+    'GET /api/user_tasks': [401, { error: 'Not signed in' }],
+  });
+  renderApp('/tasks');
+
+  expect(await googleButton()).toBeInTheDocument();
+  expect(window.location.pathname).toBe('/sign_in');
+  expect(screen.queryByRole('button', { name: /sign out/i })).not.toBeInTheDocument();
+});
+
+test('a 403 or 404 from an API call does not sign the user out', async () => {
+  mockBackend({
+    'GET /api/me': [200, { user: returningUser }],
+    'GET /api/user_tasks': [404, { error: 'Not found' }],
+    'GET /api/user_subjects': [403, { error: 'Admins only' }],
+  });
+  renderApp('/tasks');
+
+  expect(await screen.findByText(/hey, ada/i)).toBeInTheDocument();
+  expect(window.location.pathname).toBe('/tasks');
+});

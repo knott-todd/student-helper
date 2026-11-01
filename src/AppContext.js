@@ -1,5 +1,6 @@
 import { getBuildVersion, getPaperQuestions, getPastpapers } from "./services/SQLService";
 import { getSession, ServerUnreachableError } from "./services/auth";
+import { onUnauthorized } from "./services/session";
 
 const { createContext, useState, useEffect, useCallback } = require("react");
 
@@ -215,6 +216,12 @@ export default ({children}) => {
         }
         restoreSession();
     }, [restoreSession])
+
+    // Any API call answering 401 means the session is gone (expired, signed out
+    // in another tab, or the account was removed): sign out here too, and
+    // RequireAuth routes to /sign_in. getSession/signIn don't go through this.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => onUnauthorized(signOutLocally), [])
 
     // The selected subject is a per-device convenience, not identity.
     useEffect(() => {
