@@ -16,12 +16,12 @@ const Topic = memo(() => {
     const global = useContext(AppContext);
 
     useEffect(() => {
-        getTopicObjectives(id, global.userID).then(result => {
+        getTopicObjectives(id).then(result => {
             setObjectives(result);
             console.log(result[0].familiarity)
         })
 
-        getTopic(id, global.userID).then(result => {
+        getTopic(id).then(result => {
             setTopic(result)
         });
     }, [])
@@ -32,7 +32,7 @@ const Topic = memo(() => {
 
     useEffect(() => {
         
-        getTopic(id, global.userID).then(result => {
+        getTopic(id).then(result => {
             setTopic(result)
         });
 

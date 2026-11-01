@@ -38,7 +38,7 @@ const Tasks = () => {
             console.log(global)
 
         if(global.userID){
-            getUserTasks(global.userID)
+            getUserTasks()
                 .then(result => {
                     console.log("tasks: ", result)
                     setTasks(result);
@@ -186,7 +186,7 @@ const Tasks = () => {
                     <div style={{marginLeft: "9%", marginRight: "9%"}}>
                         {displayedTasks[0] && displayedTasks.some(task => !task.is_completed) ? (
                             <div>
-                                <h1 className="hey-heading" style={{textAlign: "start", margin: "11vh 0px 1vh"}}>Hey, {(global.user ? global.user.first_name : "")}</h1>
+                                <h1 className="hey-heading" style={{textAlign: "start", margin: "11vh 0px 1vh"}}>Hey, {(global.user ? global.user.fname : "")}</h1>
                                 <p style={{textAlign: "start", margin: 0}}>Next for today:</p>
                                 <div className={`next-task task ${displayedTasks[0].is_completed ? "completed_task" : ""} ${isTaskOverdue(displayedTasks[0]) ? "overdue_task" : ""}`}>
                                     <div className="center-div" >

@@ -12,15 +12,15 @@ afterEach(() => {
 
 const calls = () => global.fetch.mock.calls.map(([url, opts]) => ({ url, opts }));
 
-test('addTask posts to the backend only, with no notification id', async () => {
-  await addTask({ taskText: 'Revise', subject: 3, deadline: '2026-11-05' }, 42);
+test('addTask posts to the backend only, with no notification id and no user id', async () => {
+  await addTask({ taskText: 'Revise', subject: 3, deadline: '2026-11-05' });
 
   expect(calls()).toHaveLength(1);
   const [{ url, opts }] = calls();
   expect(url).toBe('/api/add_task');
   expect(opts.method).toBe('POST');
   expect(JSON.parse(opts.body)).toEqual({
-    taskText: 'Revise', subject: 3, deadline: '2026-11-05', userID: 42, notificationID: null,
+    taskText: 'Revise', subject: 3, deadline: '2026-11-05', notificationID: null,
   });
 });
 
@@ -41,7 +41,7 @@ test('deleteTask deletes via the backend only', async () => {
 });
 
 test('no request carries an Authorization header', async () => {
-  await addTask({ taskText: 'x', subject: 1, deadline: '2026-11-05' }, 1);
+  await addTask({ taskText: 'x', subject: 1, deadline: '2026-11-05' });
   await updateTask(1, 'x', 1, '2026-11-05');
   await deleteTask(1);
 

@@ -22,7 +22,7 @@ const Home = () => {
             if(global.userID && global.currSub && global.currExam) {
         
                 // Get subject modules
-                const modules = await getModules(global.currSub.id, global.currExam, global.userID);
+                const modules = await getModules(global.currSub.id, global.currExam);
                 console.log(await modules);
         
                 // Get all user topics
@@ -30,7 +30,7 @@ const Home = () => {
 
                 await Promise.all(modules.map(async modulePackage => {
                     
-                    const topicsPackage = await getTopics(modulePackage.module.id, global.userID);
+                    const topicsPackage = await getTopics(modulePackage.module.id);
 
                     temp = temp.concat(topicsPackage.map(_topic => ({..._topic, module: modulePackage.module.number, isPaperLoaded: false})));
                     
@@ -52,7 +52,7 @@ const Home = () => {
     // Find a not-completed or unfamiliar pastpaper question for the topic
     const loadTopicPaper = async topicID => {
 
-        const topicQuests = await getTopicQuestions(topicID, global.userID);
+        const topicQuests = await getTopicQuestions(topicID);
 
         let quest;
 

@@ -1,15 +1,39 @@
 import { getBuildVersion, getPaperQuestions, getPastpapers } from "./services/SQLService";
+import { getSession, ServerUnreachableError } from "./services/auth";
+import { onUnauthorized } from "./services/session";
 
-const { createContext, useState, useEffect } = require("react");
+const { createContext, useState, useEffect, useCallback } = require("react");
 
 export const AppContext = createContext(null);
 
+// Before Google sign-in, identity was a client-side userID/user in
+// localStorage. The session cookie is now the only source of truth, so the
+// old keys are dropped (legacy name-only accounts start fresh).
+const LEGACY_IDENTITY_KEYS = ["userID", "user"];
+
+const readStoredSub = () => {
+    try {
+        return JSON.parse(localStorage.getItem("sub"));
+    } catch (error) {
+        return null;
+    }
+};
+
 export default ({children}) => {
-    const [currSub, setCurrSub] = useState(JSON.parse(localStorage.getItem("sub")));
+    const [currSub, setCurrSub] = useState(readStoredSub);
     const [currUnit, setCurrUnit] = useState();
     const [currExam, setCurrExam] = useState();
-    const [userID, setUserID] = useState(JSON.parse(localStorage.getItem("userID")));
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+    // Signed-in user from POST /auth/google or GET /me. The backend takes the
+    // user from the session cookie, so userID is never sent to it; it is only a
+    // "signed in" flag for effects and display (and OneSignal's external id).
+    const [user, setUser] = useState(null);
+    const userID = user ? user.id : null;
+    // Shows the admin UI (with REACT_APP_ENABLE_ADMIN). The backend enforces it
+    // by re-reading the role from the DB on every admin call.
+    const isAdmin = Boolean(user && user.role === "admin");
+    // "loading" until GET /me answers, then "signedIn" | "signedOut" |
+    // "unreachable" (network error or 5xx: the backend or its DB is down).
+    const [authStatus, setAuthStatus] = useState("loading");
     const [userSubs, setUserSubs] = useState([]);
     const [isLightMode, setIsLightMode] = useState();
     const [pageTitle, setPageTitle] = useState();
@@ -29,25 +53,44 @@ export default ({children}) => {
         setSingleProgressVal(val);
     }
 
-    const cacheVariables = {
-        sub: currSub,
-        userID,
-        user
-    }
-
-    const cacheSetCommands = {
-        setCurrSub: "",
-        setUserID: "",
-        setUser: "",
-        setCurrExam: "",
-        setUserSubs: "[]"
-    }
-
     const clearCache = () => {
-        Object.keys(cacheSetCommands).forEach(key => {
-            eval(`${key}(${cacheSetCommands[key]})`)
-        })
+        setCurrSub(null);
+        setUser(null);
+        setCurrExam();
+        setUserSubs([]);
+        setExamSubs([]);
+        try {
+            localStorage.removeItem("sub");
+        } catch (error) {
+            // Storage unavailable; nothing to clear.
+        }
     }
+
+    // A successful sign-in or restored session.
+    const signIn = useCallback(signedInUser => {
+        setUser(signedInUser);
+        setCurrExam(signedInUser.default_exam || undefined);
+        setAuthStatus("signedIn");
+    }, []);
+
+    // Local half of sign-out; the caller has already ended the server session.
+    const signOutLocally = () => {
+        clearCache();
+        setAuthStatus("signedOut");
+    }
+
+    const restoreSession = useCallback(() => {
+        setAuthStatus("loading");
+        return getSession()
+            .then(sessionUser => {
+                if (sessionUser) signIn(sessionUser);
+                else setAuthStatus("signedOut");
+            })
+            .catch(error => {
+                if (!(error instanceof ServerUnreachableError)) console.error(error);
+                setAuthStatus("unreachable");
+            });
+    }, [signIn]);
 
     const lightmodeAccentColors = [
         [350, "96%", "33%"],
@@ -138,7 +181,11 @@ export default ({children}) => {
         currUnit,
         setCurrUnit,
         userID,
-        setUserID,
+        isAdmin,
+        authStatus,
+        signIn,
+        signOutLocally,
+        restoreSession,
         setRandomAccent,
         userSubs,
         setUserSubs,
@@ -149,7 +196,6 @@ export default ({children}) => {
         pageTitle,
         setPageTitle,
         user,
-        setUser,
         progressValue,
         setProgressValue,
         singleProgressValue,
@@ -167,22 +213,36 @@ export default ({children}) => {
     }, [])
 
     useEffect(() => {
-        for (const item in cacheVariables) {
-
-            if(cacheVariables[item]) {
-                console.log(`${item}`, JSON.stringify(cacheVariables[item]))
-                localStorage.setItem(`${item}`, JSON.stringify(cacheVariables[item]))
-            }
-
+        try {
+            LEGACY_IDENTITY_KEYS.forEach(key => localStorage.removeItem(key));
+        } catch (error) {
+            // Storage unavailable; nothing to clear.
         }
-    }, [cacheVariables])
+        restoreSession();
+    }, [restoreSession])
+
+    // Any API call answering 401 means the session is gone (expired, signed out
+    // in another tab, or the account was removed): sign out here too, and
+    // RequireAuth routes to the landing page. getSession/signIn don't go through this.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => onUnauthorized(signOutLocally), [])
+
+    // The selected subject is a per-device convenience, not identity.
+    useEffect(() => {
+        if (!currSub) return;
+        try {
+            localStorage.setItem("sub", JSON.stringify(currSub));
+        } catch (error) {
+            // Storage unavailable; the subject just isn't remembered.
+        }
+    }, [currSub])
 
     useEffect(() => {
         if(currSub && currExam && userID && currSub.id){
-            getPastpapers(currSub.id, currExam, userID)
+            getPastpapers(currSub.id, currExam)
             .then(async result => {        
                 for(const paper of result){
-                    await getPaperQuestions(paper.id, userID)
+                    await getPaperQuestions(paper.id)
                 }
             })
         }

@@ -1,12 +1,9 @@
-import { useContext } from "react";
 import { useEffect, useState } from "react";
-import { AppContext } from "./AppContext";
 import { getFamiliarities, updateUserQuestion } from "./services/SQLService";
 
 const FamiliarityDropdown = props => {
     const [fams, setFams] = useState([]);
 
-    const global = useContext(AppContext);
 
     useEffect(() => {
 
@@ -32,7 +29,7 @@ const FamiliarityDropdown = props => {
             console.log(tempQuests[tempQuests.findIndex(quest => quest.id === props.question.id)])
     
             props.questions.setQuests(tempQuests);
-            updateUserQuestion(tempQuests.find(quest => quest.id === props.question.id), global.userID)
+            updateUserQuestion(tempQuests.find(quest => quest.id === props.question.id))
             .then(result => {
                 console.log("Question updated: ", result)
             })

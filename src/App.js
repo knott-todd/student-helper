@@ -25,7 +25,11 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight, faX, faXmark, faCaretUp, faFlag, faThumbTack } from '@fortawesome/free-solid-svg-icons'
 import { faFlag as faRegularFlag } from '@fortawesome/free-regular-svg-icons';
 import TaskForm from './TaskForm';
-import { ENABLE_ADMIN } from './config';
+import { ENABLE_ADMIN, POST_SIGN_IN_PATH } from './config';
+import RequireAuth from './components/RequireAuth';
+import Landing from './Landing';
+import Privacy from './Privacy';
+import ServerUnreachable from './components/ServerUnreachable';
 import { ToastContainer } from 'react-toastify';
 import OneSignal from 'react-onesignal';
 import { useState } from 'react';
@@ -40,6 +44,9 @@ import QuizQuestionReview from './features/quiz/QuizQuestionReview';
 import ReviewComplete from './features/quiz/ReviewComplete';
 import QuizWrapper from './features/quiz/QuizWrapper';
 library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight, faXmark, faCaretUp, faFlag, faRegularFlag, faThumbTack )
+
+// Pages a signed-out visitor can see. They don't need the backend to render.
+const PUBLIC_PATHS = ['/', '/privacy'];
 
 function App() {
   const global = useContext(AppContext);
@@ -522,8 +529,9 @@ function App() {
     // subscription; the REST API key is server-side only.
     // TODO(reminders): backend "OneSignal server-side" PR (backend audit §6,
     // PR6) creates/cancels task reminders; until it ships, no reminders are
-    // scheduled. That PR also needs OneSignal.login(userId) (SDK v16) here or
-    // in SignIn.js instead of setExternalUserId.
+    // scheduled. SignIn.js links the subscription with setExternalUserId
+    // (react-onesignal 2.x / SDK v15); upgrading to SDK v16 means switching
+    // that to OneSignal.login(userId).
     OneSignal.init({
       appId: "99b7a99a-31e5-4656-86d7-ab456591292b"
     });
@@ -538,64 +546,89 @@ function App() {
       <canvas id="dots" />
 
       <Router>
-        <Header >
-          <script src="https://kit.fontawesome.com/ed9cf2ed95.js" crossorigin="anonymous"></script>
-        </Header>
+        {global.authStatus === "loading" ? (
+          // Waiting for GET /me: render nothing rather than flash sign-in.
+          <div className="body-div" role="status" aria-label="Loading" />
+        ) : global.authStatus === "unreachable" && !PUBLIC_PATHS.includes(window.location.pathname) ? (
+          // The landing and privacy pages still show when the server is down;
+          // signing in then shows the sign-in error instead.
+          <ServerUnreachable onRetry={global.restoreSession} />
+        ) : (
+        <>
+        {/* Signed-out visitors only reach the landing and privacy pages,
+            which show no app chrome. */}
+        {global.user ? (
+          <Header >
+            <script src="https://kit.fontawesome.com/ed9cf2ed95.js" crossorigin="anonymous"></script>
+          </Header>
+        ) : ""}
         <Routes>
           <Route exact path = "/" >
-            <Route path='/' element={ global.userID ? <Navigate to="/test" /> : <Navigate to="/sign_in" /> } />
+            {/* Signed out: the landing page. Signed in: the post-sign-in page,
+                or profile setup until a default exam is chosen. */}
+            <Route path='/' element={
+              !global.user ? <Landing />
+              : <Navigate to={global.user.default_exam ? POST_SIGN_IN_PATH : "/sign_in"} replace />
+            } />
 
-            <Route path="quiz/:id" element={<QuizWrapper />} >
-              <Route index element={<QuizPreview />} />
-              <Route path="question/:qIndex" element={<QuizQuestion />} />
-              <Route path="review" >
-                <Route index element={<QuizSummary />} />
-                <Route path=":qIndex" element={<QuizQuestionReview />} />
-                <Route path='complete' element={<ReviewComplete />} />
+            <Route path="/privacy" element={<Privacy />} />
+
+            {/* Profile (signed in). The old sign-in link shows the landing page. */}
+            <Route path="/sign_in" element={global.user ? <SignIn /> : <Navigate to="/" replace />} />
+
+            {/* Everything else needs a signed-in user. */}
+            <Route element={<RequireAuth />}>
+              <Route path="quiz/:id" element={<QuizWrapper />} >
+                <Route index element={<QuizPreview />} />
+                <Route path="question/:qIndex" element={<QuizQuestion />} />
+                <Route path="review" >
+                  <Route index element={<QuizSummary />} />
+                  <Route path=":qIndex" element={<QuizQuestionReview />} />
+                  <Route path='complete' element={<ReviewComplete />} />
+                </Route>
               </Route>
+
+              <Route path = "test">
+                <Route path = "" element={<Test />} />
+                <Route path = "pastpaper/:id" element={<Pastpaper />} />
+                <Route path = "markscheme/:id" element={<Markscheme />} />
+                <Route path = "questions/:id" element={<Questions />} />
+              </Route>
+
+              <Route path='track' >
+                <Route path = "" element={<Track />} />
+                <Route path = "objective_questions/:id" element={<ObjectiveQuestions />} />
+                <Route path = "topic_questions/:id" element={<TopicQuestions />} />
+                <Route path = "module/:id" element={<Module />} />
+                <Route path = "topic/:id" element={<Topic />} />
+              </Route>
+
+              <Route path='tasks'>
+                <Route path = "" element={<Tasks />} />
+                <Route path = "task_form/:id" element={<TaskForm />} />
+                <Route path = "task_form" element={<TaskForm />} />
+              </Route>
+
+              {/* Admin/content tools and dev pages: hidden from production builds
+                  (see ENABLE_ADMIN in src/config.js). Not access control; the
+                  backend must guard the admin write endpoints. */}
+              {ENABLE_ADMIN && (
+                <>
+                  <Route path='/insert_objective' element={<ObjectiveInsert />} />
+                  <Route path='/set_objectives' element={<ObjectiveSetter />} />
+                  <Route path='/parse_structure' element={<StructureParser />} />
+                  <Route path="/sentence_similarity" element={<SentenceSimilarity />} />
+                  <Route path="/home" element={<Home />} />
+                </>
+              )}
             </Route>
-
-            <Route path = "test">
-              <Route path = "" element={<Test />} />
-              <Route path = "pastpaper/:id" element={<Pastpaper />} />
-              <Route path = "markscheme/:id" element={<Markscheme />} />
-              <Route path = "questions/:id" element={<Questions />} />
-            </Route>
-
-            <Route path='track' >
-              <Route path = "" element={<Track />} />
-              <Route path = "objective_questions/:id" element={<ObjectiveQuestions />} />
-              <Route path = "topic_questions/:id" element={<TopicQuestions />} />
-              <Route path = "module/:id" element={<Module />} />
-              <Route path = "topic/:id" element={<Topic />} />
-            </Route>
-
-            <Route path='tasks'>
-              <Route path = "" element={<Tasks />} />
-              <Route path = "task_form/:id" element={<TaskForm />} />
-              <Route path = "task_form" element={<TaskForm />} />
-            </Route>
-
-            <Route path="/sign_in" element={<SignIn />} />
-
-            {/* Admin/content tools and dev pages: hidden from production builds
-                (see ENABLE_ADMIN in src/config.js). Not access control; the
-                backend must guard the admin write endpoints. */}
-            {ENABLE_ADMIN && (
-              <>
-                <Route path='/insert_objective' element={<ObjectiveInsert />} />
-                <Route path='/set_objectives' element={<ObjectiveSetter />} />
-                <Route path='/parse_structure' element={<StructureParser />} />
-                <Route path="/sentence_similarity" element={<SentenceSimilarity />} />
-                <Route path="/home" element={<Home />} />
-              </>
-            )}
-
             
           </Route>
         </Routes>
 
-        <Navbar />
+        {global.user ? <Navbar /> : ""}
+        </>
+        )}
       </Router>
 
       <ToastContainer

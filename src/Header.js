@@ -23,7 +23,7 @@ const Header = () => {
 
     useEffect(() => {
         if(global.userID){
-            getUserSubjects(global.userID)
+            getUserSubjects()
                 .then(result => {
                     setSubs(result);
 
@@ -41,7 +41,7 @@ const Header = () => {
                     //     navigate('/track')
                 })
                 
-            getUserExam(global.userID)
+            getUserExam()
                 .then(result => {
                     
                     global.setCurrExam(result[0].default_exam);

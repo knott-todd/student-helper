@@ -1,601 +1,151 @@
 import { API_URL } from '../config';
+import { notifyUnauthorized } from './session';
 
 const backendURL = API_URL;
+
+// API v2 (docs/api-v2-map.md): the backend takes the user from the session
+// cookie, so no call here sends a user id. Every call sends the cookie
+// (credentials: 'include', needed when REACT_APP_API_URL is another origin in
+// local dev) and reports a 401 so the app can route to /sign_in.
 
 // TODO(reminders): task reminder notifications are created/updated/cancelled
 // server-side in the backend "OneSignal server-side" PR (backend audit §6, PR6).
 // The OneSignal REST API key must never be shipped to the browser again.
 
-export async function getPastpapers (subID, examID, userID) {
-    try {
-        const response = await fetch(`${backendURL}/userpapers/${subID}/${examID}/${userID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
-
-export async function getPastpaper (id) {
-    try {
-        const response = await fetch(`${backendURL}/pastpaper/${id}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
-
-export async function getMarkscheme (id) {
-    try {
-        const response = await fetch(`${backendURL}/markscheme/${id}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
-
-export async function getPaperQuestions (id, userID) {
-    try {
-        const response = await fetch(`${backendURL}/questions/${id}/${userID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
-
-export async function getFamiliarities () {
-    try {
-        const response = await fetch(`${backendURL}/familiarities`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
-
-export async function getUserExam (userID) {
-    try {
-        const response = await fetch(`${backendURL}/user_exam/${userID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
-
-export async function getTaskInfo (taskID) {
-    try {
-        const response = await fetch(`${backendURL}/task_info/${taskID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
-
-export async function getUserTasks (userID) {
-    try {
-        const response = await fetch(`${backendURL}/user_tasks/${userID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
-
-
-
-export async function setUserExam(examID, userID) {
-    const response = await fetch(`${backendURL}/set_user_exam`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            "Bypass-Tunnel-Reminder": "true"
-        },
-        body: JSON.stringify({examID, userID})
-    })
-    return await response.json();
-}
-
-export async function setSubExam(examID, subID, userID) {
-    const response = await fetch(`${backendURL}/set_sub_exam`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            "Bypass-Tunnel-Reminder": "true"
-        },
-        body: JSON.stringify({examID, subID, userID})
-    })
-    return await response.json();
-}
-
-export async function updateUserQuestion(data, userID) {
-    console.log("Updated")
-    const response = await fetch(`${backendURL}/update_user_question`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            "Bypass-Tunnel-Reminder": "true"
-        },
-        body: JSON.stringify({question: data, userID})
-    })
-    return await response.json();
-}
-
-export async function updateTask(taskID, taskText, subject, deadline) {
-    const response = await fetch(`${backendURL}/update_task`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            "Bypass-Tunnel-Reminder": "true"
-        },
-        body: JSON.stringify({taskID, taskText, subject, deadline})
-    })
-
-    return await response.json();
-}
-
-export async function updateTaskComplete (taskID, isCompleted) {
-    const response = await fetch(`${backendURL}/update_task_complete`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-            "Bypass-Tunnel-Reminder": "true"
-        },
-        body: JSON.stringify({taskID, is_completed: isCompleted})
-    })
-    return await response.json();
-}
-
-export async function deleteTask (taskID) {
-    // Reminder cancellation moves server-side (see TODO(reminders) at top).
-    const response = await fetch(`${backendURL}/delete_task/${taskID}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            "Bypass-Tunnel-Reminder": "true"
-        }
-    })
-
+async function send(path, { method = 'GET', body } = {}) {
+    const headers = { "Bypass-Tunnel-Reminder": "true" };
+    if (method !== 'GET') headers['Content-Type'] = 'application/json';
+    const response = await fetch(`${backendURL}${path}`, {
+        method,
+        credentials: 'include',
+        headers,
+        body: body === undefined ? undefined : JSON.stringify(body),
+    });
+    if (response.status === 401) notifyUnauthorized();
     return response;
 }
 
-export async function deletePaperQuestions (paperID) {
-
-    const response = await fetch(`${backendURL}/del_paper_questions/${paperID}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            "Bypass-Tunnel-Reminder": "true"
-        }
-    })
-
-    return response;
-
-
-}
-export async function setQuestObjective(data) {
-    console.log(data);
-    const response = await fetch(`${backendURL}/set_objective`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            "Bypass-Tunnel-Reminder": "true"
-        },
-        body: JSON.stringify(data)
-    })
-    return await response.json();
-}
-
-export async function setQuestTopic(data) {
-    console.log(data);
-    const response = await fetch(`${backendURL}/set_topic`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            "Bypass-Tunnel-Reminder": "true"
-        },
-        body: JSON.stringify(data)
-    })
-    return await response.json();
-}
-
-export async function setUserSub(subject, userID) {
-    const response = await fetch(`${backendURL}/set_user_subject`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            "Bypass-Tunnel-Reminder": "true"
-        },
-        body: JSON.stringify({subject, userID})
-    })
-    return await response.json();
-}
-
-export async function getQuestTopic (questID) {
+// Reads resolve to [] on any failure, as before. That now includes an error
+// status (401/403/404/5xx), whose {error, requestId} body callers would
+// otherwise treat as data (e.g. result.filter on an object).
+async function get(path) {
     try {
-        const response = await fetch(`${backendURL}/question_topic/${questID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
+        const response = await send(path);
+        if (!response.ok) return [];
         return await response.json();
     } catch(error) {
         return [];
     }
 }
 
-export async function getModules (subID, examID, userID) {
-    try {
-        const response = await fetch(`${backendURL}/familiarity/${subID}/${examID}/${userID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
+// Writes keep their old contract: resolve to the JSON body, reject on network errors.
+async function write(method, path, body) {
+    const response = await send(path, { method, body });
+    return await response.json();
 }
+
+export const getPastpapers = (subID, examID) => get(`/userpapers/${subID}/${examID}`);
+
+export const getPastpaper = id => get(`/pastpaper/${id}`);
+
+export const getMarkscheme = id => get(`/markscheme/${id}`);
+
+export const getPaperQuestions = id => get(`/questions/${id}`);
+
+export const getFamiliarities = () => get(`/familiarities`);
+
+export const getUserExam = () => get(`/user_exam`);
+
+export const getTaskInfo = taskID => get(`/task_info/${taskID}`);
+
+export const getUserTasks = () => get(`/user_tasks`);
+
+export const setUserExam = examID => write('PUT', `/set_user_exam`, {examID});
+
+export const setSubExam = (examID, subID) => write('PUT', `/set_sub_exam`, {examID, subID});
+
+export const updateUserQuestion = data => write('PUT', `/update_user_question`, {question: data});
+
+export const updateTask = (taskID, taskText, subject, deadline) =>
+    write('PUT', `/update_task`, {taskID, taskText, subject, deadline});
+
+export const updateTaskComplete = (taskID, isCompleted) =>
+    write('PATCH', `/update_task_complete`, {taskID, is_completed: isCompleted});
+
+// Resolves to the Response (callers check it themselves).
+// Reminder cancellation moves server-side (see TODO(reminders) at top).
+export const deleteTask = taskID => send(`/delete_task/${taskID}`, { method: 'DELETE' });
+
+// Admin. Resolves to the Response.
+export const deletePaperQuestions = paperID => send(`/del_paper_questions/${paperID}`, { method: 'DELETE' });
+
+// Admin
+export const setQuestObjective = data => write('PUT', `/set_objective`, data);
+
+// Admin
+export const setQuestTopic = data => write('PUT', `/set_topic`, data);
+
+export const setUserSub = subject => write('PUT', `/set_user_subject`, {subject});
+
+// Admin
+export const getQuestTopic = questID => get(`/question_topic/${questID}`);
+
+// Modules of a subject with the user's familiarity
+export const getModules = (subID, examID) => get(`/familiarity/${subID}/${examID}`);
 
 // Get user topics
-export async function getTopics (moduleID, userID) {
-    try {
-        const response = await fetch(`${backendURL}/topics_familiarity/${moduleID}/${userID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
+export const getTopics = moduleID => get(`/topics_familiarity/${moduleID}`);
 
-export async function getModule (moduleID) {
-    try {
-        const response = await fetch(`${backendURL}/module_info/${moduleID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
+export const getModule = moduleID => get(`/module_info/${moduleID}`);
 
-export async function getUnitModules (unitID) {
-    try {
-        const response = await fetch(`${backendURL}/unit_modules/${unitID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
+// Admin
+export const getUnitModules = unitID => get(`/unit_modules/${unitID}`);
 
-export async function getModuleTopics (moduleID) {
-    try {
-        const response = await fetch(`${backendURL}/module_topics/${moduleID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
+// Admin
+export const getModuleTopics = moduleID => get(`/module_topics/${moduleID}`);
 
-export async function getObjectiveQuestions (id, userID) {
-    try {
-        const response = await fetch(`${backendURL}/objective_questions/${id}/${userID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
+export const getObjectiveQuestions = id => get(`/objective_questions/${id}`);
 
-export async function getTopicQuestions (id, userID) {
-    try {
-        const response = await fetch(`${backendURL}/topic_questions/${id}/${userID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
+export const getTopicQuestions = id => get(`/topic_questions/${id}`);
 
-export async function getObjective (id, userID) {
-    try {
-        const response = await fetch(`${backendURL}/objective/${id}/${userID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
+export const getObjective = id => get(`/objective/${id}`);
 
-export async function getTopic (id, userID) {
-    try {
-        const response = await fetch(`${backendURL}/topic/${id}/${userID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
+export const getTopic = id => get(`/topic/${id}`);
 
-export async function getModuleObjectives (id, userID) {
-    try {
-        const response = await fetch(`${backendURL}/module_objectives/${id}/${userID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
+export const getModuleObjectives = id => get(`/module_objectives/${id}`);
 
-export async function getTopicObjectives (id, userID) {
-    try {
-        const response = await fetch(`${backendURL}/topic_objectives/${id}/${userID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
+export const getTopicObjectives = id => get(`/topic_objectives/${id}`);
 
-export async function getSubjects () {
-    try {
-        const response = await fetch(`${backendURL}/subjects`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
+export const getSubjects = () => get(`/subjects`);
 
-export async function getUserSubjects (userID) {
-    try {
-        const response = await fetch(`${backendURL}/user_subjects/${userID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
+export const getUserSubjects = () => get(`/user_subjects`);
 
-export async function getExams () {
-    try {
-        const response = await fetch(`${backendURL}/exams`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
+export const getExams = () => get(`/exams`);
 
-export async function getBuildVersion () {
-    try {
-        const response = await fetch(`${backendURL}/build_version`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
+export const getBuildVersion = () => get(`/build_version`);
 
-export async function getExamSubjects (examID) {
-    try {
-        const response = await fetch(`${backendURL}/exam_subjects/${examID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
+export const getExamSubjects = examID => get(`/exam_subjects/${examID}`);
 
-export async function getSubjectUnits (examID, subjectID) {
-    try {
-        const response = await fetch(`${backendURL}/subject_units/${examID}/${subjectID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
+// Admin
+export const getSubjectUnits = (examID, subjectID) => get(`/subject_units/${examID}/${subjectID}`);
 
-export async function addObjective(objective) {
-    const response = await fetch(`${backendURL}/add_objective`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            "Bypass-Tunnel-Reminder": "true"
-        },
-        body: JSON.stringify(objective)
-    })
-    return await response.json();
-}
+// Admin
+export const addObjective = objective => write('POST', `/add_objective`, objective);
 
-export async function addMCQs(paperID, qAmount) {
-    const response = await fetch(`${backendURL}/add_mcqs`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            "Bypass-Tunnel-Reminder": "true"
-        },
-        body: JSON.stringify({paperID, qAmount})
-    })
-    return await response.json();
-}
+// Admin
+export const addMCQs = (paperID, qAmount) => write('POST', `/add_mcqs`, {paperID, qAmount});
 
-export async function addQuestion(question) {
-    const response = await fetch(`${backendURL}/add_question`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            "Bypass-Tunnel-Reminder": "true"
-        },
-        body: JSON.stringify(question)
-    })
-    return await response.json();
-}
+// Admin
+export const addQuestion = question => write('POST', `/add_question`, question);
 
-export async function addQuizAttempt(userId, selectedTopics) {
-    const response = await fetch(`${backendURL}/create_quiz_attempt`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            "Bypass-Tunnel-Reminder": "true"
-        },
-        body: JSON.stringify({userId, selectedTopics})
-    })
-    return await response.json();
-}
+// Quiz (hidden in production; out of Phase 1 scope).
+export const addQuizAttempt = selectedTopics => write('POST', `/create_quiz_attempt`, {selectedTopics});
 
-export async function addTask(task, userID) {
-    // Reminder scheduling moves server-side (see TODO(reminders) at top).
-    // notificationID is sent as null until the backend creates reminders.
-    const response = await fetch(`${backendURL}/add_task`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            "Bypass-Tunnel-Reminder": "true"
-        },
-        body: JSON.stringify({...task, userID, notificationID: null})
-    })
-    
-    return await response.json();
-}
+// Reminder scheduling moves server-side (see TODO(reminders) at top).
+// notificationID is sent as null until the backend creates reminders.
+export const addTask = task => write('POST', `/add_task`, {...task, notificationID: null});
 
-export async function setUser(fname, lname) {
-    const response = await fetch(`${backendURL}/set_user`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            "Bypass-Tunnel-Reminder": "true"
-        },
-        body: JSON.stringify({fname, lname})
-    })
-    return response;
-
-    // try {
-    //     const response = await fetch(`${backendURL}/getuserID/${fname}/${lname}`);
-    //     // userID = await response.json()[0].id;
-    //     return await response.json();
-    // } catch(error) {
-    //     return [];
-    // }
-}
-
-export async function getUserID (fname, lname) {
-    try {
-        const response = await fetch(`${backendURL}/get_userID/${fname}/${lname}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-}
-
-export async function saveInteraction (userID) {
-    try {
-        const response = await fetch(`${backendURL}/save_interaction/${userID}`, {
-            headers: {
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        });
-        return await response.json();
-    } catch(error) {
-        return [];
-    }
-
-    // Let todaysUsers = {date: "", users: []}
-    // If current date is different to date of array, save to SQL
-    // if (new Date() !== todaysUsers.date)
-    //   saveArray()
-    //   clearArray()
-    //   return
-    // 
-    // If userID in already in array, ignore
-    // if(todaysUsers.users.includes(userID))
-    //   return
-    //
-    // If todaysUsers array is empty, save new date
-    // if(!todaysUsers.date)
-    //   todaysUsers.date = new Date()
-    // 
-    // todaysUsers.users.push(userID)
-}
+// setUser (PUT /set_user) and getUserID (GET /get_userID/:fname/:lname)
+// were removed with name-only sign-in; see services/auth.js.
+// saveInteraction (GET /save_interaction/:userID) was removed: the backend never
+// had that route and nothing called it.

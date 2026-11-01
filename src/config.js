@@ -13,7 +13,23 @@ export const API_URL = (process.env.REACT_APP_API_URL || '/api').replace(/\/+$/,
 export const ENABLE_ADMIN =
   process.env.NODE_ENV !== 'production' || process.env.REACT_APP_ENABLE_ADMIN === 'true';
 
+// Google OAuth Client ID for "Sign in with Google". Public by design (it is
+// sent to every browser). The default keeps preview builds working without
+// env setup; REACT_APP_GOOGLE_CLIENT_ID overrides it.
+export const GOOGLE_CLIENT_ID =
+  process.env.REACT_APP_GOOGLE_CLIENT_ID ||
+  '995518297301-i1oc3sr8173t9gsc9s5br70jl7gj5h8u.apps.googleusercontent.com';
+
 // Quiz is out of scope for the Phase 1 launch; its entry point is hidden in
 // production unless REACT_APP_ENABLE_QUIZ=true.
 export const ENABLE_QUIZ =
   process.env.NODE_ENV !== 'production' || process.env.REACT_APP_ENABLE_QUIZ === 'true';
+
+// Where a signed-in student lands: after signing in from the landing page, and
+// when opening the site's main address while signed in. ONE place to change it
+// (Tasks is planned for deprecation).
+export const POST_SIGN_IN_PATH = '/tasks';
+
+// Address students write to for account deletion, shown on /privacy.
+// Must be set before go-live (Olusanya supplies it; not hard-coded here).
+export const PRIVACY_CONTACT_EMAIL = process.env.REACT_APP_PRIVACY_CONTACT_EMAIL || '';

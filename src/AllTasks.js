@@ -40,7 +40,7 @@ const AllTasks = () => {
 
         if(global.userID){
             console.log("idso")
-            getUserTasks(global.userID)
+            getUserTasks()
                 .then(result => {
                     console.log("tasks: ", result)
                     setTasks(result);

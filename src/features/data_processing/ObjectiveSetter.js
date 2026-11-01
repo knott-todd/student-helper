@@ -1,5 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import {AppContext} from "../../AppContext";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import DependentDropdown from "../../DependentDropdown";
 import Questions from "../pastpapers/Questions";
 import { getModuleTopics, getPaperQuestions, getQuestTopic, getTopicObjectives, getUnitModules, setQuestObjective, setQuestTopic } from "../../services/SQLService";
@@ -27,7 +26,6 @@ const ObjectiveSetter = (props) => {
 
     const [prevPaperID, setPrevPaperID] = useState();
 
-    const global = useContext(AppContext);
 
     useEffect(() => {
         console.log(quests[questIndex])
@@ -71,7 +69,7 @@ const ObjectiveSetter = (props) => {
 
     useEffect(() => {
 
-        getPaperQuestions(props.paperID, global.userID).then(result => {
+        getPaperQuestions(props.paperID).then(result => {
             if(typeof result[0] !== 'undefined'){
                 // setQuests(result);
                 setQuests(result.sort((a, b) => {
