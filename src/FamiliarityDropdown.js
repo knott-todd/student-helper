@@ -1,12 +1,9 @@
-import { useContext } from "react";
 import { useEffect, useState } from "react";
-import { AppContext } from "./AppContext";
 import { getFamiliarities, updateUserQuestion } from "./services/SQLService";
 
 const FamiliarityDropdown = props => {
     const [fams, setFams] = useState([]);
 
-    const global = useContext(AppContext);
 
     useEffect(() => {
 

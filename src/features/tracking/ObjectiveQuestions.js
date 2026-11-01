@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getObjective, getObjectiveQuestions, updateUserQuestion } from "../../services/SQLService";
 import FamiliarityDropdown from "../../FamiliarityDropdown";
 import CompleteCheckbox from "../../CompleteCheckbox";
 import '../../CSS/global.css'
 import '../../CSS/ObjectiveQuestions.css'
-import { AppContext } from "../../AppContext";
 
 const ObjectiveQuestions = () => {
     const {id} = useParams();
@@ -13,7 +12,6 @@ const ObjectiveQuestions = () => {
     const [quests, setQuests] = useState([]);
     const [objective, setObjective] = useState({});
 
-    const global = useContext(AppContext);
 
     const onDropdownChange = (e, id) => {
         const newValue = parseInt(e.target.value);
