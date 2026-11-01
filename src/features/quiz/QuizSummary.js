@@ -37,7 +37,7 @@ const QuizSummary = ({ id }) => {
             {quizAttempt.score === 100
             ? (
                 <div style={{marginTop: "2rem"}}>
-                    <ShareButton text={`I scored ${quizAttempt.score}% on The Student Helper!`} url="https://student-helper-zeta.vercel.app" />
+                    <ShareButton text={`I scored ${quizAttempt.score}% on The Student Helper!`} url={window.location.origin} />
                     <button type="button" className="secondary-btn full-width-btn" onClick={() => exitQuiz()} >
                         Home
                     </button>

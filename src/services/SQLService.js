@@ -1,14 +1,10 @@
-const backendURL = 'https://student-helper-backend.vercel.app';
-// const backendURL = 'http://localhost:3080'
+import { API_URL } from '../config';
 
-const onesignalURL = 'https://onesignal.com/api/v1/notifications';
-const onesignalAppID = '99b7a99a-31e5-4656-86d7-ab456591292b';
+const backendURL = API_URL;
 
-const sqlToJSDeadline = deadline => {
-    const dateParts = deadline.split("-");
-    return new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0,2));
-
-}
+// TODO(reminders): task reminder notifications are created/updated/cancelled
+// server-side in the backend "OneSignal server-side" PR (backend audit §6, PR6).
+// The OneSignal REST API key must never be shipped to the browser again.
 
 export async function getPastpapers (subID, examID, userID) {
     try {
@@ -163,27 +159,6 @@ export async function updateTask(taskID, taskText, subject, deadline) {
         body: JSON.stringify({taskID, taskText, subject, deadline})
     })
 
-    const signalOptions = {
-        method: 'PUT',
-        headers: {
-            accept: 'application/json',
-            Authorization: 'Basic MWNlZjkwNjItOGVmOS00N2JkLWIyZWItNzlmOTNkN2VkYTM2',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            contents: {en: `${taskText}`},
-            app_id: onesignalAppID,
-            send_after: `${deadline.slice(0, 10)}`,
-            delayed_option: "timezone",
-            delivery_time_of_day: "9:00AM"
-        })
-    };
-      
-    fetch(onesignalURL + `/${taskID}`, signalOptions)
-    .then(res => res.json())
-    .then(json => console.log(json))
-    .catch(err => console.error('error:' + err));
-
     return await response.json();
 }
 
@@ -200,37 +175,16 @@ export async function updateTaskComplete (taskID, isCompleted) {
 }
 
 export async function deleteTask (taskID) {
-
-    const signalOptions = {
+    // Reminder cancellation moves server-side (see TODO(reminders) at top).
+    const response = await fetch(`${backendURL}/delete_task/${taskID}`, {
         method: 'DELETE',
         headers: {
-            accept: 'application/json',
-            Authorization: 'Basic MWNlZjkwNjItOGVmOS00N2JkLWIyZWItNzlmOTNkN2VkYTM2',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Bypass-Tunnel-Reminder": "true"
         }
-    };
-
-    const taskInfo = await getTaskInfo(taskID);
-      
-    return fetch(onesignalURL + `/${taskInfo.notification}?app_id=${onesignalAppID}`, signalOptions)
-    .then(res => res.json())
-    .then(json => console.log(json))
-    .then(async () => {
-
-        const response = await fetch(`${backendURL}/delete_task/${taskID}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                "Bypass-Tunnel-Reminder": "true"
-            }
-        })
-
-        return response;
-
     })
-    .catch(err => console.error('error:' + err));
 
-
+    return response;
 }
 
 export async function deletePaperQuestions (paperID) {
@@ -569,49 +523,15 @@ export async function addQuizAttempt(userId, selectedTopics) {
 }
 
 export async function addTask(task, userID) {
-
-    const deadlineTimeInHours = 15;
-
-    const jsDeadline = sqlToJSDeadline(task.deadline);
-    // If 2 days before deadline is before today, set reminder for today, otherwise set as 2 days before deadline
-    let reminder = new Date();
-    reminder.setDate(((jsDeadline.getDate() - 2) < new Date().getDate() ? new Date().getDate() : (jsDeadline.getDate() - 2)));
-    reminder.setHours(deadlineTimeInHours);
-    const reminderUTC = reminder.toUTCString();
-
-    const signalOptions = {
-        method: 'POST',
-        headers: {
-            accept: 'application/json',
-            Authorization: 'Basic MWNlZjkwNjItOGVmOS00N2JkLWIyZWItNzlmOTNkN2VkYTM2',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            include_external_user_ids: [`${userID}`],
-            contents: {en: `${task.taskText}`},
-            external_id: task.id,
-            name: `Task: ${task.taskText}`,
-            app_id: onesignalAppID,
-            send_after: `${reminderUTC}`,
-            delayed_option: "timezone",
-            delivery_time_of_day: `${deadlineTimeInHours}:00`
-        })
-    };
-      
-    const signalResponse = await (await fetch(onesignalURL, signalOptions)).json()
-    console.log(signalResponse)
-    // .then(res => res.json())
-    // .then(json => console.log(json))
-    // .catch(err => console.error('error:' + err));
-
-
+    // Reminder scheduling moves server-side (see TODO(reminders) at top).
+    // notificationID is sent as null until the backend creates reminders.
     const response = await fetch(`${backendURL}/add_task`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             "Bypass-Tunnel-Reminder": "true"
         },
-        body: JSON.stringify({...task, userID, notificationID: signalResponse.id})
+        body: JSON.stringify({...task, userID, notificationID: null})
     })
     
     return await response.json();

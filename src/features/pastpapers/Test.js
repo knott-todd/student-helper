@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { getPaperQuestions, getPastpapers, getUserSubject } from "../../services/SQLService";
+import { getPastpapers } from "../../services/SQLService";
 import { Route, Routes, Router, Link } from "react-router-dom";
 import '../../CSS/global.css';
 import '../../CSS/Test.css';
@@ -10,8 +10,6 @@ import SingleProgress from "../../SingleProgress";
 
 const Test = () => {
     const [papers, setPapers] = useState([]);
-
-    const sqlUrl = "http://localhost:3080";
 
     const global = useContext(AppContext);
 

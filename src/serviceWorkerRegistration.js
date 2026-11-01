@@ -153,3 +153,24 @@ export function unregister() {
       });
   }
 }
+
+// Unregister only the app-shell worker (/service-worker.js). The OneSignal
+// push worker (OneSignalSDKWorker.js) has its own registration and must
+// stay, or push subscriptions break.
+export function unregisterAppShellWorker() {
+  if (!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker
+    .getRegistrations()
+    .then((registrations) =>
+      registrations
+        .filter((registration) =>
+          [registration.active, registration.waiting, registration.installing].some(
+            (worker) => worker && worker.scriptURL.endsWith('/service-worker.js')
+          )
+        )
+        .forEach((registration) => registration.unregister())
+    )
+    .catch((error) => {
+      console.error(error.message);
+    });
+}

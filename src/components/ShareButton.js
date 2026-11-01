@@ -8,7 +8,7 @@ const ShareButton = ({ url, title, text }) => {
         await navigator.share({
           title: title || 'Look what I scored on The Student Helper!',
           text: text || '',
-          url: url || "https://student-helper-zeta.vercel.app",
+          url: url || window.location.origin,
         });
         console.log('Shared successfully');
       } catch (error) {
