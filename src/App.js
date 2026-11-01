@@ -25,9 +25,10 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight, faX, faXmark, faCaretUp, faFlag, faThumbTack } from '@fortawesome/free-solid-svg-icons'
 import { faFlag as faRegularFlag } from '@fortawesome/free-regular-svg-icons';
 import TaskForm from './TaskForm';
-import { ENABLE_ADMIN, GOOGLE_CLIENT_ID } from './config';
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import { ENABLE_ADMIN, POST_SIGN_IN_PATH } from './config';
 import RequireAuth from './components/RequireAuth';
+import Landing from './Landing';
+import Privacy from './Privacy';
 import ServerUnreachable from './components/ServerUnreachable';
 import { ToastContainer } from 'react-toastify';
 import OneSignal from 'react-onesignal';
@@ -43,6 +44,9 @@ import QuizQuestionReview from './features/quiz/QuizQuestionReview';
 import ReviewComplete from './features/quiz/ReviewComplete';
 import QuizWrapper from './features/quiz/QuizWrapper';
 library.add(faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight, faXmark, faCaretUp, faFlag, faRegularFlag, faThumbTack )
+
+// Pages a signed-out visitor can see. They don't need the backend to render.
+const PUBLIC_PATHS = ['/', '/privacy'];
 
 function App() {
   const global = useContext(AppContext);
@@ -541,23 +545,36 @@ function App() {
       <div id="tiles" />
       <canvas id="dots" />
 
-      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <Router>
         {global.authStatus === "loading" ? (
           // Waiting for GET /me: render nothing rather than flash sign-in.
           <div className="body-div" role="status" aria-label="Loading" />
-        ) : global.authStatus === "unreachable" ? (
+        ) : global.authStatus === "unreachable" && !PUBLIC_PATHS.includes(window.location.pathname) ? (
+          // The landing and privacy pages still show when the server is down;
+          // signing in then shows the sign-in error instead.
           <ServerUnreachable onRetry={global.restoreSession} />
         ) : (
         <>
-        <Header >
-          <script src="https://kit.fontawesome.com/ed9cf2ed95.js" crossorigin="anonymous"></script>
-        </Header>
+        {/* Signed-out visitors only reach the landing and privacy pages,
+            which show no app chrome. */}
+        {global.user ? (
+          <Header >
+            <script src="https://kit.fontawesome.com/ed9cf2ed95.js" crossorigin="anonymous"></script>
+          </Header>
+        ) : ""}
         <Routes>
           <Route exact path = "/" >
-            <Route path='/' element={ <Navigate to={global.user && global.user.default_exam ? "/test" : "/sign_in"} replace /> } />
+            {/* Signed out: the landing page. Signed in: the post-sign-in page,
+                or profile setup until a default exam is chosen. */}
+            <Route path='/' element={
+              !global.user ? <Landing />
+              : <Navigate to={global.user.default_exam ? POST_SIGN_IN_PATH : "/sign_in"} replace />
+            } />
 
-            <Route path="/sign_in" element={<SignIn />} />
+            <Route path="/privacy" element={<Privacy />} />
+
+            {/* Profile (signed in). The old sign-in link shows the landing page. */}
+            <Route path="/sign_in" element={global.user ? <SignIn /> : <Navigate to="/" replace />} />
 
             {/* Everything else needs a signed-in user. */}
             <Route element={<RequireAuth />}>
@@ -609,11 +626,10 @@ function App() {
           </Route>
         </Routes>
 
-        <Navbar />
+        {global.user ? <Navbar /> : ""}
         </>
         )}
       </Router>
-      </GoogleOAuthProvider>
 
       <ToastContainer
         position="bottom-left"

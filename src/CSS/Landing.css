@@ -1,0 +1,35 @@
+/* Layout only. Fonts, colours, the button and the dotted background all come
+   from the existing app (global.css, index.css, App.js). */
+
+.landing {
+    box-sizing: border-box;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0 7%;
+}
+
+.landing-hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.landing-headline {
+    margin: 0 0 16px 0;
+}
+
+.landing-subline {
+    margin: 0 0 24px 0;
+}
+
+.landing-cta {
+    width: 100%;
+    max-width: 320px;
+}
+
+.landing-footer {
+    padding: 16px 0;
+}

@@ -1,25 +1,12 @@
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import {AppContext} from "./AppContext";
 import OneSignal from 'react-onesignal';
 import { getUserSubjects, setUserSub, getExamSubjects, getExams, setUserExam, setSubExam } from "./services/SQLService";
-import { signInWithGoogle, signOut, ServerUnreachableError } from "./services/auth";
+import { signOut, ServerUnreachableError } from "./services/auth";
 import { SERVER_UNREACHABLE_MESSAGE } from "./components/ServerUnreachable";
 
-const SIGN_IN_FAILED_MESSAGE = "Google sign-in didn't work. Please try again.";
 const SIGN_OUT_FAILED_MESSAGE = "Couldn't sign you out. Please try again.";
-
-// Link this browser's push subscription to the user. react-onesignal 2.x
-// wraps the v15 SDK, whose API is setExternalUserId (v16 renamed it login).
-// Push is best-effort: a failure here must never block sign-in.
-const linkPushToUser = userID => {
-    try {
-        Promise.resolve(OneSignal.setExternalUserId(String(userID))).catch(() => {});
-    } catch (error) {
-        // SDK not loaded (blocked by the browser or an extension).
-    }
-}
 
 const unlinkPush = () => {
     try {
@@ -47,7 +34,7 @@ const SignIn = () => {
     }, [])
 
     useEffect(() => {
-        global.setPageTitle(global.userID ? "Profile" : "Sign In");
+        global.setPageTitle("Profile");
     }, [global.userID])
 
     useEffect(() => {
@@ -74,37 +61,16 @@ const SignIn = () => {
         }
     }, [global.currExam, global.userID])
 
-    const handleGoogleCredential = ({ credential }) => {
-        setError("");
-        setBusy(true);
-
-        signInWithGoogle(credential)
-            .then(user => {
-                global.signIn(user);
-                linkPushToUser(user.id);
-
-                // New users and anyone without a default exam stay here to
-                // finish profile setup (exam, then subjects).
-                if (!user.is_new && user.default_exam)
-                    navigate("/test");
-            })
-            .catch(err => {
-                setError(err instanceof ServerUnreachableError ? SERVER_UNREACHABLE_MESSAGE : SIGN_IN_FAILED_MESSAGE);
-            })
-            .finally(() => setBusy(false));
-    }
-
     const handleSignOut = () => {
         setError("");
         setBusy(true);
 
         signOut()
             .then(() => {
-                googleLogout();
                 unlinkPush();
                 global.signOutLocally();
                 setSubs([]);
-                navigate("/sign_in");
+                navigate("/");
             })
             .catch(err => {
                 // The session cookie is still valid, so don't pretend the
@@ -168,18 +134,6 @@ const SignIn = () => {
         <div className="body-div">
             {/* <h1 className="page-title">Sign In</h1> */}
 
-            {!global.userID ? (
-                <div className="default-form">
-                    <div style={{display: "flex", justifyContent: "center"}} aria-busy={busy}>
-                        <GoogleLogin
-                            onSuccess={handleGoogleCredential}
-                            onError={() => setError(SIGN_IN_FAILED_MESSAGE)}
-                        />
-                    </div>
-                    {error ? <p role="alert">{error}</p> : ""}
-                </div>
-            ) : ""}
-            
             {global.userID ? (
                 <form style={{display: "block", paddingTop: "40px"}}>
                     <label>

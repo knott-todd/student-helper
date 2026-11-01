@@ -223,7 +223,7 @@ export default ({children}) => {
 
     // Any API call answering 401 means the session is gone (expired, signed out
     // in another tab, or the account was removed): sign out here too, and
-    // RequireAuth routes to /sign_in. getSession/signIn don't go through this.
+    // RequireAuth routes to the landing page. getSession/signIn don't go through this.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => onUnauthorized(signOutLocally), [])
 

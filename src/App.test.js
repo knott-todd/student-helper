@@ -1,6 +1,6 @@
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import OneSignal from 'react-onesignal';
-import { googleLogout } from '@react-oauth/google';
+import { openGoogleSignIn, GoogleSignInCancelled } from './services/googlePopup';
 import App from './App';
 import AppContext from './AppContext';
 
@@ -12,17 +12,12 @@ jest.mock('react-onesignal', () => ({
 jest.mock('@vercel/analytics', () => ({ inject: jest.fn() }));
 // Dev-only page that pulls TensorFlow into the module graph.
 jest.mock('./SentenceSimilarity', () => () => null);
-// The real provider loads Google's script; the stub button hands back a
-// credential the way GoogleLogin's onSuccess does.
-jest.mock('@react-oauth/google', () => ({
-  GoogleOAuthProvider: ({ children }) => children,
-  GoogleLogin: ({ onSuccess }) => (
-    <button type="button" onClick={() => onSuccess({ credential: 'google-id-token' })}>
-      Sign in with Google
-    </button>
-  ),
-  googleLogout: jest.fn(),
-}));
+// The real popup goes to Google; here it hands back an ID token the way
+// google-callback.html relays it. (Playwright covers the popup itself.)
+jest.mock('./services/googlePopup', () => {
+  const actual = jest.requireActual('./services/googlePopup');
+  return { ...actual, openGoogleSignIn: jest.fn(() => Promise.resolve('google-id-token')) };
+});
 
 // jsdom has no canvas; App draws a decorative dot grid on load.
 const noopContext = new Proxy({}, { get: () => () => {} });
@@ -77,12 +72,15 @@ const renderApp = (path = '/') => {
   );
 };
 
-const googleButton = () => screen.findByRole('button', { name: /sign in with google/i });
+const googleButton = () => screen.findByRole('button', { name: 'GET STARTED FOR FREE' });
+const SIGN_IN_ERROR = "We couldn't sign you in right now. Please try again.";
 
 beforeEach(() => {
   jest.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(noopContext);
   localStorage.clear();
   jest.clearAllMocks();
+  // CRA resets mock implementations between tests.
+  openGoogleSignIn.mockImplementation(() => Promise.resolve('google-id-token'));
 });
 
 afterEach(() => {
@@ -90,36 +88,37 @@ afterEach(() => {
   delete global.fetch;
 });
 
-test('a signed-out visitor lands on the Google sign-in, with no flash while /me is pending', async () => {
+test('a signed-out visitor sees the landing page, with no flash while /me is pending', async () => {
   let answerMe;
   mockBackend({ 'GET /api/me': () => new Promise((resolve) => { answerMe = resolve; }) });
   renderApp('/');
 
   expect(screen.getByRole('status', { name: /loading/i })).toBeInTheDocument();
-  expect(screen.queryByRole('button', { name: /sign in with google/i })).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'GET STARTED FOR FREE' })).not.toBeInTheDocument();
   expect(calls('GET /api/me')[0][1]).toMatchObject({ credentials: 'include' });
 
   answerMe(await respond(401, { error: 'no session' }));
   expect(await googleButton()).toBeInTheDocument();
-  expect(window.location.pathname).toBe('/sign_in');
+  expect(screen.getByRole('heading', { name: 'Smarter, Faster CXC Exam Prep' })).toBeInTheDocument();
+  expect(window.location.pathname).toBe('/');
   expect(screen.queryByLabelText(/first name/i)).not.toBeInTheDocument();
 });
 
-test('signed-out visitors are redirected from user pages to /sign_in', async () => {
+test.each(['/tasks', '/sign_in', '/test/pastpaper/3'])('signed-out visitors opening %s see the landing page', async (path) => {
   mockBackend({ 'GET /api/me': [401, { error: 'no session' }] });
-  renderApp('/tasks');
+  renderApp(path);
 
   expect(await googleButton()).toBeInTheDocument();
-  expect(window.location.pathname).toBe('/sign_in');
+  expect(window.location.pathname).toBe('/');
 });
 
-test('a valid session from /me is restored and routed to /test; legacy identity keys are cleared', async () => {
+test('a valid session from /me is restored and routed to Tasks; legacy identity keys are cleared', async () => {
   localStorage.setItem('userID', '150');
   localStorage.setItem('user', JSON.stringify({ id: 150 }));
   mockBackend({ 'GET /api/me': [200, { user: returningUser }] });
   renderApp('/');
 
-  await waitFor(() => expect(window.location.pathname).toBe('/test'));
+  await waitFor(() => expect(window.location.pathname).toBe('/tasks'));
   expect(localStorage.getItem('userID')).toBeNull();
   expect(localStorage.getItem('user')).toBeNull();
   // The backend takes the user from the session: no call carries a user id.
@@ -137,12 +136,12 @@ test('a restored session keeps a deep link', async () => {
   expect(window.location.pathname).toBe('/tasks');
 });
 
-test('Google sign-in for a new user posts the credential and stays on profile setup', async () => {
+test('Google sign-in for a new user posts the credential and goes to profile setup', async () => {
   mockBackend({
     'GET /api/me': [401, { error: 'no session' }],
     'POST /api/auth/google': [200, { user: newUser }],
   });
-  renderApp('/sign_in');
+  renderApp('/');
 
   fireEvent.click(await googleButton());
 
@@ -155,32 +154,47 @@ test('Google sign-in for a new user posts the credential and stays on profile se
   expect(screen.getByRole('button', { name: /sign out/i })).toBeInTheDocument();
 });
 
-test('Google sign-in for a returning user with a default exam goes to /test', async () => {
+test('Google sign-in for a returning user with a default exam goes to Tasks', async () => {
   mockBackend({
     'GET /api/me': [401, { error: 'no session' }],
     'POST /api/auth/google': [200, { user: returningUser }],
   });
-  renderApp('/sign_in');
+  renderApp('/');
 
   fireEvent.click(await googleButton());
 
-  await waitFor(() => expect(window.location.pathname).toBe('/test'));
+  await waitFor(() => expect(window.location.pathname).toBe('/tasks'));
 });
 
-test('a rejected Google sign-in shows an error and stays signed out', async () => {
+test('backing out of Google shows no error and the button works again', async () => {
+  mockBackend({ 'GET /api/me': [401, { error: 'no session' }] });
+  openGoogleSignIn.mockImplementationOnce(() => Promise.reject(new GoogleSignInCancelled()));
+  renderApp('/');
+
+  fireEvent.click(await googleButton());
+  await waitFor(() => expect(openGoogleSignIn).toHaveBeenCalledTimes(1));
+  expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  expect(calls('POST /api/auth/google')).toHaveLength(0);
+
+  fireEvent.click(screen.getByRole('button', { name: 'GET STARTED FOR FREE' }));
+  expect(openGoogleSignIn).toHaveBeenCalledTimes(2);
+});
+
+test('a rejected Google sign-in shows the sign-in error and stays signed out', async () => {
   mockBackend({
     'GET /api/me': [401, { error: 'no session' }],
     'POST /api/auth/google': [401, { error: 'invalid token' }],
   });
-  renderApp('/sign_in');
+  renderApp('/');
 
   fireEvent.click(await googleButton());
 
-  expect(await screen.findByRole('alert')).toHaveTextContent(/google sign-in didn't work/i);
-  expect(screen.getByRole('button', { name: /sign in with google/i })).toBeInTheDocument();
+  expect(await screen.findByRole('alert')).toHaveTextContent(SIGN_IN_ERROR);
+  expect(screen.getByRole('button', { name: 'GET STARTED FOR FREE' })).toBeInTheDocument();
+  expect(window.location.pathname).toBe('/');
 });
 
-test('sign-out ends the session and returns to the sign-in page', async () => {
+test('sign-out ends the session and returns to the landing page', async () => {
   mockBackend({
     'GET /api/me': [200, { user: returningUser }],
     'POST /api/auth/logout': [204],
@@ -190,9 +204,8 @@ test('sign-out ends the session and returns to the sign-in page', async () => {
   fireEvent.click(await screen.findByRole('button', { name: /sign out/i }));
 
   expect(await googleButton()).toBeInTheDocument();
-  expect(window.location.pathname).toBe('/sign_in');
+  expect(window.location.pathname).toBe('/');
   expect(calls('POST /api/auth/logout')[0][1]).toMatchObject({ credentials: 'include' });
-  expect(googleLogout).toHaveBeenCalled();
   expect(OneSignal.removeExternalUserId).toHaveBeenCalled();
   expect(localStorage.getItem('sub')).toBeNull();
 });
@@ -213,45 +226,61 @@ test('a failed sign-out says so and keeps the user signed in', async () => {
 test.each([
   ['a 5xx', () => respond(503)],
   ['a network error', () => Promise.reject(new TypeError('Failed to fetch'))],
-])('when /me fails with %s the app says the server is unreachable, and Try again recovers', async (_, failure) => {
+])('when /me fails with %s an inside page says the server is unreachable, and Try again recovers', async (_, failure) => {
   let meFails = true;
   mockBackend({
     'GET /api/me': () => (meFails ? failure() : respond(200, { user: returningUser })),
   });
-  renderApp('/');
+  renderApp('/track');
 
   expect(await screen.findByRole('alert')).toHaveTextContent(/student helper can't reach the server right now/i);
-  expect(screen.queryByRole('button', { name: /sign in with google/i })).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'GET STARTED FOR FREE' })).not.toBeInTheDocument();
 
   meFails = false;
   fireEvent.click(screen.getByRole('button', { name: /try again/i }));
-  await waitFor(() => expect(window.location.pathname).toBe('/test'));
+  expect(await screen.findByText(/track/i, { selector: 'h1' })).toBeInTheDocument();
+  expect(window.location.pathname).toBe('/track');
 });
 
-test('sign-in shows the unreachable message when the backend is down mid-sign-in', async () => {
+test('when /me is unreachable the landing page still shows, and sign-in shows the sign-in error', async () => {
+  mockBackend({
+    'GET /api/me': () => Promise.reject(new TypeError('Failed to fetch')),
+    'POST /api/auth/google': () => Promise.reject(new TypeError('Failed to fetch')),
+  });
+  renderApp('/');
+
+  fireEvent.click(await googleButton());
+  expect(await screen.findByRole('alert')).toHaveTextContent(SIGN_IN_ERROR);
+  expect(window.location.pathname).toBe('/');
+});
+
+test.each([
+  ['a 502', () => respond(502)],
+  ['a network error', () => Promise.reject(new TypeError('Failed to fetch'))],
+])('sign-in shows the sign-in error when the backend fails mid-sign-in (%s)', async (_, failure) => {
   mockBackend({
     'GET /api/me': [401, { error: 'no session' }],
-    'POST /api/auth/google': [502],
+    'POST /api/auth/google': failure,
   });
-  renderApp('/sign_in');
+  renderApp('/');
 
   fireEvent.click(await googleButton());
 
-  expect(await screen.findByRole('alert')).toHaveTextContent(/can't reach the server/i);
+  expect(await screen.findByRole('alert')).toHaveTextContent(SIGN_IN_ERROR);
+  expect(screen.getByRole('button', { name: 'GET STARTED FOR FREE' })).toBeEnabled();
 });
 
 test('app load never calls OneSignal REST, save_interaction or the removed name endpoints', async () => {
   mockBackend({ 'GET /api/me': [401, { error: 'no session' }] });
   renderApp('/');
   await googleButton();
-  await waitFor(() => expect(calls('GET /api/exams')).not.toHaveLength(0));
 
   const urls = global.fetch.mock.calls.map(([url]) => String(url));
   expect(urls.every((url) => url.startsWith('/api/'))).toBe(true);
   expect(urls.some((url) => /onesignal\.com|save_interaction|set_user$|get_userID/.test(url))).toBe(false);
 });
 
-test('a 401 from any API call (session expired) signs out and routes to /sign_in', async () => {
+test('a 401 from any API call (session expired) signs out and shows the landing page', async () => {
   mockBackend({
     'GET /api/me': [200, { user: returningUser }],
     'GET /api/user_tasks': [401, { error: 'Not signed in' }],
@@ -259,7 +288,7 @@ test('a 401 from any API call (session expired) signs out and routes to /sign_in
   renderApp('/tasks');
 
   expect(await googleButton()).toBeInTheDocument();
-  expect(window.location.pathname).toBe('/sign_in');
+  expect(window.location.pathname).toBe('/');
   expect(screen.queryByRole('button', { name: /sign out/i })).not.toBeInTheDocument();
 });
 
