@@ -28,6 +28,9 @@ export default ({children}) => {
     // "signed in" flag for effects and display (and OneSignal's external id).
     const [user, setUser] = useState(null);
     const userID = user ? user.id : null;
+    // Shows the admin UI (with REACT_APP_ENABLE_ADMIN). The backend enforces it
+    // by re-reading the role from the DB on every admin call.
+    const isAdmin = Boolean(user && user.role === "admin");
     // "loading" until GET /me answers, then "signedIn" | "signedOut" |
     // "unreachable" (network error or 5xx: the backend or its DB is down).
     const [authStatus, setAuthStatus] = useState("loading");
@@ -178,6 +181,7 @@ export default ({children}) => {
         currUnit,
         setCurrUnit,
         userID,
+        isAdmin,
         authStatus,
         signIn,
         signOutLocally,

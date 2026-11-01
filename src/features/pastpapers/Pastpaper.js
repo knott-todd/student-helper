@@ -65,7 +65,7 @@ const Pastpaper = () => {
 
                 <div className="editor-wrapper">
 
-                    {ENABLE_ADMIN && global.userID === 150 ? (
+                    {ENABLE_ADMIN && global.isAdmin ? (
                         <>
                             Edit Topics
                             <input type="checkbox" onChange={e => {setIsEditTopics(e.target.checked)}}/>

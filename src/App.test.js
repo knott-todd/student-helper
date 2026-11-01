@@ -274,3 +274,14 @@ test('a 403 or 404 from an API call does not sign the user out', async () => {
   expect(await screen.findByText(/hey, ada/i)).toBeInTheDocument();
   expect(window.location.pathname).toBe('/tasks');
 });
+
+test.each([
+  ['an admin', 'admin', true],
+  ['a student', 'student', false],
+])('the admin Insert link shows for %s only (role from /me, not a user id)', async (_, role, shown) => {
+  mockBackend({ 'GET /api/me': [200, { user: { ...returningUser, id: 150, role } }] });
+  renderApp('/tasks');
+
+  expect(await screen.findByText(/hey, ada/i)).toBeInTheDocument();
+  expect(Boolean(document.querySelector('a[href="/insert_objective"]'))).toBe(shown);
+});
