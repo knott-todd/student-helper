@@ -4,14 +4,12 @@ import { getSubjects, getUserExam, getUserSubjects } from "./services/SQLService
 import './CSS/Header.css'
 import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Progress from "./Progress";
 import SingleProgress from "./SingleProgress";
+import { subjectUnit } from "./curriculum";
 
 const Header = () => {
     const [subs, setSubs] = useState([{}]);
     const [scrollTop, setScrollTop] = useState(0);
-
-    const units = [1, 2];
 
     const global = useContext(AppContext);
 
@@ -33,9 +31,12 @@ const Header = () => {
                     if(!global.currSub || result.filter(sub => sub.id === global.currSub.id).length === 0){
                         global.setCurrSub(result.sort((a, b) => a.name.localeCompare(b.name))[0]);
                         console.log("Nok", global.currSub)
-                    } else console.log("SOk")
+                    } else {
+                        // Fresh row from the server (e.g. the unit saved on Profile),
+                        // not the copy kept in localStorage.
+                        global.setCurrSub(result.find(sub => sub.id === global.currSub.id));
+                    }
 
-                    global.setCurrUnit(units[0]);
                     
                     // if(result.length !== 0)
                     //     navigate('/track')
@@ -44,7 +45,7 @@ const Header = () => {
             getUserExam()
                 .then(result => {
                     
-                    global.setCurrExam(result[0].default_exam);
+                    if (Array.isArray(result) && result[0]) global.setCurrExam(result[0].default_exam);
 
                 })
         }
@@ -68,8 +69,13 @@ const Header = () => {
 
     }, [global.userSubs, global.currExam, global.examSubs])
 
+    // The unit is chosen per subject on Profile (Unit 1 by default).
     useEffect(() => {
-        
+        global.setCurrUnit(subjectUnit(global.currSub));
+    }, [global.currSub])
+
+    useEffect(() => {
+
         const onScroll = () => setScrollTop(window.pageYOffset);
         // clean up code
         window.removeEventListener('scroll', onScroll);
@@ -97,18 +103,11 @@ const Header = () => {
                             <option key={parseInt(sub.id)} value={sub.id}>{sub.name}</option>
                         ))} 
                     </select> 
-                    {/* <select className="unit-select header-dropdown" value={global.currUnit} style={{margin: "10px 10px 10px 5px"}} onChange={e => global.setCurrUnit(units.find(unit => unit === parseInt(e.target.value)))}>
-                        {units.map(unit => (
-                            <option key={parseInt(unit)} value={unit}>Unit {unit}</option>
-                        ))} 
-                    </select> */}
                 </form>
 
             </div>
-            <Progress className={global.progressValue >= 1 ? "familiarity-complete": ""} value={global.progressValue} height="4px" width={(window.location.pathname.includes("/track") ? "100%" : "0")} position="absolute" />
             <SingleProgress height="4px" width={(window.location.pathname.includes("/tasks") ? "100%" : "0")} position="absolute" value={global.singleProgressValue} />
                 
-            {global.progressValue ? <span className="tooltip-text">{Math.round(global.progressValue * 100, 4)}%</span> : ""}
         </div>
     )
 }
