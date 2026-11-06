@@ -235,7 +235,7 @@ describe('curriculum helpers', () => {
 describe('Landing page copy v1, privacy, push off', () => {
   const signedOut = () => mockBackend({ 'GET /api/me': [401, { error: 'no session' }] });
 
-  test('shows the approved copy in order, two sign-in buttons, no founder section', async () => {
+  test('shows the approved copy in order, including who is behind it, with two sign-in buttons', async () => {
     signedOut();
     renderApp('/');
     await screen.findByRole('heading', { level: 1 });
@@ -255,6 +255,11 @@ describe('Landing page copy v1, privacy, push off', () => {
       '1. Sign in with Google.',
       '2. Choose CAPE, then Pure Mathematics, then your unit.',
       '3. Open Track to see your syllabus, or add your first task.',
+      "Who's behind this",
+      "I'm Olusanya. I went to Queen's Royal College, Trinidad and Tobago.",
+      'When I was preparing for CSEC, I was overwhelmed and anxious that I would miss a topic. So I matched years of past paper questions to the objectives they were testing, and used that to track how well I knew each part of the syllabus.',
+      "It worked so well that I'm building it out into Student Helper. It starts with the whole syllabus on Track; the past papers come next.",
+      'Questions or ideas? Email me at hello@olusanyatodd.com',
       'Next on the list: original Pure Maths papers with mark schemes, written by Caribbean teachers. No date yet.',
       'Is it free?', 'Yes.',
       'Which exams and subjects?',
@@ -277,9 +282,11 @@ describe('Landing page copy v1, privacy, push off', () => {
       at = found + line.length;
     }
     expect(screen.getAllByRole('button', { name: 'GET STARTED FOR FREE' })).toHaveLength(2);
-    expect(screen.getByRole('link', { name: 'hello@olusanyatodd.com' })).toHaveAttribute('href', 'mailto:hello@olusanyatodd.com');
+    const emails = screen.getAllByRole('link', { name: 'hello@olusanyatodd.com' });
+    expect(emails).toHaveLength(2); // Who's behind this, and the data FAQ
+    emails.forEach((a) => expect(a).toHaveAttribute('href', 'mailto:hello@olusanyatodd.com'));
     expect(screen.getByRole('link', { name: 'Read the privacy page' })).toHaveAttribute('href', '/privacy');
-    expect(text).not.toMatch(/founder|olusanya todd|screenshot/i);
+    expect(text).not.toMatch(/screenshot/i);
     expect(document.querySelectorAll('.landing img')).toHaveLength(0);
   });
 

@@ -52,10 +52,10 @@ test.describe('What a visitor sees', () => {
     const lines = (await page.locator('body').innerText()).split('\n').map((l) => l.trim()).filter(Boolean);
     expect(lines.slice(0, 3)).toEqual([COPY.headline, COPY.subline, "Unit 1 or Unit 2. Every objective, laid out, so you can plan when you'll cover each one."]);
     expect(lines[lines.length - 1]).toBe('Privacy');
-    expect(lines.join('\n')).not.toMatch(/founder/i);
+    expect(lines).toContain("Who's behind this");
     await expect(page.locator('footer').getByRole('link', { name: 'Privacy', exact: true })).toBeVisible();
-    // Email, "Read the privacy page", footer Privacy.
-    await expect(page.getByRole('link')).toHaveCount(3);
+    // Email (twice), "Read the privacy page", footer Privacy.
+    await expect(page.getByRole('link')).toHaveCount(4);
     await expect(page.getByRole('button')).toHaveCount(2);
     await shot(page, '02-only-his-copy');
   });

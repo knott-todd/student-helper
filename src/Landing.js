@@ -35,6 +35,13 @@ export const LANDING_COPY = {
         "2. Choose CAPE, then Pure Mathematics, then your unit.",
         "3. Open Track to see your syllabus, or add your first task.",
     ],
+    aboutTitle: "Who's behind this",
+    about: [
+        "I'm Olusanya. I went to Queen's Royal College, Trinidad and Tobago.",
+        "When I was preparing for CSEC, I was overwhelmed and anxious that I would miss a topic. So I matched years of past paper questions to the objectives they were testing, and used that to track how well I knew each part of the syllabus.",
+        "It worked so well that I'm building it out into Student Helper. It starts with the whole syllabus on Track; the past papers come next.",
+    ],
+    aboutContact: "Questions or ideas? Email me at",
     next: "Next on the list: original Pure Maths papers with mark schemes, written by Caribbean teachers. No date yet.",
     faq: [
         { q: "Is it free?", a: "Yes." },
@@ -139,6 +146,15 @@ const Landing = () => {
                 <section className="landing-section">
                     <h2>{LANDING_COPY.stepsTitle}</h2>
                     {LANDING_COPY.steps.map(step => <p key={step}>{step}</p>)}
+                </section>
+
+                <section className="landing-section landing-about">
+                    <h2>{LANDING_COPY.aboutTitle}</h2>
+                    {LANDING_COPY.about.map(line => <p key={line}>{line}</p>)}
+                    <p>
+                        {LANDING_COPY.aboutContact}{" "}
+                        <a className="accent-link" href={`mailto:${PRIVACY_CONTACT_EMAIL}`}>{PRIVACY_CONTACT_EMAIL}</a>
+                    </p>
                 </section>
 
                 <section className="landing-section">
