@@ -1,12 +1,8 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import './CSS/App.css';
-import Pastpaper from './features/pastpapers/Pastpaper';
-import Test from './features/pastpapers/Test';
-import Markscheme from './features/pastpapers/Markscheme';
-import Questions from './features/pastpapers/Questions';
+import PastPapersComingSoon from './features/pastpapers/PastPapersComingSoon';
 import Navbar from './Navbar';
 import Track from './features/tracking/Track';
-import ObjectiveQuestions from './features/tracking/ObjectiveQuestions';
 import Module from './features/tracking/Module';
 import Header from './Header';
 import Topic from './features/tracking/Topic';
@@ -16,7 +12,6 @@ import {AppContext} from './AppContext';
 import ObjectiveInsert from './features/data_processing/ObjectiveInsert';
 import ObjectiveSetter from './features/data_processing/ObjectiveSetter';
 import StructureParser from './features/data_processing/StructureParser';
-import TopicQuestions from './features/tracking/TopicQuestions';
 import SignIn from './SignIn';
 import Refresh from './Refresh';
 import { useContext, useEffect } from 'react';
@@ -588,17 +583,15 @@ function App() {
                 </Route>
               </Route>
 
-              <Route path = "test">
-                <Route path = "" element={<Test />} />
-                <Route path = "pastpaper/:id" element={<Pastpaper />} />
-                <Route path = "markscheme/:id" element={<Markscheme />} />
-                <Route path = "questions/:id" element={<Questions />} />
-              </Route>
+              {/* Past Papers: no Pure Maths papers yet, so the tab and every
+                  old paper, mark-scheme and question URL say "coming soon". */}
+              <Route path = "test/*" element={<PastPapersComingSoon />} />
 
               <Route path='track' >
                 <Route path = "" element={<Track />} />
-                <Route path = "objective_questions/:id" element={<ObjectiveQuestions />} />
-                <Route path = "topic_questions/:id" element={<TopicQuestions />} />
+                {/* Old past-paper question pages (they asked for self-ratings). */}
+                <Route path = "objective_questions/:id" element={<PastPapersComingSoon />} />
+                <Route path = "topic_questions/:id" element={<PastPapersComingSoon />} />
                 <Route path = "module/:id" element={<Module />} />
                 <Route path = "topic/:id" element={<Topic />} />
               </Route>
