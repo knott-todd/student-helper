@@ -9,8 +9,9 @@
     padding: 0 7%;
 }
 
+/* The hero fills most of the first screen; the rest of the page is below. */
 .landing-hero {
-    flex: 1;
+    min-height: 88vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -19,15 +20,69 @@
 
 .landing-headline {
     margin: 0 0 16px 0;
+    max-width: 720px;
 }
 
 .landing-subline {
-    margin: 0 0 24px 0;
+    margin: 0 0 16px 0;
+    max-width: 560px;
 }
 
 .landing-cta {
     width: 100%;
     max-width: 320px;
+    margin: 8px auto 0 auto;
+}
+
+.landing-small {
+    margin: 12px 0 0 0;
+}
+
+.landing-section {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 0;
+}
+
+.landing-section h2 {
+    margin: 0 0 16px 0;
+}
+
+.landing-section h3 {
+    margin: 0 0 8px 0;
+}
+
+.landing-section p {
+    margin: 0 0 8px 0;
+}
+
+/* One column on phones; side by side from tablet width. Each feature has
+   room for a screenshot under its text (LANDING_COPY.features[].screenshot). */
+.landing-features {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+@media (min-width: 768px) {
+    .landing-features {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.landing-screenshot {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-top: 12px;
+}
+
+.landing-faq-item {
+    margin-bottom: 20px;
+}
+
+.landing-closing {
+    padding-bottom: 48px;
 }
 
 .landing-footer {

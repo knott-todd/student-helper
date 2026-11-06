@@ -30,6 +30,13 @@ export const ENABLE_QUIZ =
 // (Tasks is planned for deprecation).
 export const POST_SIGN_IN_PATH = '/tasks';
 
-// Address students write to for account deletion, shown on /privacy.
-// Must be set before go-live (Olusanya supplies it; not hard-coded here).
-export const PRIVACY_CONTACT_EMAIL = process.env.REACT_APP_PRIVACY_CONTACT_EMAIL || '';
+// Address students write to for account deletion, shown on the landing FAQ
+// and /privacy. Olusanya's address is the default so every build (previews
+// included) shows it; REACT_APP_PRIVACY_CONTACT_EMAIL overrides it.
+export const PRIVACY_CONTACT_EMAIL =
+  process.env.REACT_APP_PRIVACY_CONTACT_EMAIL || 'hello@olusanyatodd.com';
+
+// OneSignal web push. Off for launch: reminders aren't built, so students get
+// no push prompt and the browser is never subscribed or linked to a user.
+// REACT_APP_ENABLE_PUSH=true turns it back on.
+export const ENABLE_PUSH = process.env.REACT_APP_ENABLE_PUSH === 'true';

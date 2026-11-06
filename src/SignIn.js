@@ -6,12 +6,14 @@ import { getUserSubjects, setUserSub, getExamSubjects, getExams, setUserExam, se
 import { signOut, ServerUnreachableError } from "./services/auth";
 import { SERVER_UNREACHABLE_MESSAGE } from "./components/ServerUnreachable";
 import EmptyState from "./components/EmptyState";
+import { ENABLE_PUSH } from "./config";
 import { UNITS, hasUnits, subjectUnit } from "./curriculum";
 
 const SIGN_OUT_FAILED_MESSAGE = "Couldn't sign you out. Please try again.";
 const SAVE_FAILED_MESSAGE = "Couldn't save that change. Please try again.";
 
 const unlinkPush = () => {
+    if (!ENABLE_PUSH) return;
     try {
         Promise.resolve(OneSignal.removeExternalUserId()).catch(() => {});
     } catch (error) {

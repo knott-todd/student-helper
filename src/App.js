@@ -20,7 +20,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFilePen, faBarsProgress, faArrowLeft, faFolderPlus, faUser, faListCheck, faAtom, faDna, faFlask, faSuperscript, faChartSimple, faEarthAmericas, faInfinity, faEarthEurope, faComments, faDrumSteelpan, faSquareRootVariable, faMessage, faBook, faTimeline, faUsers, faHandshake, faCoins, faHandHoldingDollar, faBitcoinSign, faBriefcase, faCircleCheck, faPencil, faPlus, faForward, faAngleLeft, faAngleRight, faX, faXmark, faCaretUp, faFlag, faThumbTack } from '@fortawesome/free-solid-svg-icons'
 import { faFlag as faRegularFlag } from '@fortawesome/free-regular-svg-icons';
 import TaskForm from './TaskForm';
-import { ENABLE_ADMIN, POST_SIGN_IN_PATH } from './config';
+import { ENABLE_ADMIN, ENABLE_PUSH, POST_SIGN_IN_PATH } from './config';
 import RequireAuth from './components/RequireAuth';
 import Landing from './Landing';
 import Privacy from './Privacy';
@@ -527,9 +527,12 @@ function App() {
     // scheduled. SignIn.js links the subscription with setExternalUserId
     // (react-onesignal 2.x / SDK v15); upgrading to SDK v16 means switching
     // that to OneSignal.login(userId).
-    OneSignal.init({
-      appId: "99b7a99a-31e5-4656-86d7-ab456591292b"
-    });
+    // Off for launch (ENABLE_PUSH): no reminders yet, so no push prompt.
+    if (ENABLE_PUSH) {
+      OneSignal.init({
+        appId: "99b7a99a-31e5-4656-86d7-ab456591292b"
+      });
+    }
  
     inject();
   }, []);

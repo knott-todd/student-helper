@@ -12,7 +12,6 @@ const Privacy = () => (
             <li><p>your name and email address from your Google account</p></li>
             <li><p>the exam and subjects you choose</p></li>
             <li><p>your tasks</p></li>
-            <li><p>your progress</p></li>
         </ul>
         <p>We don't sell this information, and we don't share it with anyone except the services that run Student Helper.</p>
         <p>

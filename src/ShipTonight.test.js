@@ -231,3 +231,80 @@ describe('curriculum helpers', () => {
     expect(sortById([{ id: 3 }, { id: 1 }, { id: 2 }]).map((t) => t.id)).toEqual([1, 2, 3]);
   });
 });
+
+describe('Landing page copy v1, privacy, push off', () => {
+  const signedOut = () => mockBackend({ 'GET /api/me': [401, { error: 'no session' }] });
+
+  test('shows the approved copy in order, two sign-in buttons, no founder section', async () => {
+    signedOut();
+    renderApp('/');
+    await screen.findByRole('heading', { level: 1 });
+    const text = document.querySelector('.landing').textContent;
+    const expected = [
+      'Your whole CAPE Pure Maths syllabus, and a plan to get through it.',
+      "Too much to study and don't know where to start? The easiest time is now.",
+      "Unit 1 or Unit 2. Every objective, laid out, so you can plan when you'll cover each one.",
+      'GET STARTED FOR FREE',
+      'CSEC subjects coming soon.',
+      'Two things you can do today',
+      'See the whole syllabus',
+      'Track lays out Pure Maths module by module, then topic by topic, down to each objective. You can see everything you need to cover.',
+      'Plan your study',
+      "Add a task, give it a due date, and tick it off when it's done.",
+      'How it starts',
+      '1. Sign in with Google.',
+      '2. Choose CAPE, then Pure Mathematics, then your unit.',
+      '3. Open Track to see your syllabus, or add your first task.',
+      'Next on the list: original Pure Maths papers with mark schemes, written by Caribbean teachers. No date yet.',
+      'Is it free?', 'Yes.',
+      'Which exams and subjects?',
+      'Right now, CAPE Pure Mathematics, Unit 1 and Unit 2. You pick your unit on your Profile. CSEC subjects are coming soon.',
+      'Where are the past papers?',
+      "Not here yet. We're getting original Pure Maths papers written by Caribbean teachers, with mark schemes. No date yet.",
+      'Does it work on my phone?',
+      "Yes. It runs in your phone's browser, so there's nothing to download.",
+      'What happens to my data?',
+      "We keep your name and email from Google, the exam and subjects you choose, and your tasks. We don't sell it. To have your account and everything in it deleted, email hello@olusanyatodd.com from the address you sign in with.",
+      'Read the privacy page',
+      'Your Pure Maths syllabus is one sign-in away.',
+      'GET STARTED FOR FREE',
+      'Privacy',
+    ];
+    let at = 0;
+    for (const line of expected) {
+      const found = text.indexOf(line, at);
+      expect([line, found]).not.toEqual([line, -1]);
+      at = found + line.length;
+    }
+    expect(screen.getAllByRole('button', { name: 'GET STARTED FOR FREE' })).toHaveLength(2);
+    expect(screen.getByRole('link', { name: 'hello@olusanyatodd.com' })).toHaveAttribute('href', 'mailto:hello@olusanyatodd.com');
+    expect(screen.getByRole('link', { name: 'Read the privacy page' })).toHaveAttribute('href', '/privacy');
+    expect(text).not.toMatch(/founder|olusanya todd|screenshot/i);
+    expect(document.querySelectorAll('.landing img')).toHaveLength(0);
+  });
+
+  test('a sign-in error shows under the button that was pressed', async () => {
+    mockBackend({ 'GET /api/me': [401, { error: 'no session' }], 'POST /api/auth/google': [401, { error: 'bad' }] });
+    renderApp('/');
+    const buttons = await screen.findAllByRole('button', { name: 'GET STARTED FOR FREE' });
+    fireEvent.click(buttons[1]);
+    const alert = await screen.findByRole('alert');
+    expect(alert.closest('.landing-closing')).not.toBeNull();
+    expect(screen.getAllByRole('alert')).toHaveLength(1);
+  });
+
+  test('/privacy shows the contact email and no longer says "your progress"', async () => {
+    signedOut();
+    renderApp('/privacy');
+    expect(await screen.findByRole('link', { name: 'hello@olusanyatodd.com' })).toHaveAttribute('href', 'mailto:hello@olusanyatodd.com');
+    expect(document.body.textContent).not.toMatch(/your progress/i);
+  });
+
+  test('push is off: OneSignal is never initialised', async () => {
+    const OneSignal = require('react-onesignal').default;
+    signedOut();
+    renderApp('/');
+    await screen.findByRole('heading', { level: 1 });
+    expect(OneSignal.init).not.toHaveBeenCalled();
+  });
+});

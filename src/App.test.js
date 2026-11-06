@@ -72,7 +72,7 @@ const renderApp = (path = '/') => {
   );
 };
 
-const googleButton = () => screen.findByRole('button', { name: 'GET STARTED FOR FREE' });
+const googleButton = async () => (await screen.findAllByRole('button', { name: 'GET STARTED FOR FREE' }))[0];
 const SIGN_IN_ERROR = "We couldn't sign you in right now. Please try again.";
 
 beforeEach(() => {
@@ -94,12 +94,12 @@ test('a signed-out visitor sees the landing page, with no flash while /me is pen
   renderApp('/');
 
   expect(screen.getByRole('status', { name: /loading/i })).toBeInTheDocument();
-  expect(screen.queryByRole('button', { name: 'GET STARTED FOR FREE' })).not.toBeInTheDocument();
+  expect(screen.queryAllByRole('button', { name: 'GET STARTED FOR FREE' })[0] || null).not.toBeInTheDocument();
   expect(calls('GET /api/me')[0][1]).toMatchObject({ credentials: 'include' });
 
   answerMe(await respond(401, { error: 'no session' }));
   expect(await googleButton()).toBeInTheDocument();
-  expect(screen.getByRole('heading', { name: 'Smarter, Faster CXC Exam Prep' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'Your whole CAPE Pure Maths syllabus, and a plan to get through it.' })).toBeInTheDocument();
   expect(window.location.pathname).toBe('/');
   expect(screen.queryByLabelText(/first name/i)).not.toBeInTheDocument();
 });
@@ -150,7 +150,8 @@ test('Google sign-in for a new user posts the credential and goes to profile set
   const [[, opts]] = calls('POST /api/auth/google');
   expect(opts.credentials).toBe('include');
   expect(JSON.parse(opts.body)).toEqual({ credential: 'google-id-token' });
-  expect(OneSignal.setExternalUserId).toHaveBeenCalledWith('8');
+  // Push is off for launch: no subscription is linked.
+  expect(OneSignal.setExternalUserId).not.toHaveBeenCalled();
   expect(screen.getByRole('button', { name: /sign out/i })).toBeInTheDocument();
 });
 
@@ -176,7 +177,7 @@ test('backing out of Google shows no error and the button works again', async ()
   expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   expect(calls('POST /api/auth/google')).toHaveLength(0);
 
-  fireEvent.click(screen.getByRole('button', { name: 'GET STARTED FOR FREE' }));
+  fireEvent.click(screen.getAllByRole('button', { name: 'GET STARTED FOR FREE' })[0]);
   expect(openGoogleSignIn).toHaveBeenCalledTimes(2);
 });
 
@@ -190,7 +191,7 @@ test('a rejected Google sign-in shows the sign-in error and stays signed out', a
   fireEvent.click(await googleButton());
 
   expect(await screen.findByRole('alert')).toHaveTextContent(SIGN_IN_ERROR);
-  expect(screen.getByRole('button', { name: 'GET STARTED FOR FREE' })).toBeInTheDocument();
+  expect(screen.getAllByRole('button', { name: 'GET STARTED FOR FREE' })[0]).toBeInTheDocument();
   expect(window.location.pathname).toBe('/');
 });
 
@@ -206,7 +207,7 @@ test('sign-out ends the session and returns to the landing page', async () => {
   expect(await googleButton()).toBeInTheDocument();
   expect(window.location.pathname).toBe('/');
   expect(calls('POST /api/auth/logout')[0][1]).toMatchObject({ credentials: 'include' });
-  expect(OneSignal.removeExternalUserId).toHaveBeenCalled();
+  expect(OneSignal.removeExternalUserId).not.toHaveBeenCalled();
   expect(localStorage.getItem('sub')).toBeNull();
 });
 
@@ -234,7 +235,7 @@ test.each([
   renderApp('/track');
 
   expect(await screen.findByRole('alert')).toHaveTextContent(/student helper can't reach the server right now/i);
-  expect(screen.queryByRole('button', { name: 'GET STARTED FOR FREE' })).not.toBeInTheDocument();
+  expect(screen.queryAllByRole('button', { name: 'GET STARTED FOR FREE' })[0] || null).not.toBeInTheDocument();
 
   meFails = false;
   fireEvent.click(screen.getByRole('button', { name: /try again/i }));
@@ -273,7 +274,7 @@ test.each([
   fireEvent.click(await googleButton());
 
   expect(await screen.findByRole('alert')).toHaveTextContent(SIGN_IN_ERROR);
-  expect(screen.getByRole('button', { name: 'GET STARTED FOR FREE' })).toBeEnabled();
+  expect(screen.getAllByRole('button', { name: 'GET STARTED FOR FREE' })[0]).toBeEnabled();
 });
 
 test('app load never calls OneSignal REST, save_interaction or the removed name endpoints', async () => {

@@ -4,7 +4,7 @@
 const { test, expect, shot } = require('./fixtures');
 
 const COPY = {
-  headline: 'Smarter, Faster CXC Exam Prep',
+  headline: 'Your whole CAPE Pure Maths syllabus, and a plan to get through it.',
   subline: "Too much to study and don't know where to start? The easiest time is now.",
   button: 'GET STARTED FOR FREE',
 };
@@ -12,7 +12,8 @@ const SIGN_IN_ERROR = "We couldn't sign you in right now. Please try again.";
 
 const headline = (page) => page.getByRole('heading', { name: COPY.headline });
 const subline = (page) => page.getByText(COPY.subline, { exact: true });
-const cta = (page) => page.getByRole('button', { name: COPY.button, exact: true });
+// Two buttons (hero and closing); the hero one is first.
+const cta = (page) => page.getByRole('button', { name: COPY.button, exact: true }).first();
 
 // Clicks the button and returns the popup it opens.
 const openGoogle = async (page) => {
@@ -49,10 +50,13 @@ test.describe('What a visitor sees', () => {
     await expect(cta(page)).toBeVisible();
 
     const lines = (await page.locator('body').innerText()).split('\n').map((l) => l.trim()).filter(Boolean);
-    expect(lines).toEqual([COPY.headline, COPY.subline, COPY.button, 'Privacy']);
+    expect(lines.slice(0, 3)).toEqual([COPY.headline, COPY.subline, "Unit 1 or Unit 2. Every objective, laid out, so you can plan when you'll cover each one."]);
+    expect(lines[lines.length - 1]).toBe('Privacy');
+    expect(lines.join('\n')).not.toMatch(/founder/i);
     await expect(page.locator('footer').getByRole('link', { name: 'Privacy', exact: true })).toBeVisible();
-    await expect(page.getByRole('link')).toHaveCount(1);
-    await expect(page.getByRole('button')).toHaveCount(1);
+    // Email, "Read the privacy page", footer Privacy.
+    await expect(page.getByRole('link')).toHaveCount(3);
+    await expect(page.getByRole('button')).toHaveCount(2);
     await shot(page, '02-only-his-copy');
   });
 
@@ -61,7 +65,8 @@ test.describe('What a visitor sees', () => {
     await expect(cta(page)).toBeVisible();
     const text = `${await page.title()}\n${await page.locator('body').innerText()}`;
 
-    for (const banned of [/past paper/i, /mark scheme/i, /quiz/i, /placement/i, /testimonial/i, /trusted by/i, /\b(students|users|visits)\b/i, /\d/]) {
+    // Copy v1 names papers as "next" and uses numbers (Unit 1, the steps).
+    for (const banned of [/quiz/i, /placement/i, /testimonial/i, /trusted by/i, /\b(students|users|visits)\b/i]) {
       expect(text).not.toMatch(banned);
     }
     expect(text).toMatch(/free/i); // allowed
@@ -268,7 +273,8 @@ test.describe('Where the page lives', () => {
     expect(text).toMatch(/name and email address from your Google account/);
     expect(text).toMatch(/exam and subjects you choose/);
     expect(text).toMatch(/your tasks/);
-    expect(text).toMatch(/your progress/);
+    expect(text).not.toMatch(/your progress/);
+    expect(text).toMatch(/hello@olusanyatodd\.com/);
     expect(text).toMatch(/don't sell/);
     expect(text).toMatch(/don't share it/);
     expect(text).toMatch(/deleted/);
